@@ -32,38 +32,26 @@ for i in range(len(data_clean)):
 #we remove the duplicates
 list_token = list(set(list_token))
     
-
+print(f"Tokenizer size bfr adding the new tokens : {len(tokenizer)}")#  28996
 #we add the new tokens to the tokenizer
-print("Length of the tokenizer before adding the new tokens")
-print(len(tokenizer))  # 28996 
 
 tokenizer.add_tokens(list_token)
 
-print("Length of the tokenizer after adding the new tokens")
-print(len(tokenizer))  # 28997 
+print(f"Tokenizer size after adding the new tokens : {len(tokenizer)}")# 121089 (len(list_token)) + 28996 = 150085
 
   
-
+#we adapt the size of the embedding
 model.resize_token_embeddings(len(tokenizer))  
 
-# The new vector is added at the end of the embedding matrix 
-
-  
-print(" Old embedding vector at the end of the embedding matrix")
-print(model.embeddings.word_embeddings.weight[-1, :]) 
-
 # Randomly generated matrix 
-#this loop is to add a random vector to the embedding matrix for each new token
-
-#TODO :verify if it is the right way to do it
-for i in range(len(list_token)):
-    with torch.no_grad():
-        model.embeddings.word_embeddings.weight[-1, :] = torch.zeros([model.config.hidden_size]) 
+#for i in range(len(list_token)):
+#    with torch.no_grad():
+#        model.embeddings.word_embeddings.weight[-1, :] = torch.zeros([model.config.hidden_size]) 
 
 
   
-print(" New embedding vector at the end of the embedding matrix")
-print(model.embeddings.word_embeddings.weight[-1, :])
+#print(" New embedding vector at the end of the embedding matrix")
+#print(model.embeddings.word_embeddings.weight[-1, :])
 
 
 
@@ -75,22 +63,19 @@ tokenizer.save_pretrained('/home/daril_kw/data/02.06.23/tokenizer_clean')
 
 contextual_info_token = []
 for i in range(len(data_clean)):
-    contextual_info_token.append(data_clean['Call_type'][i])
-    contextual_info_token.append(str(data_clean['Taxi_id'][i]))
-    contextual_info_token.append(str(data_clean['Timestamp'][i]))   
+    contextual_info_token.append(data_clean['CALL_TYPE'][i])
+    contextual_info_token.append(str(data_clean['TAXI_ID'][i]))
+    contextual_info_token.append(str(data_clean['TIMESTAMP'][i]))   
 
 #we remove the duplicates
 contextual_info_token = list(set(contextual_info_token))
     
 
-#we add the new tokens to the tokenizer
-print("Length of the tokenizer before adding the new tokens")
-print(len(tokenizer))  # 28996 
-
+#we add the new tokens to the tokenizer 
+print(f"Tokenizer size bfr adding the new tokens (context): {len(tokenizer)}")# 150085
 tokenizer.add_tokens(contextual_info_token)
 
-print("Length of the tokenizer after adding the new tokens")
-print(len(tokenizer))  # 28997 
+print(f"Tokenizer size after adding the new tokens: {len(tokenizer)}")# 
 
   
 
@@ -99,15 +84,33 @@ model.resize_token_embeddings(len(tokenizer))
 # The new vector is added at the end of the embedding matrix 
 
   
-print(" Old embedding vector at the end of the embedding matrix")
-print(model.embeddings.word_embeddings.weight[-1, :]) 
+#print(" Old embedding vector at the end of the embedding matrix")
+#print(model.embeddings.word_embeddings.weight[-1, :]) 
 
 # Randomly generated matrix 
 
-for i in range(len(contextual_info_token)):
-    with torch.no_grad():
-        model.embeddings.word_embeddings.weight[-1, :] = torch.zeros([model.config.hidden_size]) 
+#for i in range(len(contextual_info_token)):
+#    with torch.no_grad():
+#        model.embeddings.word_embeddings.weight[-1, :] = torch.zeros([model.config.hidden_size]) 
 
   
-print(" New embedding vector at the end of the embedding matrix")
-print(model.embeddings.word_embeddings.weight[-1, :])
+#print(" New embedding vector at the end of the embedding matrix")
+#print(model.embeddings.word_embeddings.weight[-1, :])
+
+
+#we save the tokenizer
+tokenizer.save_pretrained('/home/daril_kw/data/02.06.23/tokenizer_clean_context')
+
+
+
+#we add the special token [EOT] ie end of trajectory
+special_tokens_dict = {'EOT_token': '<EOT>'}
+
+num_added_toks = tokenizer.add_special_tokens(special_tokens_dict)
+print('We have added', num_added_toks, 'tokens')
+model.resize_token_embeddings(len(tokenizer))
+
+print(f"Tokenizer final size after adding special token : {len(tokenizer)}")
+
+
+tokenizer.save_pretrained('/home/daril_kw/data/02.06.23/tokenizer_final')
