@@ -78,7 +78,7 @@ print(f"Tokenizer size after adding the new tokens: {len(tokenizer)}")#
 
 model.resize_token_embeddings(len(tokenizer))  
 
-tokenizer.save_pretrained('/home/daril_kw/data/02.06.23/tokenizer_clean')  
+tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_clean')  
 
 
 timestamp_tokens =  []
