@@ -53,10 +53,7 @@ model.resize_token_embeddings(len(tokenizer))
 #print(" New embedding vector at the end of the embedding matrix")
 #print(model.embeddings.word_embeddings.weight[-1, :])
 
-
-
-#we save the new tokenizer
-tokenizer.save_pretrained('/home/daril_kw/data/02.06.23/tokenizer_clean')   
+ 
 
 #we can add the token of the contextual information we want ie the following columns of the dataframe : 'Call_type', 'Taxi_id', 'Timestamp'
 #but we need them all of them as strings and not as integers so we need to convert them except for the column 'Call_type' which is already a string
@@ -65,7 +62,7 @@ contextual_info_token = []
 for i in range(len(data_clean)):
     contextual_info_token.append(data_clean['CALL_TYPE'][i])
     contextual_info_token.append(str(data_clean['TAXI_ID'][i]))
-    contextual_info_token.append(str(data_clean['TIMESTAMP'][i]))   
+      
 
 #we remove the duplicates
 contextual_info_token = list(set(contextual_info_token))
@@ -81,17 +78,17 @@ print(f"Tokenizer size after adding the new tokens: {len(tokenizer)}")#
 
 model.resize_token_embeddings(len(tokenizer))  
 
-# The new vector is added at the end of the embedding matrix 
+tokenizer.save_pretrained('/home/daril_kw/data/02.06.23/tokenizer_clean')  
 
-  
-#print(" Old embedding vector at the end of the embedding matrix")
-#print(model.embeddings.word_embeddings.weight[-1, :]) 
 
-# Randomly generated matrix 
+timestamp_tokens =  []
+for i in range(len(data_clean)):
+    timestamp_tokens.append(str(data_clean['TIMESTAMP'][i]))
 
-#for i in range(len(contextual_info_token)):
-#    with torch.no_grad():
-#        model.embeddings.word_embeddings.weight[-1, :] = torch.zeros([model.config.hidden_size]) 
+timestamp_tokens = list(set(timestamp_tokens))
 
-  
+print(f"Tokenizer size bfr adding the timestamp tokens (context): {len(tokenizer)}")# 150085
+tokenizer.add_tokens(timestamp_tokens)
+
+print(f"Tokenizer size after adding the timestamp tokens: {len(tokenizer)}")#
 
