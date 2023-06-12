@@ -111,3 +111,7 @@ for i in range(len(contextual_info_token)):
   
 print(" New embedding vector at the end of the embedding matrix")
 print(model.embeddings.word_embeddings.weight[-1, :])
+
+
+#we save the new tokenizer
+tokenizer.save_pretrained('/home/daril_kw/data/02.06.23/tokenizer_with_new_tokens')
