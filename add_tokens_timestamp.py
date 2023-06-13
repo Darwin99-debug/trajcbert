@@ -18,6 +18,26 @@ print("We put the data in a dataset.")
 
 #we put them in a dataframe
 data_clean = pd.DataFrame(data=json_loaded)
+
+#we want to put in a list all the different token from the lists in the Tokenization column
+
+print("We create the list of tokens.")
+list_token = []
+for i in range(len(data_clean)):
+    list_token += data_clean['Tokenization'][i]
+
+#we keep every token only once
+list_token = list(set(list_token))
+
+#we save in in a txt file
+print("We save the list of tokens in a txt file.")
+with open('/home/daril_kw/data/list_geographic_token.txt', 'w') as f:
+    for item in list_token:
+        f.write("%s\n" % item)
+
+#len(list_token) = 121089
+
+
 print("We load the model and the tokenizer.")
 #we load the model and the tokenizer
 tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/trajcbert/trajcbert/new_tokenizer')
