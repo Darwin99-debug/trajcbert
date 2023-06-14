@@ -9,7 +9,7 @@ with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
 data_clean = pd.DataFrame(data=json_loaded)
 
 new_data=data_clean.drop(['TRIP_ID','ORIGIN_CALL','ORIGIN_STAND','DAY_TYPE','MISSING_DATA','Nb_points_token'],axis=1)
-print(new_data.info(), "on va sauevgarder les nveaux dataframe en json mtn")
+print(new_data.info(), "on va sauvegarder les nveaux dataframe en json mtn")
 
 dict_to_save=new_data.to_dict()
 with open("dataset_wo_useless_columns.json", "w") as outfile:
