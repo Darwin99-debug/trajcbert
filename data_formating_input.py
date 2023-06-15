@@ -39,18 +39,20 @@ data_format['HOUR']=data_format['HOUR'].apply(lambda x: ' '+x)
 data_format['WEEK']=data_format['WEEK'].apply(lambda x: ' '+x)
 data_format['CALL_TYPE']=data_format['CALL_TYPE'].apply(lambda x: ' '+x)
 data_format['TAXI_ID']=data_format['TAXI_ID'].apply(lambda x: ' '+x)
+data_format['DAY']=data_format['DAY'].apply(lambda x: ' '+x)
 
 # la colonne CONTEXT_INPUT sera la concaténation du jour de la semaine, de l'heure et de la semaien de l'année pui de la colonne CALL_TYPE, de la colonne TAXI_ID, d'un espace et du dernier token de la colonne Tokenization
-data_format['CONTEXT_INPUT'] =data_format['DAY'] + data_format['HOUR'] + data_format['WEEK'] + data_format['CALL_TYPE'] + data_format['TAXI_ID'] + data_format['Tokenization'].apply(lambda x: ' ' + x[-1])
+data_format['CONTEXT_INPUT'] =data_format['Tokenization'].apply(lambda x: x[-1]) + data_format['DAY'] + data_format['HOUR'] + data_format['WEEK'] + data_format['CALL_TYPE'] + data_format['TAXI_ID']
 
 
 #la colonne DEB_TRAJ sera la colonne Tokenization jusqu'a l'avant-dernier token exclu
 data_format['DEB_TRAJ']=data_format['Tokenization'].apply(lambda x: x[:-2])
 #we truncate the beggining of the trajectory input if it is too long to fit in the 512 tokens after the concatenation
 #we keep the end of the trajectory
-if len(data_format['DEB_TRAJ'][0])>512-len(data_format['CONTEXT_INPUT'][0]-2):
-    #the 2 is for the CLS and SEP tokens
-    data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: x[-(512-len(data_format['CONTEXT_INPUT'][0]-2)):])
+
+len_context_info =6
+#the 2 is for the CLS and SEP tokens
+    data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: x[-(512-len_context_info-2):])
 #then we keep the column in form of a string
 data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: ' '.join(x))
 
@@ -63,10 +65,11 @@ data_format['TARGET']=data_format['Tokenization'].apply(lambda x: x[-2])
 #on supprime les colonnes inutiles si elles existent encore
 if 'Tokenization' in data_format.columns:
     data_format.drop(['Tokenization'],axis=1,inplace=True)
-if 'CALL_TYPE' in data_format.columns:
-    data_format.drop(['CALL_TYPE'],axis=1,inplace=True)
-if 'TAXI_ID' in data_format.columns:
-    data_format.drop(['TAXI_ID'],axis=1,inplace=True)
+#if 'CALL_TYPE' in data_format.columns:
+ #   data_format.drop(['CALL_TYPE'],axis=1,inplace=True)
+#if 'TAXI_ID' in data_format.columns:
+ #   data_format.drop(['TAXI_ID'],axis=1,inplace=True)
+ data_format.drop(['Nb_points_token'],axis=1,inplace=True)
     
 
 #on sauvegarde le dataframe dans un fichier json
@@ -83,10 +86,11 @@ c_inputs=data_format.CONTEXT_INPUT.values
 traj_inputs=data_format.DEB_TRAJ.values
 targets=data_format.TARGET.values
 
+from tqdm import tqdm
 
 input_ids = []
 full_inputs = []
-for i in range(len(c_inputs)):
+for i in tqdm(range(len(c_inputs))):
     #no truncation is needed because we managed it before
 
     #we concatenate the context input and the trajectory input adding manually the CLS token and the SEP token
