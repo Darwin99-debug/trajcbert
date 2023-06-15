@@ -32,8 +32,8 @@ list_token = []
 for i in range(len(data_clean)):
     for j in range(len(data_clean['Tokenization'][i])):
         list_token.append(data_clean['Tokenization'][i][j])
-list_token
-nb_labels=(len(list_token))
+list_token = list(set(list_token))
+nb_labels=(len(list_token)) #121089
 
 #on load le tokenizer et le model
 tokenizer = BertTokenizer.from_pretrained("bert-base-cased") 
@@ -65,5 +65,5 @@ model_classif.resize_token_embeddings(len(tokenizer))
 #on sauvegarde le tokenizer
 tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_full')
 #on sauvegarde le model
-model.save_pretrained('/home/daril_kw/data/model_full')
-model_classif.save_pretrained('/home/daril_kw/data/model_classif_full')
+#model.save_pretrained('/home/daril_kw/data/model_full')
+#model_classif.save_pretrained('/home/daril_kw/data/model_classif_full')
