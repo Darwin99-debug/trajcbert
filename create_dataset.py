@@ -460,13 +460,16 @@ plt.show()
 
 """ 
 
+
+#we need to import datset from torch.utils.data
+from torch.utils.data import Dataset
+
 #we create a dataset from the file data_formated.json
 class TrajDataset(Dataset):
-    def __init__(self, json_file, tokenizer):
-        data=json.load(open(json_file))
-        self.tokenizer = tokenizer
-        self.input = data['INPUT']
-        self.target = data['TARGET']    
+    def __init__(self, train_inputs, train_mask, train_target):
+        self.input = train_inputs
+        self.mask = train_mask
+        self.target =  train_target
 
     def __len__(self):
         return len(self.input)
@@ -474,7 +477,8 @@ class TrajDataset(Dataset):
     def __getitem__(self, idx):
         input = self.input[idx]
         target = self.target[idx]
-        return input, target    
+        mask = self.mask[idx]
+        return input, mask ,target    
     
 
 

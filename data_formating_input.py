@@ -6,6 +6,9 @@ from transformers import BertModel, BertTokenizer, BertForSequenceClassification
 import torch
 from torch.nn.parallel import DataParallel
 
+
+len_context_info =6
+
 if torch.cuda.is_available():    
 
     # Tell PyTorch to use the GPU.    
@@ -49,10 +52,12 @@ data_format['CONTEXT_INPUT'] =data_format['Tokenization'].apply(lambda x: x[-1])
 data_format['DEB_TRAJ']=data_format['Tokenization'].apply(lambda x: x[:-2])
 #we truncate the beggining of the trajectory input if it is too long to fit in the 512 tokens after the concatenation
 #we keep the end of the trajectory
-
-len_context_info =6
 #the 2 is for the CLS and SEP tokens
-    data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: x[-(512-len_context_info-2):])
+
+
+# for exemple here, if the trajectory input is too long, we keep the 512-6-2=504 last tokens
+data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: x[-(512-len_context_info-2):] if len(x)>512-len_context_info-2 else x)
+
 #then we keep the column in form of a string
 data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: ' '.join(x))
 
@@ -69,7 +74,7 @@ if 'Tokenization' in data_format.columns:
  #   data_format.drop(['CALL_TYPE'],axis=1,inplace=True)
 #if 'TAXI_ID' in data_format.columns:
  #   data_format.drop(['TAXI_ID'],axis=1,inplace=True)
- data_format.drop(['Nb_points_token'],axis=1,inplace=True)
+data_format.drop(['Nb_points_token'],axis=1,inplace=True)
     
 
 #on sauvegarde le dataframe dans un fichier json
@@ -94,16 +99,15 @@ for i in tqdm(range(len(c_inputs))):
     #no truncation is needed because we managed it before
 
     #we concatenate the context input and the trajectory input adding manually the CLS token and the SEP token
-    full_inputs.append('[CLS] ' + c_inputs[i] + ' ' + traj_inputs[i] + ' [SEP]')
-
-    encoded_c_input=tokenizer.encode(c_inputs[i], traj_inputs[i], add_special_tokens=False)
-    encoded_traj_input=tokenizer.encode(traj_inputs[i], add_special_tokens=False)
-
-
-
+    full_input = '[CLS] ' + c_inputs[i] + ' ' + traj_inputs[i] + ' [SEP]'
+    full_inputs.append(full_input)
+    #encoded_c_input=tokenizer.encode(c_inputs[i], add_special_tokens=False)
+    #encoded_traj_input=tokenizer.encode(traj_inputs[i], add_special_tokens=False)
     #we add manually the CLS token and the SEP token when we concatenate the two inputs
-    encoded_full_input=[101] + encoded_c_input + encoded_traj_input + [102]
+    #encoded_full_input=[101] + encoded_c_input + encoded_traj_input + [102]
     #the[101] token is the CLS token and the [102] token is the SEP token
+
+    encoded_full_input=tokenizer.encode(full_input, add_special_tokens=False)
     #we pad the input to the maximum length of 512
     encoded_full_input=encoded_full_input + [0]*(512-len(encoded_full_input))
     input_ids.append(encoded_full_input)
@@ -120,14 +124,53 @@ for seq in input_ids:
     attention_masks.append(att_mask)
 
     
-# Use train_test_split to split our data into train and validation sets for training
+
+#we store the input_ids,the attention_masks and the targets in a file
+import pickle
+with open('/home/daril_kw/data/input_ids_full.pkl', 'wb') as f:
+    pickle.dump(input_ids, f)
+
+
+#with open('/home/daril_kw/data/input_ids_filtered.pkl', 'wb') as f:
+# pickle.dump(input_ids_filtered, f)
+
+
+with open('/home/daril_kw/data/attention_masks_full.pkl', 'wb') as f:
+    pickle.dump(attention_masks, f)
+
+
+#with open('/home/daril_kw/data/attention_masks_filtered.pkl', 'wb') as f:
+# pickle.dump(attention_mask_filtered, f)    
+with open('/home/daril_kw/data/targets_full.pkl', 'wb') as f:
+    pickle.dump(targets, f)
+#with open('/home/daril_kw/data/targets_filtered.pkl', 'wb') as f:
+#   pickle.dump(targets_filtered, f)
+
+
+
+#in another file, we load the input_ids, the attention_masks and the targets
+import pickle
+with open('/home/daril_kw/data/input_ids_full.pkl', 'rb') as f:
+    input_ids=pickle.load(f)
+with open('/home/daril_kw/data/attention_masks_full.pkl', 'rb') as f:
+    attention_masks=pickle.load(f)
+with open('/home/daril_kw/data/targets_full.pkl', 'rb') as f:
+    targets=pickle.load(f)
+
+
+#we split the data in train, validation and test sets
 from sklearn.model_selection import train_test_split
-train_inputs, validation_inputs, train_labels, validation_labels = train_test_split(input_ids, targets,random_state=2023, test_size=0.1)
+
+train_data, test_data, train_targets, test_targets = train_test_split(input_ids, targets,random_state=2023, test_size=0.2) 
+train_inputs, validation_inputs, train_labels, validation_labels = train_test_split(train_data, train_targets,random_state=2023, test_size=0.1)
+
 # Do the same for the masks.
-train_masks, validation_masks, _, _ = train_test_split(attention_masks, targets,random_state=2023, test_size=0.1)
+train_masks, test_masks, _, _ = train_test_split(attention_masks, targets,random_state=2023, test_size=0.2)
+train_masks, validation_masks, _, _ = train_test_split(train_masks, train_targets,random_state=2023, test_size=0.1)
 
 
 # Convert all inputs and labels into torch tensors, the required datatype for our model.
+
 train_inputs = torch.tensor(train_inputs)
 validation_inputs = torch.tensor(validation_inputs)
 
@@ -172,6 +215,7 @@ model = BertForSequenceClassification.from_pretrained('/home/daril_kw/data/model
 
 # Tell pytorch to run this model on the GPU.
 model.to(device)
+
 
 # tell pytorch to run this model on multiple GPUs
 model = DataParallel(model)
@@ -346,3 +390,16 @@ print("Training complete!")
 
 #in the trainning loop, the loss is computed for each batch, so we have to compute the average loss for each epoch
 #the loss function is the cross entropy loss that is to say the negative log likelihood loss
+
+import os 
+#we save the model
+output_dir = './model_save/'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+print("Saving model to %s" % output_dir)
+model_to_save = model.module if hasattr(model, 'module') else model
+model_to_save.save_pretrained(output_dir)
+tokenizer.save_pretrained(output_dir)
+#we save the loss and accuracy values
+np.save(output_dir+'loss_values.npy',loss_values)
+np.save(output_dir+'accuracy_values.npy',accuracy_values)
