@@ -45,11 +45,12 @@ data_format['TAXI_ID']=data_format['TAXI_ID'].apply(lambda x: ' '+x)
 data_format['DAY']=data_format['DAY'].apply(lambda x: ' '+x)
 
 # la colonne CONTEXT_INPUT sera la concaténation du jour de la semaine, de l'heure et de la semaien de l'année pui de la colonne CALL_TYPE, de la colonne TAXI_ID, d'un espace et du dernier token de la colonne Tokenization
-data_format['CONTEXT_INPUT'] =data_format['Tokenization'].apply(lambda x: x[-1]) + data_format['DAY'] + data_format['HOUR'] + data_format['WEEK'] + data_format['CALL_TYPE'] + data_format['TAXI_ID']
+data_format['CONTEXT_INPUT'] =data_format['Tokenization_2'].apply(lambda x: x[-1]) + data_format['DAY'] + data_format['HOUR'] + data_format['WEEK'] + data_format['CALL_TYPE'] + data_format['TAXI_ID']
 
 
 #la colonne DEB_TRAJ sera la colonne Tokenization jusqu'a l'avant-dernier token exclu
-data_format['DEB_TRAJ']=data_format['Tokenization'].apply(lambda x: x[:-2])
+#data_format['DEB_TRAJ']=data_format['Tokenization'].apply(lambda x: x[:-2])
+data_format['DEB_TRAJ']=data_format['Tokenization_2'].apply(lambda x: x[:-2])
 #we truncate the beggining of the trajectory input if it is too long to fit in the 512 tokens after the concatenation
 #we keep the end of the trajectory
 #the 2 is for the CLS and SEP tokens
@@ -65,8 +66,8 @@ data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: ' '.join(x))
 
 
 # la target sera l'avant dernier élément de la colonne Tokenization
-data_format['TARGET']=data_format['Tokenization'].apply(lambda x: x[-2])
-
+#data_format['TARGET']=data_format['Tokenization'].apply(lambda x: x[-2])
+data_format['TARGET']=data_format['Tokenization_2'].apply(lambda x: x[-2])
 #on supprime les colonnes inutiles si elles existent encore
 if 'Tokenization' in data_format.columns:
     data_format.drop(['Tokenization'],axis=1,inplace=True)
@@ -78,14 +79,14 @@ data_format.drop(['Nb_points_token'],axis=1,inplace=True)
     
 
 #on sauvegarde le dataframe dans un fichier json
-data_format.to_json('/home/daril_kw/data/data_formated_with_time_info.json',orient='records')
+data_format.to_json('/home/daril_kw/data/data_formated_2_with_time_info.json',orient='records')
 
 
 
 #A présent, on va gérer le format des données en entrée (dataloader)
 #on load le tokenize
 
-tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/data/tokenizer_full')
+#tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/data/tokenizer_full')
 
 c_inputs=data_format.CONTEXT_INPUT.values
 traj_inputs=data_format.DEB_TRAJ.values
@@ -179,6 +180,8 @@ validation_labels = torch.tensor(validation_labels)
 
 train_masks = torch.tensor(train_masks)
 validation_masks = torch.tensor(validation_masks)
+
+
 
 #once we have everything we want, we manage the dataloader
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
