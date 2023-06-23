@@ -1,4 +1,17 @@
-"""from transformers import BertTokenizer
+from transformers import BertTokenizer
+
+#we read the data
+with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
+
+    # Reading from json file
+    json_loaded = json.load(openfile)
+
+print("We put the data in a dataset.")
+ 
+
+#we put them in a dataframe
+data_clean = pd.DataFrame(data=json_loaded)
+
 
 
 data_format['Tokenization_2'] = data_format['POLYLINE'].apply(lambda x: [h3.geo_to_h3(x[i][0], x[i][1], 10) for i in range(len(x))])
@@ -14,7 +27,7 @@ for i in range(len(data_format)):
     for j in range(len(data_format['Tokenization_2'][i])):
         list_token.append(data_format['Tokenization_2'][i][j])
 
-
+ 
 print("token de Tokenization ajoutes")
 
 

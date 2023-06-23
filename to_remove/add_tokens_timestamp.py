@@ -14,7 +14,7 @@ with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
     json_loaded = json.load(openfile)
 
 print("We put the data in a dataset.")
-
+ 
 
 #we put them in a dataframe
 data_clean = pd.DataFrame(data=json_loaded)

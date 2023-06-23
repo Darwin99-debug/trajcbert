@@ -11,7 +11,7 @@ attention_masks = attention_masks[:60]
 targets_encoded=targets_encoded[:60]
 targets_matching=targets_encoded.copy()
 targets_matching.sort()
-
+ 
 
 with open('/home/daril_kw/data/targets_matching_small.pkl', 'wb') as f:
     pickle.dump(targets_matching, f)
