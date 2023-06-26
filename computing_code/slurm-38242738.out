@@ -1,0 +1,7 @@
+Please load a Python module before running virtualenv.
+/var/spool/slurmd/job38242738/slurm_script: line 8: venv/bin/activate: No such file or directory
+/var/spool/slurmd/job38242738/slurm_script: line 9: pip: command not found
+Traceback (most recent call last):
+  File "model.py", line 1, in <module>
+    import transformers
+ModuleNotFoundError: No module named 'transformers'
