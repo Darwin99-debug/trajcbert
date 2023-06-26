@@ -13,7 +13,7 @@ VENV_DIR=venv
 python -m venv --system-site-packages "$VENV_DIR"
 source "$VENV_DIR"/bin/activate
 
-pip install --upgrade pip
+# pip install --upgrade pip
 
 pip install -r requirements.txt
 
