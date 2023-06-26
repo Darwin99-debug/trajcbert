@@ -1,0 +1,4 @@
+Please load a Python module before running virtualenv.
+/var/spool/slurmd/job38243392/slurm_script: line 8: venv/bin/activate: No such file or directory
+/var/spool/slurmd/job38243392/slurm_script: line 9: venv/bin/pip: No such file or directory
+/cvmfs/soft.computecanada.ca/gentoo/2020/usr/lib/python-exec/python3.7/python: can't open file 'model.py': [Errno 2] No such file or directory
