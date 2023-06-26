@@ -1,12 +1,18 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #SBATCH --account=def-nkambou
 #SBATCH --time=0-00:10:00 # time (DD-HH:MM)
+#SBATCH --job-name=test_installation
+#SBATCH --output=output.log
+#SBATCH --error=error.log
 
+
+
+VENV_DIR=venv
 
 # creation of the virtual environment
-virtualenv -p python3.6 venv
-source venv/bin/activate
-venv/bin/pip install -r requirements.txt
+python -m venv --system-site-packages "$VENV_DIR"
+source "$VENV_DIR"/bin/activate
+pip install -r requirements.txt
 
 
 #  run the model located in mode.py
