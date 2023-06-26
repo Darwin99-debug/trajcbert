@@ -6,7 +6,7 @@
 # creation of the virtual environment
 virtualenv -p python3.6 venv
 source venv/bin/activate
-pip install -r requirements.txt
+venv/bin/pip install -r requirements.txt
 
 
 #  run the model located in mode.py
