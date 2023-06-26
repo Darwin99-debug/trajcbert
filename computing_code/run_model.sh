@@ -12,7 +12,15 @@ VENV_DIR=venv
 # creation of the virtual environment
 python -m venv --system-site-packages "$VENV_DIR"
 source "$VENV_DIR"/bin/activate
+
+pip install --upgrade pip
+
 pip install -r requirements.txt
+
+# run ls comand 
+ls
+
+echo $(pwd)
 
 
 #  run the model located in mode.py
