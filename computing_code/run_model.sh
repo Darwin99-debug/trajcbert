@@ -20,6 +20,10 @@ python3 -m pip install --upgrade pip
 
 pip3 install -r requirements.txt
 
+pip3 list
+
+pip3 install transformers
+
 # run ls comand 
 ls
 
