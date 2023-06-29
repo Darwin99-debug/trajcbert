@@ -1,11 +1,13 @@
 import folium
 import h3
+import json
+import pandas as pd
 
 #we begin by taking a trajectory from train_clean_small.json
 #we take the first trajectory of the first taxi
 
 #we read the data
-with open('/home/daril_kw/data/02.06.23/train_clean_small.json', 'r') as openfile:
+with open('data/train_clean_small.json', 'r') as openfile:
      
         # Reading from json file
         json_loaded = json.load(openfile)

@@ -261,7 +261,8 @@ torch.cuda.manual_seed_all(seed_val)
 
 # Store the average loss after each epoch so we can plot them.
 loss_values = []
-
+accuracy_values = []
+f1_values = []
 # For each epoch...
 for epoch_i in range(0, epochs):
     

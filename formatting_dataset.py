@@ -23,7 +23,7 @@ data_clean['WEEK'] = data_clean['DATE'].apply(lambda x: str(datetime.datetime.st
 data_clean.drop(['MISSING_DATA','DATE','ORIGIN_CALL','TRIP_ID', 'DAY_TYPE', 'ORIGIN_CALL', 'ORIGIN_STAND', 'Nb_points', 'TIMESTAMP' ],axis=1,inplace=True)
 
 #on transforme la colonne CALL_TYPE en nombre
-data_clean['CALL_TYPE'] = data_clean['CALL_TYPE'].apply(lambda x: 1 if x=='A' else 2 if x=='B' else 3)
+data_clean['CALL_TYPE'] = data_clean['CALL_TYPE'].apply(lambda x: str(1) if x=='A' else str(2) if x=='B' else str(3))
 
 
 from transformers import BertTokenizer, BertForSequenceClassification, BertModel
@@ -54,7 +54,7 @@ for i in range(len(data_clean)):
     contextual_info_token.append(data_clean['DAY'][i])
     contextual_info_token.append(data_clean['HOUR'][i])
     contextual_info_token.append(data_clean['WEEK'][i])
-      
+       
 
 #we remove the duplicates
 contextual_info_token = list(set(contextual_info_token))
