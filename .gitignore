@@ -1,3 +1,4 @@
 train_clean.json
 train_clean_truncated.json
 data/train_clean_small.json
+computing_code/venv
