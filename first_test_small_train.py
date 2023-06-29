@@ -13,9 +13,11 @@ import torch
 import pickle
 import numpy as np
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler
-from transformers get_linear_schedule_with_warmup
+from transformers import get_linear_schedule_with_warmup
 from torch.optim import AdamW
 from torch.nn.parallel import DistributedDataParallel
+import h3
+from sklearn.metrics import f1_score
 
 
 with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
@@ -220,7 +222,7 @@ prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, b
 #we go on the cpu
 device = torch.device("cpu")
 
-model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_final",num_labels=nb_labels)
+#model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_final",num_labels=nb_labels)
 model.to(device)
 #model = DistributedDataParallel(model)
 
@@ -249,6 +251,11 @@ def format_time(elapsed):
     elapsed_rounded = int(round((elapsed)))
     return str(datetime.timedelta(seconds=elapsed_rounded))
 
+
+def flat_f1(preds, labels):
+    pred_flat = np.argmax(preds, axis=1).flatten()
+    labels_flat = labels.flatten()
+    return f1_score(labels_flat,pred_flat,average='macro')
 
 seed_val = 2023
 random.seed(seed_val)
