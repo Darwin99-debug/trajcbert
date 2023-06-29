@@ -12,7 +12,7 @@ print('Predicting labels for {:,} test sentences...'.format(len(test_inputs)))
 
 # Put model in evaluation mode
 model.eval()
-
+ 
 # Tracking variables 
 predictions , true_labels = [], []
 print("We predict")
