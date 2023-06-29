@@ -18,11 +18,7 @@ from torch.optim import AdamW
 from torch.nn.parallel import DistributedDataParallel
 import h3
 from sklearn.metrics import f1_score
-<<<<<<< HEAD
-=======
 
-
->>>>>>> 3bb377623dfa1b4dc5df2770ed76ffc7a0584075
 with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
 
     # Reading from json file
