@@ -371,13 +371,13 @@ print("Training complete!")
 
 
 #we save the model
-#output_dir = './model_save/'
-#if not os.path.exists(output_dir):
-  #  os.makedirs(output_dir)
-#print("Saving model to %s" % output_dir)
+output_dir = './model_save/'
+if not os.path.exists(output_dir):
+    os.makedirs(output_dir)
+print("Saving model to %s" % output_dir)
 model_to_save = model.module if hasattr(model, 'module') else model
-model_to_save.save_pretrained('/home/daril_kw/model_save/')
-tokenizer.save_pretrained('/home/daril_kw/model_save/')
+model_to_save.save_pretrained(output_dir)
+tokenizer.save_pretrained(output_dir)
 #we save the loss and accuracy values
-np.save('/home/daril_kw/model_save/loss_values.npy',loss_values)
-np.save('/home/daril_kw/model_save/accuracy_values.npy',accuracy_values)
+np.save(output_dir+'loss_values.npy',loss_values)
+np.save(output_dir+'accuracy_values.npy',accuracy_values)
