@@ -389,7 +389,3 @@ model_to_save.save_pretrained('/home/daril_kw/data/model_trained')
 
 np.save('/home/daril_kw/data/model_trained/loss_values.npy',loss_values)
 np.save('/home/daril_kw/data/model_trained/accuracy_values.npy',accuracy_values)
-=======
-np.save('/home/daril_kw/model_save/loss_values.npy',loss_values)
-np.save('/home/daril_kw/model_save/accuracy_values.npy',accuracy_values)
->>>>>>> 1f17fae444c027a14580f78401c731519d5d82e0
