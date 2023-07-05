@@ -19,7 +19,7 @@ from torch.nn.parallel import DistributedDataParallel
 import h3
 from sklearn.metrics import f1_score
 
-with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
+with open('../data/train_clean.json', 'r') as openfile:
 
     # Reading from json file
     json_loaded = json.load(openfile)
@@ -228,12 +228,16 @@ model.to(device)
 optimizer = torch.optim.AdamW(model.parameters(),lr = 2e-5,eps = 1e-8)
 
 # Number of training epochs. The BERT authors recommend between 2 and 4.
-epochs = 4
+epochs = 2
 
 # Total number of training steps is number of batches * number of epochs.
 total_steps = len(train_dataloader) * epochs
 
+#  the length of the data loader is the number of batches
+
 scheduler = get_linear_schedule_with_warmup(optimizer,num_warmup_steps = 0,num_training_steps = total_steps)
+#  num_warmup_steps is the number of steps during which the learning rate is increased linearly from 0 to the initial learning rate
+
 
 
 #on définit les fonctions utiles pour l'entrainement
@@ -257,6 +261,7 @@ def flat_f1(preds, labels):
     return f1_score(labels_flat,pred_flat,average='macro')
 
 seed_val = 2023
+# seed is fixed for reproducibility in other to compare the results and always have the same results
 random.seed(seed_val)
 np.random.seed(seed_val)
 torch.manual_seed(seed_val)
@@ -278,6 +283,8 @@ for epoch_i in range(0, epochs):
     model.train()
     for step, batch in enumerate(train_dataloader):
         # Progress update every 40 batches.
+
+        # TO DO : generalize the priting of the progress
         if step % 40 == 0 and not step == 0:
             # Calculate elapsed time in minutes.
             elapsed = format_time(time.time() - t0)
@@ -302,12 +309,24 @@ for epoch_i in range(0, epochs):
         outputs = model(b_input_ids,token_type_ids=None,attention_mask=b_input_mask,labels=b_labels)
         #we get the loss
         loss = outputs[0]
+        # loss is a tensor containing a single value; the `.item()` function just returns the Python value like a number
         #we accumulate the loss
+        # the item function is used to transform the loss to a scalar, it does 
         total_loss += loss.item()
         #we make the backward pass
-        loss.backward()
+        loss.backward() # Calculate the gradients for each parameter
         #we clip the gradient to avoid exploding gradient
+
+        #TO DO : generalize the clipping of the gradient
         torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        #  the clip_grad_norm function does the following:
+        # 1. Compute the norm of the gradients
+        # 2. If the norm is larger than the threshold (1.0 in this case), scale the gradients
+        # the scale is the following : new_grad = grad * max_norm / norm 
+        # 3. Update the parameters with the new gradients
+        # the normalization method here is called the L2 norm
+
+
         #we update the parameters
         optimizer.step()
         #we update the learning rate
@@ -338,7 +357,7 @@ for epoch_i in range(0, epochs):
             outputs = model(b_input_ids,token_type_ids=None,attention_mask=b_input_mask)
             #we get the logits
             logits = outputs[0]
-        # Move logits and labels to CPU
+        # Move logits and labels to CPU  TODO : generalize the moving of the logits and labels to the device
         logits = logits.detach().cpu().numpy()
         label_ids = b_labels.to('cpu').numpy()
         #we compute the accuracy
@@ -379,17 +398,17 @@ model_to_save = model.module if hasattr(model, 'module') else model
 model_to_save.save_pretrained('/home/daril_kw/model_save/')
 tokenizer.save_pretrained('/home/daril_kw/model_save/')
 #we save the loss and accuracy values
-<<<<<<< HEAD
 np.save(output_dir+'loss_values.npy',loss_values)
 np.save(output_dir+'accuracy_values.npy',accuracy_values)"""
 
 
-model_to_save = model.module if hasattr(model, 'module') else model
-model_to_save.save_pretrained('/home/daril_kw/data/model_trained')
+# model_to_save = model.module if hasattr(model, 'module') else model
 
-np.save('/home/daril_kw/data/model_trained/loss_values.npy',loss_values)
-np.save('/home/daril_kw/data/model_trained/accuracy_values.npy',accuracy_values)
-=======
-np.save('/home/daril_kw/model_save/loss_values.npy',loss_values)
-np.save('/home/daril_kw/model_save/accuracy_values.npy',accuracy_values)
->>>>>>> 1f17fae444c027a14580f78401c731519d5d82e0
+# the hasattr function checks if the model has the attribute module or not
+#  the attribute module is used when we use the DataParallel function
+
+model.save_pretrained('models/first_test_small.hdf5')
+
+np.save('models/loss_values.npy',loss_values)
+np.save('models/accuracy_values' ,accuracy_values)
+
