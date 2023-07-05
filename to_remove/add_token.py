@@ -21,7 +21,7 @@ tokenizer = BertTokenizer.from_pretrained("bert-base-cased")
 model = BertModel.from_pretrained("bert-base-cased") 
 
   
-
+ 
 #we find the token we want to add to the tokenizer
 #for that, we put in a list all the tokens of the lists ins the column 'Tokenization' of the dataframe
 list_token = []

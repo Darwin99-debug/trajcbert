@@ -19,13 +19,6 @@ source "$VENV_DIR"/bin/activate
 # python3 -m pip install --upgrade pip
 
 
-# pip3 install transformers
-
-# run ls comand 
-ls
-
-echo $(pwd)
-
 
 #  run the model located in mode.py
 python3 model.py
