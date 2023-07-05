@@ -21,6 +21,5 @@ source "$VENV_DIR"/bin/activate
 
 
 #  run the model located in mode.py
-python3 model.py
-
+python3 first_test_small_train.py
 # this code is to lunch the model on calcul quebec
