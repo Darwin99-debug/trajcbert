@@ -92,6 +92,25 @@ model=BertForSequenceClassification.from_pretrained("bert-base-cased",num_labels
 model.resize_token_embeddings(len(tokenizer))
 
 
+
+#gestion séparation test/(train+validation)
+#on prend 20% des données pour le test, on prend les 80% restants pour le train et la validation
+#train sera les 80 premiers pourcents, validation les 20 derniers pourcents
+#on prend donc les 80% premieres ligne du dataframe pour le train et la validation, les 20% dernières pour le test
+
+data_train_val = data_format[:int(0.8*len(data_format))]
+#avec la ligne ci-dessus, on a les 80% premières lignes du dataframe
+data_test = data_format[int(0.8*len(data_format)):]
+
+#on commence par gérer le format de test
+#pour chaque ligne, on va vouloir prédire les 40% derniers points de la trajectoire
+
+
+#on gère le cas de train/validation
+
+data_format_copy = data_format.copy()
+data_format=data_train_val
+
 print("gestion du format de l'input commencée")
 #gestion du format de l'input
 data_format['HOUR']=data_format['HOUR'].apply(lambda x: ' '+x)
@@ -104,10 +123,16 @@ data_format['CONTEXT_INPUT'] =data_format['Tokenization_2'].apply(lambda x: x[-1
 
 len_context_info = len(data_format['CONTEXT_INPUT'][0].split(' '))
 
-#la colonne DEB_TRAJ sera la colonne Tokenization jusqu'a l'avant-dernier token exclu
 
-data_format['DEB_TRAJ']=data_format['Tokenization_2'].apply(lambda x: x[:-2])
 
+
+#la colonne DEB_TRAJ sera la colonne Tokenization_2 raccourcit entre 0 et 40% de sa longueur
+
+#on tire un nombre entier entre 0 et 0.4*len(trajectoire)
+#on enlève ce nombre de tokens à la trajectoire
+
+#on enlève la moitié de la trajectoire
+data_format['DEB_TRAJ']=data_format['Tokenization_2'].apply(lambda x: x[:(-int(0.5*len(x)))] if len(x)>1 else x)
 
 # on gère la longueur de la colonne CONTEXT_INPUT pour qu'après la concaténation, elle ne dépasse pas 512 tokens
 #le -2 correspond aux deux tokens spéciaux [CLS] et [SEP]
@@ -117,7 +142,8 @@ data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: x[-(512-len_cont
 #then we keep the column in form of a string
 data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: ' '.join(x))
 
-data_format['TARGET']=data_format['Tokenization_2'].apply(lambda x: x[-2])
+#on veut prédire le token suivant le dernier token de DEB_TRAJ soit le premier token après la moitié de la trajectoire
+data_format['TARGET']=data_format['Tokenization_2'].apply(lambda x: x[int(0.5*len(x))])
 
 
 #on enlève les colonnes inutiles
