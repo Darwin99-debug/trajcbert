@@ -1,36 +1,24 @@
 #!/usr/bin/env bash
 #SBATCH --account=def-nkambou
-#SBATCH --time=0-00:10:00 # time (DD-HH:MM)
-#SBATCH --job-name=test_installation
-#SBATCH --output=output.log
-#SBATCH --error=error.log
+#SBATCH --time=0-00:3:00 # time (DD-HH:MM)
+#SBATCH --job-name=first_small_trajcbert_on_cpu_s
+#SBATCH --error=errors/%x-%j.err
+#SBATCH --cpus-per-task=39 # number of cores
+#SBATCH --mem-per-cpu=16G
+#SBATCH --nodes=3 
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user= lacourarie.clara@courrier.uqam.ca
 
 
 
 VENV_DIR=venv
 
-# creation of the virtual environment
-#python3 -m venv --system-site-packages "$VENV_DIR"
 source "$VENV_DIR"/bin/activate
 
-# pip install --upgrade pip
-# upgrate pip with python 3.7
-#python3 -m pip install --upgrade pip
+# python3 -m pip install --upgrade pip
 
-
-#pip3 install -r requirements.txt
-
-pip3 list
-
-pip3 install transformers
-
-# run ls comand 
-ls
-
-echo $(pwd)
 
 
 #  run the model located in mode.py
-python3 model.py
-
+python3 first_test_small_train.py
 # this code is to lunch the model on calcul quebec

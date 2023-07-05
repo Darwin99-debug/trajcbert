@@ -91,28 +91,7 @@ model=BertForSequenceClassification.from_pretrained("bert-base-cased",num_labels
 #on adapte la taille de l'embedding pour qu'elle corresponde au nombre de tokens géographiques + 1
 model.resize_token_embeddings(len(tokenizer))
 
-
-
-#gestion séparation test/(train+validation)
-#on prend 20% des données pour le test, on prend les 80% restants pour le train et la validation
-#train sera les 80 premiers pourcents, validation les 20 derniers pourcents
-#on prend donc les 80% premieres ligne du dataframe pour le train et la validation, les 20% dernières pour le test
-
-data_train_val = data_format[:int(0.8*len(data_format))]
-#avec la ligne ci-dessus, on a les 80% premières lignes du dataframe
-data_test = data_format[int(0.8*len(data_format)):]
-
-#on commence par gérer le format de test
-#pour chaque ligne, on va vouloir prédire les 40% derniers points de la trajectoire
-
-
-#on gère le cas de train/validation
-
-data_format_copy = data_format.copy()
-data_format=data_train_val
-
-print("gestion du format de l'input commencée")
-#gestion du format de l'input
+print("l'input de contexte est le même qu'on soit dans le cas de test, train ou validation")
 data_format['HOUR']=data_format['HOUR'].apply(lambda x: ' '+x)
 data_format['WEEK']=data_format['WEEK'].apply(lambda x: ' '+x)
 data_format['CALL_TYPE']=data_format['CALL_TYPE'].apply(lambda x: ' '+x)
@@ -123,6 +102,38 @@ data_format['CONTEXT_INPUT'] =data_format['Tokenization_2'].apply(lambda x: x[-1
 
 len_context_info = len(data_format['CONTEXT_INPUT'][0].split(' '))
 
+
+
+#gestion séparation test/(train+validation)
+print("gestion séparation test/(train+validation) commencée")
+#on prend 20% des données pour le test, on prend les 80% restants pour le train et la validation
+#train sera les 80 premiers pourcents, validation les 20 derniers pourcents
+#on prend donc les 80% premieres ligne du dataframe pour le train et la validation, les 20% dernières pour le test
+
+data_train_val = data_format[:int(0.8*len(data_format))]
+#avec la ligne ci-dessus, on a les 80% premières lignes du dataframe
+data_test = data_format[int(0.8*len(data_format)):]
+
+#on commence par gérer le format de test
+#pour chaque ligne, on va vouloir prédire les 40% derniers points de la trajectoire
+print("gestion du format de test commencée")
+#il faut ajouter des lignes au dataframe pour demander au modèle de prédire les 40% derniers points de la trajectoire
+#on va donc ajouter des lignes au dataframe, chaque ligne correspondant à un point de la trajectoire
+
+data_test_copy = data_test.copy()
+data_test = 
+
+
+
+
+#on gère le cas de train/validation
+print("gestion du format de train/validation commencée")
+
+data_format_copy = data_format.copy()
+data_format=data_train_val
+
+print("gestion du format de l'input commencée")
+#gestion du format de l'input
 
 
 
