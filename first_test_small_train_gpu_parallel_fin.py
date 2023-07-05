@@ -16,6 +16,7 @@ from torch.utils.data import TensorDataset, DataLoader, RandomSampler, Sequentia
 from transformers import get_linear_schedule_with_warmup
 from torch.optim import AdamW
 from torch.nn.parallel import DistributedDataParallel
+import torch.distributed as dist
 import h3
 from sklearn.metrics import f1_score
 
@@ -30,7 +31,7 @@ print("We put the data in a dataset.")
 data_format = pd.DataFrame(data=json_loaded)
 
 #we keep only 60 rows
-data_format = data_format[:60]
+data_format = data_format[:10]
 
 #we create the correct tokenization column
 data_format['Tokenization_2'] = data_format['POLYLINE'].apply(lambda x: [h3.geo_to_h3(x[i][0], x[i][1], 10) for i in range(len(x))])
@@ -91,7 +92,9 @@ model=BertForSequenceClassification.from_pretrained("bert-base-cased",num_labels
 #on adapte la taille de l'embedding pour qu'elle corresponde au nombre de tokens géographiques + 1
 model.resize_token_embeddings(len(tokenizer))
 
-print("l'input de contexte est le même qu'on soit dans le cas de test, train ou validation")
+
+print("gestion du format de l'input commencée")
+#gestion du format de l'input
 data_format['HOUR']=data_format['HOUR'].apply(lambda x: ' '+x)
 data_format['WEEK']=data_format['WEEK'].apply(lambda x: ' '+x)
 data_format['CALL_TYPE']=data_format['CALL_TYPE'].apply(lambda x: ' '+x)
@@ -102,48 +105,10 @@ data_format['CONTEXT_INPUT'] =data_format['Tokenization_2'].apply(lambda x: x[-1
 
 len_context_info = len(data_format['CONTEXT_INPUT'][0].split(' '))
 
+#la colonne DEB_TRAJ sera la colonne Tokenization jusqu'a l'avant-dernier token exclu
 
+data_format['DEB_TRAJ']=data_format['Tokenization_2'].apply(lambda x: x[:-2])
 
-#gestion séparation test/(train+validation)
-print("gestion séparation test/(train+validation) commencée")
-#on prend 20% des données pour le test, on prend les 80% restants pour le train et la validation
-#train sera les 80 premiers pourcents, validation les 20 derniers pourcents
-#on prend donc les 80% premieres ligne du dataframe pour le train et la validation, les 20% dernières pour le test
-
-data_train_val = data_format[:int(0.8*len(data_format))]
-#avec la ligne ci-dessus, on a les 80% premières lignes du dataframe
-data_test = data_format[int(0.8*len(data_format)):]
-
-#on commence par gérer le format de test
-#pour chaque ligne, on va vouloir prédire les 40% derniers points de la trajectoire
-print("gestion du format de test commencée")
-#il faut ajouter des lignes au dataframe pour demander au modèle de prédire les 40% derniers points de la trajectoire
-#on va donc ajouter des lignes au dataframe, chaque ligne correspondant à un point de la trajectoire
-
-data_test_copy = data_test.copy()
-data_test = 
-
-
-
-
-#on gère le cas de train/validation
-print("gestion du format de train/validation commencée")
-
-data_format_copy = data_format.copy()
-data_format=data_train_val
-
-print("gestion du format de l'input commencée")
-#gestion du format de l'input
-
-
-
-#la colonne DEB_TRAJ sera la colonne Tokenization_2 raccourcit entre 0 et 40% de sa longueur
-
-#on tire un nombre entier entre 0 et 0.4*len(trajectoire)
-#on enlève ce nombre de tokens à la trajectoire
-
-#on enlève la moitié de la trajectoire
-data_format['DEB_TRAJ']=data_format['Tokenization_2'].apply(lambda x: x[:(-int(0.5*len(x)))] if len(x)>1 else x)
 
 # on gère la longueur de la colonne CONTEXT_INPUT pour qu'après la concaténation, elle ne dépasse pas 512 tokens
 #le -2 correspond aux deux tokens spéciaux [CLS] et [SEP]
@@ -153,8 +118,7 @@ data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: x[-(512-len_cont
 #then we keep the column in form of a string
 data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: ' '.join(x))
 
-#on veut prédire le token suivant le dernier token de DEB_TRAJ soit le premier token après la moitié de la trajectoire
-data_format['TARGET']=data_format['Tokenization_2'].apply(lambda x: x[int(0.5*len(x))])
+data_format['TARGET']=data_format['Tokenization_2'].apply(lambda x: x[-2])
 
 
 #on enlève les colonnes inutiles
@@ -223,6 +187,12 @@ train_masks, test_masks, _, _ = train_test_split(attention_masks, targets_input,
 train_masks, validation_masks, _, _ = train_test_split(train_masks, train_targets,random_state=2023, test_size=0.1)
 
 
+
+
+
+
+
+
 #on convertit les données en tenseurs
 train_inputs = torch.tensor(train_inputs)
 validation_inputs = torch.tensor(validation_inputs)
@@ -239,11 +209,33 @@ test_masks = torch.tensor(test_masks)
 
 batch_size = 32
 
+
+#we go on the gpu
+device = torch.device("cuda")
+
+torch.cuda.set_device(0)
+torch.cuda.set_device(1)
+
+def setup(rank, world_size):
+    os.environ['MASTER_ADDR'] = 'localhost'
+    os.environ['MASTER_PORT'] = '12355'
+    dist.init_process_group("nccl", rank=rank, world_size=world_size)
+
+
+
+
+
+
 # Create the DataLoader for our training set, one for validation set and one for test set
 
-train_data = TensorDataset(train_inputs, train_masks, train_labels)
-train_sampler = RandomSampler(train_data)
-train_dataloader = DataLoader(train_data,sampler=train_sampler, batch_size=batch_size)
+def prepare(rank, world_size, batch_size=batch_size, pin_memory=False, num_workers=0):
+    dataset = TensorDataset(train_inputs, train_masks, train_labels)
+    sampler = DistributedSampler(dataset, num_replicas=world_size, rank=rank, shuffle=False, drop_last=False)
+    
+    dataloader = DataLoader(dataset, batch_size=batch_size, pin_memory=pin_memory, num_workers=num_workers, drop_last=False, shuffle=False, sampler=sampler)
+    
+    return dataloader
+
 
 validation_data = TensorDataset(validation_inputs, validation_masks, validation_labels)
 validation_sampler = SequentialSampler(validation_data)
@@ -254,23 +246,9 @@ prediction_sampler = SequentialSampler(prediction_data)
 prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, batch_size=batch_size)
 
 
-#device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-#we go on the cpu
-device = torch.device("cpu")
-
 #model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_final",num_labels=nb_labels)
 model.to(device)
 #model = DistributedDataParallel(model)
-
-optimizer = torch.optim.AdamW(model.parameters(),lr = 2e-5,eps = 1e-8)
-
-# Number of training epochs. The BERT authors recommend between 2 and 4.
-epochs = 4
-
-# Total number of training steps is number of batches * number of epochs.
-total_steps = len(train_dataloader) * epochs
-
-scheduler = get_linear_schedule_with_warmup(optimizer,num_warmup_steps = 0,num_training_steps = total_steps)
 
 
 #on définit les fonctions utiles pour l'entrainement
@@ -299,113 +277,132 @@ np.random.seed(seed_val)
 torch.manual_seed(seed_val)
 torch.cuda.manual_seed_all(seed_val)
 
+def main(rank, world_size):
+    setup(rank, world_size)
+    # prepare the dataloader
+    train_dataloader = prepare(rank, world_size)
+    model = Model().to(rank)
+    model = DistributedDataParallel(model, device_ids=[rank], output_device=rank, find_unused_parameters=True)
+
+    optimizer = torch.optim.AdamW(model.parameters(),lr = 2e-5,eps = 1e-8)
+
+# Number of training epochs. The BERT authors recommend between 2 and 4.
+    epochs = 4
+
+# Total number of training steps is number of batches * number of epochs.
+    total_steps = len(train_dataloader) * epochs
+
+    scheduler = get_linear_schedule_with_warmup(optimizer,num_warmup_steps = 0,num_training_steps = total_steps)
+
 
 #we store the loss and accuracy of each epoch
-loss_values = []
-accuracy_values = []
-f1_values = []
+    loss_values = []
+    accuracy_values = []
+    f1_values = []
 
 # For each epoch...
-for epoch_i in range(0, epochs):
-    print("")
-    print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, epochs))
-    print('Training...')
-    t0 = time.time()
-    total_loss = 0
-    model.train()
-    for step, batch in enumerate(train_dataloader):
+    for epoch_i in range(0, epochs):
+        print("")
+        dataloader.sampler.set_epoch(epoch_i)
+        print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, epochs))
+        print('Training...')
+        t0 = time.time()
+        total_loss = 0
+        model.train()
+        for step, batch in enumerate(train_dataloader):
         # Progress update every 40 batches.
-        if step % 40 == 0 and not step == 0:
+            if step % 40 == 0 and not step == 0:
             # Calculate elapsed time in minutes.
-            elapsed = format_time(time.time() - t0)
+                elapsed = format_time(time.time() - t0)
             # Report progress.
-            print('  Batch {:>5,}  of  {:>5,}.    Elapsed: {:}.'.format(step, len(train_dataloader),elapsed))
-        
-
-        """
-        b_input_ids = batch[0].to(device)
-        b_input_mask = batch[1].to(device)
-        b_labels = batch[2].to(device)"""
-
-        batch = tuple(t.to(device) for t in batch)
+                print('  Batch {:>5,}  of  {:>5,}.    Elapsed: {:}.'.format(step, len(train_dataloader),elapsed))
+            batch = tuple(t.to(device) for t in batch)
   
         # Unpack the inputs from our dataloader
-        b_input_ids, b_input_mask, b_labels = batch
+            b_input_ids, b_input_mask, b_labels = batch
 
 
         #we set the gradients to zero
-        model.zero_grad()
+            model.zero_grad()
         #we make the forward pass
-        outputs = model(b_input_ids,token_type_ids=None,attention_mask=b_input_mask,labels=b_labels)
+            outputs = model(b_input_ids,token_type_ids=None,attention_mask=b_input_mask,labels=b_labels)
         #we get the loss
-        loss = outputs[0]
+            loss = outputs[0]
         #we accumulate the loss
-        total_loss += loss.item()
+            total_loss += loss.item()
         #we make the backward pass
-        loss.backward()
+            loss.backward()
         #we clip the gradient to avoid exploding gradient
-        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
         #we update the parameters
-        optimizer.step()
+            optimizer.step()
         #we update the learning rate
-        scheduler.step()
+            scheduler.step()
     # Calculate the average loss over all of the batches.  
-    avg_train_loss = total_loss / len(train_dataloader)
+        avg_train_loss = total_loss / len(train_dataloader)
     # Store the loss value for plotting the learning curve.
-    loss_values.append(avg_train_loss)
-    print("")
-    print("  Average training loss: {0:.2f}".format(avg_train_loss))
-    print("  Training epoch took: {:}".format(format_time(time.time() - t0)))
-    print("")
-    print("Running Validation...")
-    t0 = time.time()
+        loss_values.append(avg_train_loss)
+        print("")
+        print("  Average training loss: {0:.2f}".format(avg_train_loss))
+        print("  Training epoch took: {:}".format(format_time(time.time() - t0)))
+        print("")
+        print("Running Validation...")
+        t0 = time.time()
     # Put the model in evaluation mode--the dropout layers behave differently during evaluation.
-    model.eval()
+        model.eval()
     # Tracking variables
-    eval_loss, eval_accuracy,eval_f1 = 0, 0, 0
-    nb_eval_steps, nb_eval_examples = 0, 0
+        eval_loss, eval_accuracy,eval_f1 = 0, 0, 0
+        nb_eval_steps, nb_eval_examples = 0, 0
     # Evaluate data for one epoch
-    for batch in validation_dataloader:
-        batch = tuple(t.to(device) for t in batch)
+        for batch in validation_dataloader:
+            batch = tuple(t.to(device) for t in batch)
         #we unpack the batch
-        b_input_ids, b_input_mask, b_labels = batch
+            b_input_ids, b_input_mask, b_labels = batch
         #we don't compute the gradient
-        with torch.no_grad():
+            with torch.no_grad():
             #we make the forward pass
-            outputs = model(b_input_ids,token_type_ids=None,attention_mask=b_input_mask)
+                outputs = model(b_input_ids,token_type_ids=None,attention_mask=b_input_mask)
             #we get the logits
-            logits = outputs[0]
+                logits = outputs[0]
         # Move logits and labels to CPU
-        logits = logits.detach().cpu().numpy()
-        label_ids = b_labels.to('cpu').numpy()
+            logits = logits.detach().cpu().numpy()
+            label_ids = b_labels.to('cpu').numpy()
         #we compute the accuracy
-        tmp_eval_accuracy = flat_accuracy(logits, label_ids)
+            tmp_eval_accuracy = flat_accuracy(logits, label_ids)
         #we compute the f1 score
-        tmp_eval_f1 = flat_f1(logits, label_ids)
+            tmp_eval_f1 = flat_f1(logits, label_ids)
         #we accumulate the accuracy
-        eval_accuracy += tmp_eval_accuracy
+            eval_accuracy += tmp_eval_accuracy
         #we accumulate the f1 score
-        eval_f1 += tmp_eval_f1
+            eval_f1 += tmp_eval_f1
         #we accumulate the number of examples
-        nb_eval_examples += b_input_ids.size(0)
+            nb_eval_examples += b_input_ids.size(0)
         #we accumulate the number of steps
-        nb_eval_steps += 1
+            nb_eval_steps += 1
     #we compute the accuracy
-    eval_accuracy = eval_accuracy / nb_eval_examples
+        eval_accuracy = eval_accuracy / nb_eval_examples
     #we compute the f1 score
-    eval_f1 = eval_f1 / nb_eval_examples
-    print("  Accuracy: {0:.2f}".format(eval_accuracy))
-    print("  F1 score: {0:.2f}".format(eval_f1))
-    print("  Validation took: {:}".format(format_time(time.time() - t0)))
+        eval_f1 = eval_f1 / nb_eval_examples
+        print("  Accuracy: {0:.2f}".format(eval_accuracy))
+        print("  F1 score: {0:.2f}".format(eval_f1))
+        print("  Validation took: {:}".format(format_time(time.time() - t0)))
     #we store the accuracy
-    accuracy_values.append(eval_accuracy)
+        accuracy_values.append(eval_accuracy)
     #we store the f1 score
-    f1_values.append(eval_f1)
-print("")
-print("Training complete!")
+        f1_values.append(eval_f1)
+    print("")
+    print("Training complete!")
+    #cleanup
+    dist.destroy_process_group()
 
 
+import torch.multiprocessing as mp
+if __name__ == '__main__':
+    world_size = 2
+    mp.spawn(main,args=(world_size),nprocs=world_size)
 
+
+"""
 
 #we save the model
 output_dir = './model_save/'
@@ -417,4 +414,11 @@ model_to_save.save_pretrained(output_dir)
 tokenizer.save_pretrained(output_dir)
 #we save the loss and accuracy values
 np.save(output_dir+'loss_values.npy',loss_values)
-np.save(output_dir+'accuracy_values.npy',accuracy_values)
+np.save(output_dir+'accuracy_values.npy',accuracy_values)"""
+
+
+model_to_save = model.module if hasattr(model, 'module') else model
+model_to_save.save_pretrained('/home/daril_kw/data/model_trained')
+
+np.save('/home/daril_kw/data/model_trained/loss_values.npy',loss_values)
+np.save('/home/daril_kw/data/model_trained/accuracy_values.npy',accuracy_values)
