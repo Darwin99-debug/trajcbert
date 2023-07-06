@@ -228,7 +228,7 @@ def setup(rank, world_size):
 
 
 
-
+from torch.utils.data.distributed import DistributedSampler
 
 # Create the DataLoader for our training set, one for validation set and one for test set
 
@@ -285,7 +285,7 @@ def main(rank, world_size):
     setup(rank, world_size)
     # prepare the dataloader
     train_dataloader = prepare(rank, world_size)
-    model = Model().to(rank)
+    model = model.to(rank)
     model = DistributedDataParallel(model, device_ids=[rank], output_device=rank, find_unused_parameters=True)
 
     optimizer = torch.optim.AdamW(model.parameters(),lr = 2e-5,eps = 1e-8)
@@ -403,7 +403,7 @@ def main(rank, world_size):
 import torch.multiprocessing as mp
 if __name__ == '__main__':
     world_size = WORLD_S
-    mp.spawn(main,args=(world_size),nprocs=world_size)
+    mp.spawn(main,args=(world_size,),nprocs=world_size)
 
 
 """
