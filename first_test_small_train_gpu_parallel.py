@@ -20,6 +20,9 @@ import torch.distributed as dist
 import h3
 from sklearn.metrics import f1_score
 
+WORLD_S=2
+
+
 with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
 
     # Reading from json file
@@ -213,8 +216,9 @@ batch_size = 32
 #we go on the gpu
 device = torch.device("cuda")
 
-torch.cuda.set_device(0)
-torch.cuda.set_device(1)
+for i in range(WORLD_S):
+    torch.cuda.set_device(i)
+
 
 def setup(rank, world_size):
     os.environ['MASTER_ADDR'] = 'localhost'
@@ -398,7 +402,7 @@ def main(rank, world_size):
 
 import torch.multiprocessing as mp
 if __name__ == '__main__':
-    world_size = 2
+    world_size = WORLD_S
     mp.spawn(main,args=(world_size),nprocs=world_size)
 
 
@@ -420,5 +424,5 @@ np.save(output_dir+'accuracy_values.npy',accuracy_values)"""
 model_to_save = model.module if hasattr(model, 'module') else model
 model_to_save.save_pretrained('/home/daril_kw/data/model_trained')
 
-np.save('/home/daril_kw/data/model_trained/loss_values.npy',loss_values)
-np.save('/home/daril_kw/data/model_trained/accuracy_values.npy',accuracy_values)
+#np.save('/home/daril_kw/data/model_trained/loss_values.npy',loss_values)
+#np.save('/home/daril_kw/data/model_trained/accuracy_values.npy',accuracy_values)

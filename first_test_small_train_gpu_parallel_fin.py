@@ -1,4 +1,4 @@
-from transformers import BertTokenizer, BertForSequenceClassification
+"""from transformers import BertTokenizer, BertForSequenceClassification
 from sklearn.metrics import f1_score
 import random
 import json
@@ -208,7 +208,7 @@ test_masks = torch.tensor(test_masks)
 
 
 batch_size = 32
-
+"""
 
 #we go on the gpu
 device = torch.device("cuda")
@@ -317,11 +317,8 @@ def main(rank, world_size):
             # Report progress.
                 print('  Batch {:>5,}  of  {:>5,}.    Elapsed: {:}.'.format(step, len(train_dataloader),elapsed))
             batch = tuple(t.to(device) for t in batch)
-  
         # Unpack the inputs from our dataloader
             b_input_ids, b_input_mask, b_labels = batch
-
-
         #we set the gradients to zero
             model.zero_grad()
         #we make the forward pass
@@ -397,6 +394,7 @@ def main(rank, world_size):
 
 
 import torch.multiprocessing as mp
+import torch.multiprocessing as mp
 if __name__ == '__main__':
     world_size = 2
     mp.spawn(main,args=(world_size),nprocs=world_size)
@@ -416,9 +414,9 @@ tokenizer.save_pretrained(output_dir)
 np.save(output_dir+'loss_values.npy',loss_values)
 np.save(output_dir+'accuracy_values.npy',accuracy_values)"""
 
-
+"""
 model_to_save = model.module if hasattr(model, 'module') else model
 model_to_save.save_pretrained('/home/daril_kw/data/model_trained')
 
 np.save('/home/daril_kw/data/model_trained/loss_values.npy',loss_values)
-np.save('/home/daril_kw/data/model_trained/accuracy_values.npy',accuracy_values)
+np.save('/home/daril_kw/data/model_trained/accuracy_values.npy',accuracy_values)"""
