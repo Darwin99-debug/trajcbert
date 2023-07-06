@@ -40,6 +40,8 @@ with open('/home/daril_kw/data/targets.pkl', 'rb') as f:
 with open('/home/daril_kw/data/full_inputs.pkl', 'rb') as f:
     full_inputs = pickle.load(f)
 
+print("gestion des targets")
+
 targets_dict={}
 for i in range(len(targets)):
     if targets[i] not in targets_dict:
@@ -60,7 +62,7 @@ train_masks, validation_masks, _, _ = train_test_split(train_masks, train_target
 
 
 
-
+print("conversion des données (listes) en tenseurs")
 #on convertit les données en tenseurs
 train_inputs = torch.tensor(train_inputs)
 validation_inputs = torch.tensor(validation_inputs)
@@ -77,7 +79,7 @@ test_masks = torch.tensor(test_masks)
 
 batch_size = 32
 
-
+print(" parallélisation : definition des fonctions")
 #we go on the gpu
 device = torch.device("cuda")
 
@@ -148,7 +150,7 @@ def main(rank, world_size):
     setup(rank, world_size)
     # prepare the dataloader
     train_dataloader = prepare(rank, world_size)
-    model = from_pretrained("/home/daril_kw/data/model_before_training")
+    model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_before_training")
     model = model.to(rank)
     model = DistributedDataParallel(model, device_ids=[rank], output_device=rank, find_unused_parameters=True)
 
@@ -171,7 +173,7 @@ def main(rank, world_size):
 # For each epoch...
     for epoch_i in range(0, epochs):
         print("")
-        dataloader.sampler.set_epoch(epoch_i)
+        train_dataloader.sampler.set_epoch(epoch_i)
         print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, epochs))
         print('Training...')
         t0 = time.time()
