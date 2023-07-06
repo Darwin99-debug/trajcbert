@@ -94,6 +94,7 @@ nb_labels = nb_token_geo + 1
 model=BertForSequenceClassification.from_pretrained("bert-base-cased",num_labels=nb_labels)
 #on adapte la taille de l'embedding pour qu'elle corresponde au nombre de tokens géographiques + 1
 model.resize_token_embeddings(len(tokenizer))
+model.save_pretrained('/home/daril_kw/data/model_before_training')
 
 
 print("gestion du format de l'input commencée")
@@ -283,6 +284,7 @@ def main(rank, world_size):
     setup(rank, world_size)
     # prepare the dataloader
     train_dataloader = prepare(rank, world_size)
+    model = from_pretrained("/home/daril_kw/data/model_before_training")
     model = model.to(rank)
     model = DistributedDataParallel(model, device_ids=[rank], output_device=rank, find_unused_parameters=True)
 
