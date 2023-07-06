@@ -39,7 +39,7 @@ def setup(rank, world_size):
 
 # Create the DataLoader for our training set, one for validation set and one for test set
 
-def prepare(rank, world_size, batch_size, pin_memory=False, num_workers=0):
+def prepare(rank, world_size, batch_size, train_inputs, train_masks, train_labels, pin_memory=False, num_workers=0):
     dataset = TensorDataset(train_inputs, train_masks, train_labels)
     sampler = DistributedSampler(dataset, num_replicas=world_size, rank=rank, shuffle=False, drop_last=False)
     dataloader = DataLoader(dataset, batch_size=batch_size, pin_memory=pin_memory, num_workers=num_workers, drop_last=False, shuffle=False, sampler=sampler)
@@ -145,7 +145,7 @@ def main(rank, world_size):
 
     setup(rank, world_size)
     # prepare the dataloader
-    train_dataloader = prepare(rank, world_size, batch_size)
+    train_dataloader = prepare(rank, world_size, batch_size, train_inputs, train_masks, train_labels)
     model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_before_training")
     model = model.to(rank)
     model = DistributedDataParallel(model, device_ids=[rank], output_device=rank, find_unused_parameters=True)
