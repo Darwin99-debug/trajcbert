@@ -284,7 +284,7 @@ def main(rank, world_size):
     setup(rank, world_size)
     # prepare the dataloader
     train_dataloader = prepare(rank, world_size)
-    model = from_pretrained("/home/daril_kw/data/model_before_training")
+    model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_before_training")
     model = model.to(rank)
     model = DistributedDataParallel(model, device_ids=[rank], output_device=rank, find_unused_parameters=True)
 
@@ -307,7 +307,7 @@ def main(rank, world_size):
 # For each epoch...
     for epoch_i in range(0, epochs):
         print("")
-        dataloader.sampler.set_epoch(epoch_i)
+        train_dataloader.sampler.set_epoch(epoch_i)
         print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, epochs))
         print('Training...')
         t0 = time.time()
