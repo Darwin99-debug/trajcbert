@@ -19,69 +19,11 @@ from torch.nn.parallel import DistributedDataParallel
 import torch.distributed as dist
 import h3
 from sklearn.metrics import f1_score
-
-print("imports done")
+from torch.utils.data.distributed import DistributedSampler
 
 WORLD_S=2
 
-
-#load the lists saved in deb_train_gpu_parallel.py
-# the lists saved full_inputs, inputs_ids, attention_masks and the targets in different files /home/daril_kw/data/input_ids.pkl, /home/daril_kw/data/attention_masks.pkl, /home/daril_kw/data/targets.pkl
-
-with open('/home/daril_kw/data/input_ids.pkl', 'rb') as f:
-    input_ids = pickle.load(f)
-
-with open('/home/daril_kw/data/attention_masks.pkl', 'rb') as f:
-    attention_masks = pickle.load(f)
-
-with open('/home/daril_kw/data/targets.pkl', 'rb') as f:
-    targets = pickle.load(f)
-
-with open('/home/daril_kw/data/full_inputs.pkl', 'rb') as f:
-    full_inputs = pickle.load(f)
-
-print("gestion des targets")
-
-targets_dict={}
-for i in range(len(targets)):
-    if targets[i] not in targets_dict:
-        targets_dict[targets[i]]=len(targets_dict)
-
-targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
-
-train_data, test_input, train_targets, test_targets = train_test_split(input_ids, targets_input,random_state=2023, test_size=0.2) 
-train_inputs, validation_inputs, train_labels, validation_labels = train_test_split(train_data, train_targets,random_state=2023, test_size=0.1)
-
-train_masks, test_masks, _, _ = train_test_split(attention_masks, targets_input,random_state=2023, test_size=0.2)
-#train_masks, test_masks, _, _ = train_test_split(attention_masks, targets_input,random_state=2023, test_size=0.1)
-train_masks, validation_masks, _, _ = train_test_split(train_masks, train_targets,random_state=2023, test_size=0.1)
-
-
-
-
-
-
-
 print("conversion des données (listes) en tenseurs")
-#on convertit les données en tenseurs
-train_inputs = torch.tensor(train_inputs)
-validation_inputs = torch.tensor(validation_inputs)
-test_inputs = torch.tensor(test_input)
-
-train_labels = torch.tensor(train_labels)
-validation_labels = torch.tensor(validation_labels)
-test_labels = torch.tensor(test_targets)
-
-train_masks = torch.tensor(train_masks)
-validation_masks = torch.tensor(validation_masks)
-test_masks = torch.tensor(test_masks)
-
-
-batch_size = 32
-
-print(" parallélisation : definition des fonctions")
-#we go on the gpu
-device = torch.device("cuda")
 
 for i in range(WORLD_S):
     torch.cuda.set_device(i)
@@ -95,25 +37,13 @@ def setup(rank, world_size):
 
 
 
-from torch.utils.data.distributed import DistributedSampler
-
 # Create the DataLoader for our training set, one for validation set and one for test set
 
-def prepare(rank, world_size, batch_size=batch_size, pin_memory=False, num_workers=0):
+def prepare(rank, world_size, batch_size, pin_memory=False, num_workers=0):
     dataset = TensorDataset(train_inputs, train_masks, train_labels)
     sampler = DistributedSampler(dataset, num_replicas=world_size, rank=rank, shuffle=False, drop_last=False)
     dataloader = DataLoader(dataset, batch_size=batch_size, pin_memory=pin_memory, num_workers=num_workers, drop_last=False, shuffle=False, sampler=sampler)
     return dataloader
-
-
-validation_data = TensorDataset(validation_inputs, validation_masks, validation_labels)
-validation_sampler = SequentialSampler(validation_data)
-validation_dataloader = DataLoader(validation_data,sampler=validation_sampler, batch_size=batch_size)
-
-prediction_data = TensorDataset(test_inputs, test_masks, test_labels)
-prediction_sampler = SequentialSampler(prediction_data)
-prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, batch_size=batch_size)
-
 
 #model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_final",num_labels=nb_labels)
 #model.to(device)
@@ -140,16 +70,82 @@ def flat_f1(preds, labels):
     labels_flat = labels.flatten()
     return f1_score(labels_flat,pred_flat,average='macro')
 
-seed_val = 2023
-random.seed(seed_val)
-np.random.seed(seed_val)
-torch.manual_seed(seed_val)
-torch.cuda.manual_seed_all(seed_val)
 
 def main(rank, world_size):
+
+    print("imports done")
+
+#load the lists saved in deb_train_gpu_parallel.py
+# the lists saved full_inputs, inputs_ids, attention_masks and the targets in different files /home/daril_kw/data/input_ids.pkl, /home/daril_kw/data/attention_masks.pkl, /home/daril_kw/data/targets.pkl
+
+    with open('/home/daril_kw/data/input_ids.pkl', 'rb') as f:
+        input_ids = pickle.load(f)
+
+    with open('/home/daril_kw/data/attention_masks.pkl', 'rb') as f:
+        attention_masks = pickle.load(f)
+
+    with open('/home/daril_kw/data/targets.pkl', 'rb') as f:
+        targets = pickle.load(f)
+
+    with open('/home/daril_kw/data/full_inputs.pkl', 'rb') as f:
+        full_inputs = pickle.load(f)
+
+    print("gestion des targets")
+
+    targets_dict={}
+    for i in range(len(targets)):
+        if targets[i] not in targets_dict:
+            targets_dict[targets[i]]=len(targets_dict)
+
+    targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
+
+    train_data, test_input, train_targets, test_targets = train_test_split(input_ids, targets_input,random_state=2023, test_size=0.2)
+    train_inputs, validation_inputs, train_labels, validation_labels = train_test_split(train_data, train_targets,random_state=2023, test_size=0.1)
+
+    train_masks, test_masks, _, _ = train_test_split(attention_masks, targets_input,random_state=2023, test_size=0.2)
+#train_masks, test_masks, _, _ = train_test_split(attention_masks, targets_input,random_state=2023, test_size=0.1)
+    train_masks, validation_masks, _, _ = train_test_split(train_masks, train_targets,random_state=2023, test_size=0.1)
+
+    print(" parallélisation : passage gpu")
+#we go on the gpu
+    device = torch.device("cuda")
+
+    print("conversion des données (listes) en tenseurs")
+#on convertit les données en tenseurs
+    train_inputs = torch.tensor(train_inputs).to(rank)
+    validation_inputs = torch.tensor(validation_inputs).to(rank)
+    test_inputs = torch.tensor(test_input).to(rank)
+
+    train_labels = torch.tensor(train_labels).to(rank)
+    validation_labels = torch.tensor(validation_labels).to(rank)
+    test_labels = torch.tensor(test_targets).to(rank)
+
+    train_masks = torch.tensor(train_masks).to(rank)
+    validation_masks = torch.tensor(validation_masks).to(rank)
+    test_masks = torch.tensor(test_masks).to(rank)
+
+
+    batch_size = 32
+
+
+    validation_data = TensorDataset(validation_inputs, validation_masks, validation_labels)
+    validation_sampler = SequentialSampler(validation_data)
+    validation_dataloader = DataLoader(validation_data,sampler=validation_sampler, batch_size=batch_size)
+
+    prediction_data = TensorDataset(test_inputs, test_masks, test_labels)
+    prediction_sampler = SequentialSampler(prediction_data)
+    prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, batch_size=batch_size)
+
+    seed_val = 2023
+    random.seed(seed_val)
+    np.random.seed(seed_val)
+    torch.manual_seed(seed_val)
+    torch.cuda.manual_seed_all(seed_val)
+
+
     setup(rank, world_size)
     # prepare the dataloader
-    train_dataloader = prepare(rank, world_size)
+    train_dataloader = prepare(rank, world_size, batch_size)
     model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_before_training")
     model = model.to(rank)
     model = DistributedDataParallel(model, device_ids=[rank], output_device=rank, find_unused_parameters=True)
