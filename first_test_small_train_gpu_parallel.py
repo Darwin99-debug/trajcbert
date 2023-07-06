@@ -235,9 +235,7 @@ from torch.utils.data.distributed import DistributedSampler
 def prepare(rank, world_size, batch_size=batch_size, pin_memory=False, num_workers=0):
     dataset = TensorDataset(train_inputs, train_masks, train_labels)
     sampler = DistributedSampler(dataset, num_replicas=world_size, rank=rank, shuffle=False, drop_last=False)
-    
     dataloader = DataLoader(dataset, batch_size=batch_size, pin_memory=pin_memory, num_workers=num_workers, drop_last=False, shuffle=False, sampler=sampler)
-    
     return dataloader
 
 
@@ -251,7 +249,7 @@ prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, b
 
 
 #model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_final",num_labels=nb_labels)
-model.to(device)
+#model.to(device)
 #model = DistributedDataParallel(model)
 
 
