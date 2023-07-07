@@ -21,7 +21,7 @@ import h3
 from sklearn.metrics import f1_score
 from torch.utils.data.distributed import DistributedSampler
 
-WORLD_S=2
+WORLD_S=6
 
 print("conversion des données (listes) en tenseurs")
 
@@ -260,7 +260,8 @@ def main(rank, world_size):
     print("Training complete!")
     #cleanup
     dist.destroy_process_group()
-
+    model_to_save = model.module if hasattr(model, 'module') else model
+    model_to_save.save_pretrained('/home/daril_kw/data/model_trained_parallel_gpu')
 
 import torch.multiprocessing as mp
 if __name__ == '__main__':
