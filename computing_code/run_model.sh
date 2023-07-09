@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 #SBATCH --account=def-nkambou
+// request gpu 
+#SBATCH --gres=gpu:1
 #SBATCH --time=0-00:3:00 # time (DD-HH:MM)
 #SBATCH --job-name=first_small_trajcbert_on_cpu_s_and_venv
 #SBATCH --error=errors/%x-%j.err
