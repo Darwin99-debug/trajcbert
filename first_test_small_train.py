@@ -412,3 +412,5 @@ model.save_pretrained('models/first_test_small.hdf5')
 np.save('models/loss_values.npy',loss_values)
 np.save('models/accuracy_values' ,accuracy_values)
 
+#save the prediction dataloader
+torch.save(validation_dataloader,'data/validation_dataloader.pt')
