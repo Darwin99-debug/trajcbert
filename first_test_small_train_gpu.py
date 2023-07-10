@@ -221,7 +221,7 @@ prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, b
 #we go on the cpu
 device = torch.device("cuda")
 
-#model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_final",num_labels=nb_labels)
+#model = BertForSequenceClassification.from_pretrained("models/model_final",num_labels=nb_labels)
 model.to(device)
 #model = DistributedDataParallel(model)
 
@@ -384,7 +384,7 @@ np.save(output_dir+'accuracy_values.npy',accuracy_values)"""
 
 
 model_to_save = model.module if hasattr(model, 'module') else model
-model_to_save.save_pretrained('/home/daril_kw/data/model_trained_gpu')
+model_to_save.save_pretrained('models/model_trained_gpu')
 
-np.save('/home/daril_kw/data/model_trained_gpu/loss_values.npy',loss_values)
-np.save('/home/daril_kw/data/model_trained_gpu/accuracy_values.npy',accuracy_values)
+np.save('models/model_trained_gpu/loss_values.npy',loss_values)
+np.save('models/model_trained_gpu/accuracy_values.npy',accuracy_values)
