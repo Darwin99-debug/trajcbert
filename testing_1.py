@@ -10,8 +10,8 @@ device = torch.device("cpu")
 
 
 #load the prediction_dataloader
-prediction_dataloader = torch.load('/home/daril_kw/data/validation_dataloader_v_small.pt')
-
+#prediction_dataloader = torch.load('/home/daril_kw/data/validation_dataloader_v_small.pt')
+predicttion_dataloader = torch.load('/home/daril_kw/data/validation_dataloader_v_small.pkl')
 # we load the model
 model = BertForSequenceClassification.from_pretrained('/home/daril_kw/data/model_trained_gpu')
 print("we evaluate")
