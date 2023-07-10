@@ -19,7 +19,7 @@ from torch.nn.parallel import DistributedDataParallel
 import h3
 from sklearn.metrics import f1_score
 
-with open('../data/train_clean.json', 'r') as openfile:
+with open('/home/nkambou/projects/def-nkambou/data/train_clean.json', 'r') as openfile:
 
     # Reading from json file
     json_loaded = json.load(openfile)
@@ -402,13 +402,6 @@ np.save(output_dir+'loss_values.npy',loss_values)
 np.save(output_dir+'accuracy_values.npy',accuracy_values)"""
 
 
-<<<<<<< HEAD
-model_to_save = model.module if hasattr(model, 'module') else model
-model_to_save.save_pretrained('/home/daril_kw/data/model_trained')
-
-np.save('/home/daril_kw/data/model_trained/loss_values.npy',loss_values)
-np.save('/home/daril_kw/data/model_trained/accuracy_values.npy',accuracy_values)
-=======
 # model_to_save = model.module if hasattr(model, 'module') else model
 
 # the hasattr function checks if the model has the attribute module or not
@@ -419,4 +412,3 @@ model.save_pretrained('models/first_test_small.hdf5')
 np.save('models/loss_values.npy',loss_values)
 np.save('models/accuracy_values' ,accuracy_values)
 
->>>>>>> e8bc05adce6db32bb2a933d4ed12b43b644832a3

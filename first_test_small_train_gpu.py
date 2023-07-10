@@ -19,7 +19,7 @@ from torch.nn.parallel import DistributedDataParallel
 import h3
 from sklearn.metrics import f1_score
 
-with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
+with open('/home/nkambou/projects/def-nkambou/data/train_clean.json', 'r') as openfile:
 
     # Reading from json file
     json_loaded = json.load(openfile)
