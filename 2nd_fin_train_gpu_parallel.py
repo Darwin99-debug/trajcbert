@@ -46,11 +46,13 @@ def main(rank, world_size):
 
     args = parser.parse_args()
 
-    local_rank = int(os.environ.get("SLURM_LOCALID")) 
-    rank = int(os.environ.get("SLURM_NODEID"))*ngpus_per_node + local_rank
+    #local_rank = int(os.environ.get("SLURM_LOCALID")) 
+    #rank = int(os.environ.get("SLURM_NODEID"))*ngpus_per_node + local_rank
+    
+    #current_device = local_rank
 
-    current_device = local_rank
 
+    current_device = rank
     torch.cuda.set_device(current_device)
 
     """ this block initializes a process group and initiate communications
@@ -289,7 +291,7 @@ def main(rank, world_size):
     #cleanup
     dist.destroy_process_group()
     model_to_save = model.module if hasattr(model, 'module') else model
-    model_to_save.save_pretrained('/home/daril_kw/data/model_trained_parallel_gpu')
+    model_to_save.save_pretrained('/home/daril_kw/data/model_trained_parallel_gpu_parser')
 
 import torch.multiprocessing as mp
 if __name__ == '__main__':

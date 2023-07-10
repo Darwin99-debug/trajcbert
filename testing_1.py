@@ -10,12 +10,11 @@ device = torch.device("cpu")
 
 
 #load the prediction_dataloader
-prediction_dataloader = torch.load('data/prediction_dataloader.pt')
+prediction_dataloader = torch.load('/home/daril_kw/data/validation_dataloader_v_small.pt')
 
 # we load the model
-model = BertForSequenceClassification.from_pretrained('models/first_test_small.hdf5')
-
-
+model = BertForSequenceClassification.from_pretrained('/home/daril_kw/data/model_trained_gpu')
+print("we evaluate")
 model.eval()
  
 # Tracking variables 
