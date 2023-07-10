@@ -2,7 +2,8 @@
 #SBATCH --account=def-nkambou
 #SBATCH --gres=gpu:1
 #SBATCH --time=0-00:3:00 # time (DD-HH:MM)
-#SBATCH --job-name=first_small_trajcbert_on_gpu_s_and_venv
+#SBATCH --job-name=first_small_trajcbert_on_gpu_s_and_venv_%j
+#SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
 #SBATCH --cpus-per-task=16 # number of cores
 #SBATCH --mem-per-cpu=8G
