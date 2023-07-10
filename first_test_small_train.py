@@ -415,5 +415,5 @@ model.save_pretrained('/home/daril_kw/data/model_trained_cpu_version')
 #save the prediction dataloader
 #torch.save(validation_dataloader,'/home/daril_kw/data/validation_dataloader_v_small.pt')
 
-#save the dataloader
-#torch.save(train_dataloader,'/home/daril_kw/data/train_dataloader_v_small.pt')
+#save the prediction dataloader
+torch.save(prediction_dataloader,'/home/daril_kw/data/pred_dataloader_v_small.pt')
