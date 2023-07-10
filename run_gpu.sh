@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=def-nkambou
 #SBATCH --gres=gpu:1
-#SBATCH --time=0-00:3:00 # time (DD-HH:MM)
+#SBATCH --time=03:00:00 
 #SBATCH --job-name=first_small_trajcbert_on_gpu_s_and_venv_%j
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
