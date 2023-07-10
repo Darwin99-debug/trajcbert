@@ -416,6 +416,4 @@ model.save_pretrained('/home/daril_kw/data/model_trained_cpu_version')
 #torch.save(validation_dataloader,'/home/daril_kw/data/validation_dataloader_v_small.pt')
 
 #save the dataloader
-with open('/home/daril_kw/data/validation_dataloader_v_small.pkl', 'wb') as f:
-    pickle.dump(validation_dataloader, f)
-    
+#torch.save(train_dataloader,'/home/daril_kw/data/train_dataloader_v_small.pt')
