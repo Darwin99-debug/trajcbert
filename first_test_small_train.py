@@ -418,3 +418,4 @@ model.save_pretrained('/home/daril_kw/data/model_trained_cpu_version')
 #save the dataloader
 with open('/home/daril_kw/data/validation_dataloader_v_small.pkl', 'wb') as f:
     pickle.dump(validation_dataloader, f)
+    
