@@ -64,9 +64,13 @@ torch.manual_seed(seed_val)
 torch.cuda.manual_seed_all(seed_val)
 
 def main(rank, world_size):
-    setup(rank, world_size)
+    
+    dataset = TensorDataset(train_inputs, train_masks, train_labels)
+    sampler = DistributedSampler(dataset, num_replicas=world_size, rank=rank, shuffle=False, drop_last=False)
+    dataloader = DataLoader(dataset, batch_size=batch_size, pin_memory=False, num_workers=0, drop_last=False, shuffle=False, sampler=sampler)
+
     # prepare the dataloader
-    train_dataloader = prepare(rank, world_size)
+    train_dataloader = dataloader
     model = Model().to(rank)
     model = DistributedDataParallel(model, device_ids=[rank], output_device=rank, find_unused_parameters=True)
 

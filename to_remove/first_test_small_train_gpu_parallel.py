@@ -19,6 +19,9 @@ from torch.nn.parallel import DistributedDataParallel
 import torch.distributed as dist
 from sklearn.metrics import f1_score
 
+WORLD_S=2
+
+
 with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
 
     # Reading from json file
@@ -90,6 +93,7 @@ nb_labels = nb_token_geo + 1
 model=BertForSequenceClassification.from_pretrained("bert-base-cased",num_labels=nb_labels)
 #on adapte la taille de l'embedding pour qu'elle corresponde au nombre de tokens géographiques + 1
 model.resize_token_embeddings(len(tokenizer))
+model.save_pretrained('/home/daril_kw/data/model_before_training')
 
 
 print("gestion du format de l'input commencée")
@@ -212,8 +216,9 @@ batch_size = 32
 #we go on the gpu
 device = torch.device("cuda")
 
-torch.cuda.set_device(0)
-torch.cuda.set_device(1)
+for i in range(WORLD_S):
+    torch.cuda.set_device(i)
+
 
 def setup(rank, world_size):
     os.environ['MASTER_ADDR'] = 'localhost'
@@ -223,16 +228,14 @@ def setup(rank, world_size):
 
 
 
-
+from torch.utils.data.distributed import DistributedSampler
 
 # Create the DataLoader for our training set, one for validation set and one for test set
 
 def prepare(rank, world_size, batch_size=batch_size, pin_memory=False, num_workers=0):
     dataset = TensorDataset(train_inputs, train_masks, train_labels)
     sampler = DistributedSampler(dataset, num_replicas=world_size, rank=rank, shuffle=False, drop_last=False)
-    
     dataloader = DataLoader(dataset, batch_size=batch_size, pin_memory=pin_memory, num_workers=num_workers, drop_last=False, shuffle=False, sampler=sampler)
-    
     return dataloader
 
 
@@ -246,7 +249,7 @@ prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, b
 
 
 #model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_final",num_labels=nb_labels)
-model.to(device)
+#model.to(device)
 #model = DistributedDataParallel(model)
 
 
@@ -280,7 +283,8 @@ def main(rank, world_size):
     setup(rank, world_size)
     # prepare the dataloader
     train_dataloader = prepare(rank, world_size)
-    model = Model().to(rank)
+    model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_before_training")
+    model = model.to(rank)
     model = DistributedDataParallel(model, device_ids=[rank], output_device=rank, find_unused_parameters=True)
 
     optimizer = torch.optim.AdamW(model.parameters(),lr = 2e-5,eps = 1e-8)
@@ -302,7 +306,7 @@ def main(rank, world_size):
 # For each epoch...
     for epoch_i in range(0, epochs):
         print("")
-        dataloader.sampler.set_epoch(epoch_i)
+        train_dataloader.sampler.set_epoch(epoch_i)
         print('======== Epoch {:} / {:} ========'.format(epoch_i + 1, epochs))
         print('Training...')
         t0 = time.time()
@@ -397,8 +401,8 @@ def main(rank, world_size):
 
 import torch.multiprocessing as mp
 if __name__ == '__main__':
-    world_size = 2
-    mp.spawn(main,args=(world_size),nprocs=world_size)
+    world_size = WORLD_S
+    mp.spawn(main,args=(world_size,),nprocs=world_size)
 
 
 """
@@ -419,5 +423,5 @@ np.save(output_dir+'accuracy_values.npy',accuracy_values)"""
 model_to_save = model.module if hasattr(model, 'module') else model
 model_to_save.save_pretrained('/home/daril_kw/data/model_trained')
 
-np.save('/home/daril_kw/data/model_trained/loss_values.npy',loss_values)
-np.save('/home/daril_kw/data/model_trained/accuracy_values.npy',accuracy_values)
+#np.save('/home/daril_kw/data/model_trained/loss_values.npy',loss_values)
+#np.save('/home/daril_kw/data/model_trained/accuracy_values.npy',accuracy_values)

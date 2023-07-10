@@ -20,6 +20,11 @@ import torch.distributed as dist
 import h3
 from sklearn.metrics import f1_score
 
+print("imports done")
+
+WORLD_S=2
+
+
 with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
 
     # Reading from json file
@@ -91,6 +96,7 @@ nb_labels = nb_token_geo + 1
 model=BertForSequenceClassification.from_pretrained("bert-base-cased",num_labels=nb_labels)
 #on adapte la taille de l'embedding pour qu'elle corresponde au nombre de tokens géographiques + 1
 model.resize_token_embeddings(len(tokenizer))
+model.save_pretrained('/home/daril_kw/data/model_before_training')
 
 
 print("gestion du format de l'input commencée")
@@ -171,41 +177,14 @@ for i in tqdm(range(len(c_inputs))):
 
 
 
-#gestion des targets
-targets_dict={}
-for i in range(len(targets)):
-    if targets[i] not in targets_dict:
-        targets_dict[targets[i]]=len(targets_dict)
 
-targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
-
-train_data, test_input, train_targets, test_targets = train_test_split(input_ids, targets_input,random_state=2023, test_size=0.2) 
-train_inputs, validation_inputs, train_labels, validation_labels = train_test_split(train_data, train_targets,random_state=2023, test_size=0.1)
-
-train_masks, test_masks, _, _ = train_test_split(attention_masks, targets_input,random_state=2023, test_size=0.2)
-#train_masks, test_masks, _, _ = train_test_split(attention_masks, targets_input,random_state=2023, test_size=0.1)
-train_masks, validation_masks, _, _ = train_test_split(train_masks, train_targets,random_state=2023, test_size=0.1)
-
-
-
-
-
-
-
-
-#on convertit les données en tenseurs
-train_inputs = torch.tensor(train_inputs)
-validation_inputs = torch.tensor(validation_inputs)
-test_inputs = torch.tensor(test_input)
-
-train_labels = torch.tensor(train_labels)
-validation_labels = torch.tensor(validation_labels)
-test_labels = torch.tensor(test_targets)
-
-train_masks = torch.tensor(train_masks)
-validation_masks = torch.tensor(validation_masks)
-test_masks = torch.tensor(test_masks)
-
-
-batch_size = 32
-
+#save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
+with open('/home/daril_kw/data/input_ids.pkl', 'wb') as fp:
+    pickle.dump(input_ids, fp)
+with open('/home/daril_kw/data/attention_masks.pkl', 'wb') as fp:
+    pickle.dump(attention_masks, fp)
+with open('/home/daril_kw/data/targets.pkl', 'wb') as fp:
+    pickle.dump(targets, fp)
+with open('/home/daril_kw/data/full_inputs.pkl', 'wb') as fp:
+    pickle.dump(full_inputs, fp)
+    
