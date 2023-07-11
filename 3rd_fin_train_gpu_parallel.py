@@ -46,11 +46,11 @@ def main(rank, world_size):
 
     args = parser.parse_args()
 
-    local_rank = int(os.environ.get("SLURM_LOCALID")) 
-    rank = int(os.environ.get("SLURM_NODEID"))*ngpus_per_node + local_rank
+    #local_rank = int(os.environ.get("SLURM_LOCALID")) 
+    #rank = int(os.environ.get("SLURM_NODEID"))*ngpus_per_node + local_rank
 
-    current_device = local_rank
-
+    #current_device = local_rank
+    current_device = rank
     torch.cuda.set_device(current_device)
     os.environ['MASTER_ADDR'] = 'localhost'
     os.environ['MASTER_PORT'] = '12355'
