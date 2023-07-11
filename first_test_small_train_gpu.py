@@ -17,7 +17,6 @@ from transformers import get_linear_schedule_with_warmup
 from torch.optim import AdamW
 from torch.nn.parallel import DistributedDataParallel
 import h3
-from sklearn.metrics import f1_score
 
 with open('/home/nkambou/projects/def-nkambou/data/train_clean.json', 'r') as openfile:
 
