@@ -1,9 +1,10 @@
 #!/bin/bash
 #SBATCH --account=def-nkambou
 #SBATCH --time=03:00:00 
-#SBATCH --job-name=first_small_trajcbert_on_cpu_s_and_venv
-#SBATCH --output=outputs/%x-%j.out
-#SBATCH --error=errors/%x-%j.err
+time = $(date +"%T")
+#SBATCH --job-name=first_small_trajcbert_on_cpu_s_and_venv+$time
+#SBATCH --output=outputs/%x-%j-$time.out
+#SBATCH --error=errors/%x-%j-$time.err
 #SBATCH --cpus-per-task=39 # number of cores
 #SBATCH --mem-per-cpu=16G
 #SBATCH --nodes=3 
