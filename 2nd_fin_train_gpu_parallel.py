@@ -33,7 +33,7 @@ parser.add_argument('--max_epochs', type=int, default=4, help='')
 parser.add_argument('--num_workers', type=int, default=0, help='')
 
 parser.add_argument('--init_method', default='tcp://127.0.0.1:3456', type=str, help='')
-parser.add_argument('--dist-backend', default='gloo', type=str, help='')
+parser.add_argument('--dist-backend', default='nccl', type=str, help='')
 parser.add_argument('--world_size', default=1, type=int, help='')
 parser.add_argument('--distributed', action='store_true', help='')
 
@@ -60,7 +60,7 @@ def main(rank, world_size):
 
     print('From Rank: {}, ==> Initializing Process Group...'.format(rank))
     #init the process group
-    dist.init_process_group(backend=args.dist_backend, init_method=args.init_method, world_size=args.world_size, rank=rank)
+    dist.init_process_group(backend= "nccl", init_method=args.init_method, world_size=args.world_size, rank=rank)
     print("process group ready!")
 
     print('From Rank: {}, ==> Making model..'.format(rank))
@@ -175,7 +175,7 @@ def main(rank, world_size):
 
 
     model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_before_training")
-    model = model.cuda()
+    model = model.to(device)
     model = DistributedDataParallel(model, device_ids=[rank], output_device=rank, find_unused_parameters=True)
 
     optimizer = torch.optim.AdamW(model.parameters(),lr = 2e-5,eps = 1e-8)
