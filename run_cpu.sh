@@ -15,7 +15,7 @@
 
 
 source /home/daril/scratch/MYENV/bin/activate
-module scipy-stack/2023a
+module load scipy-stack/2023a
 
 python first_test_small_train.py
 
