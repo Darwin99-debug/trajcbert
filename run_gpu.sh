@@ -16,8 +16,8 @@ time = $(date +"%T")
 
 
 
-module load python/3.10.2 scipy-stack/2023a
-
+source /home/daril/scratch/MYENV/bin/activate
+module scipy-stack/2023a
 
 
 python first_test_small_train_gpu.py
