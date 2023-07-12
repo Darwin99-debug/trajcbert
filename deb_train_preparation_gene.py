@@ -93,8 +93,7 @@ model.resize_token_embeddings(len(tokenizer))
 
 
 #save the data_format here : '/home/daril_kw/data/data_with_time_info_ok.json'
-with open('/home/daril_kw/data/data_with_time_info_ok.json', 'w') as outfile:
-    json.dump(data_format, outfile)
+data_format.to_json('/home/daril_kw/data/data_with_time_info_ok.json')
 
 #save the tokenizer here : '/home/daril_kw/data/tokenizer_final'
 tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_final')
