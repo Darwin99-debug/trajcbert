@@ -16,6 +16,7 @@ from torch.utils.data import TensorDataset, DataLoader, RandomSampler, Sequentia
 from transformers import get_linear_schedule_with_warmup
 from torch.optim import AdamW
 from torch.nn.parallel import DistributedDataParallel
+import h3
 
 with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
 
