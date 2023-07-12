@@ -1,4 +1,0 @@
-Traceback (most recent call last):
-  File "/home/daril/trajcbert/first_test_small_train_gpu.py", line 19, in <module>
-    import h3
-ModuleNotFoundError: No module named 'h3'
