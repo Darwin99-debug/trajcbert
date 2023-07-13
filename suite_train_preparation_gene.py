@@ -154,8 +154,17 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent
         #list_target_full_data[list_index_sixty[i]] = tokenization_2[index]
         list_target_sixty_data[i] = tokenization_2[index]
         #we put in the column DEB_TRAJ the tokens that are before the target
-        #list_deb_traj_full_data[list_index_sixty[i]] = dataframe.iloc[list_index_sixty[i]]['Tokenization_2'][:-int(len(tokenization_2)*0.6)+index]
-        list_deb_traj_sixty_data[i] = dataframe_sixty.iloc[i]['Tokenization_2'][:index]
+        #we take as deb_traj the tokens that are before the target ie the tokens that are before the 60% last tokens and those that are between the 60% and the 30% last tokens and at the sqme time before the index
+        #we begin by taking the tokens that are before the 60% last tokens 
+        list_deb_traj_sixty_data[i] = dataframe_sixty.iloc[i]['Tokenization_2'][:-int(len(dataframe_sixty.iloc[i]['Tokenization_2'])*0.6)]
+        #then we add the tokens that are between the 60% and the 30% last tokens and before the index
+        if index != 0:
+            #we append the element of tokenization_2[:index] to the list and not the list in itself
+            for token in tokenization_2[:index] :
+                list_deb_traj_sixty_data[i].append(token)
+        
+        
+        
         """
         tokenization_2 = dataframe_sixty.iloc[i]['Tokenization_2']
         #we take the token that is between the 60% and the 30% last tokens
@@ -187,6 +196,13 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent
     
     dataframe_sixty['DEB_TRAJ'] = list_deb_traj_sixty_data
    
+    # we verify that dataframe_sixty['Tokenization_2'][i][len(dataframe_sixty['DEB_TRAJ'][i])]==dataframe_sixty['TARGET'][i] for all i
+    #this would mean that the target is the token that is after the deb_traj
+    for i in range(len(dataframe_sixty)):
+        if dataframe_sixty['Tokenization_2'][i][len(dataframe_sixty['DEB_TRAJ'][i])]!=dataframe_sixty['TARGET'][i]:
+            #raise ValueError('the target is not the token that is after the deb_traj') :
+            raise ValueError('the target is not the token that is after the deb_traj')
+
 
 
     #for the dataframe_thirty
@@ -200,7 +216,13 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent
         #list_target_full_data[list_index_thirty[i]] = tokenization_2[index]
         list_target_thirty_data[i] = tokenization_2[index]
         #list_deb_traj_full_data[list_index_thirty[i]] = dataframe.iloc[list_index_thirty[i]]['Tokenization_2'][:-int(len(tokenization_2)*0.3)+index]
-        list_deb_traj_thirty_data[i] = dataframe_thirty.iloc[i]['Tokenization_2'][:index]
+        list_deb_traj_thirty_data[i] = dataframe_thirty.iloc[i]['Tokenization_2'][:-int(len(dataframe_thirty.iloc[i]['Tokenization_2'])*0.3)]
+        #then we add the tokens that are between the 30% and the 10% last tokens and before the index
+        if index != 0:
+            #we append the element of tokenization_2[:index] to the list and not the list in itself
+            for token in tokenization_2[:index] :
+                list_deb_traj_thirty_data[i].append(token)
+        
 
     dataframe_thirty['TARGET'] = list_target_thirty_data
     dataframe_thirty['DEB_TRAJ'] = list_deb_traj_thirty_data
@@ -217,7 +239,12 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent
         #list_target_full_data[list_index_ten[i]] = tokenization_2[index]
         list_target_ten_data[i] = tokenization_2[index]
         #list_deb_traj_full_data[list_index_ten[i]] = dataframe.iloc[list_index_ten[i]]['Tokenization_2'][:-int(len(tokenization_2)*0.1)+index]
-        list_deb_traj_ten_data[i] = dataframe_ten.iloc[i]['Tokenization_2'][:index]
+        list_deb_traj_ten_data[i] = dataframe_ten.iloc[i]['Tokenization_2'][:-int(len(dataframe_ten.iloc[i]['Tokenization_2'])*0.1)]
+        #then we add the tokens that are between the 10% and the last token and before the index
+        if index != 0:
+            #we append the element of tokenization_2[:index] to the list and not the list in itself
+            for token in tokenization_2[:index] :
+                list_deb_traj_ten_data[i].append(token)
 
     dataframe_ten['TARGET'] = list_target_ten_data
     dataframe_ten['DEB_TRAJ'] = list_deb_traj_ten_data
@@ -228,10 +255,8 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent
     list_target_last_data = [0 for i in range(len(dataframe_last))]
     list_deb_traj_last_data = [0 for i in range(len(dataframe_last))]
     for i in range(len(dataframe_last)):
-        tokenization_2 = dataframe_last.iloc[i]['Tokenization_2']
-        tokenization_2 = tokenization_2[-1]
         #list_target_full_data[list_index_last[i]] = tokenization_2
-        list_target_last_data[i] = tokenization_2
+        list_target_last_data[i] = dataframe_last.iloc[i]['Tokenization_2'][-1]
         #list_deb_traj_full_data[list_index_last[i]] = dataframe.iloc[list_index_last[i]]['Tokenization_2'][:-1]
         list_deb_traj_last_data[i] = dataframe_last.iloc[i]['Tokenization_2'][:-1]
 
