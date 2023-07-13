@@ -150,7 +150,10 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent
         #we take the token that is between the 60% and the 30% last tokens
         tokenization_2 = tokenization_2[-int(len(tokenization_2)*0.6):-int(len(tokenization_2)*0.3)]
         #we take a random index in the list
-        index = random.randint(0,len(tokenization_2)-1)
+        if len(tokenization_2) != 0:
+            index = random.randint(0,len(tokenization_2)-1)
+        else:
+            index = -1
         #list_target_full_data[list_index_sixty[i]] = tokenization_2[index]
         list_target_sixty_data[i] = tokenization_2[index]
         #we put in the column DEB_TRAJ the tokens that are before the target
@@ -211,8 +214,11 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent
 
     for i in range(len(dataframe_thirty)):
         tokenization_2 = dataframe_thirty.iloc[i]['Tokenization_2']
-        tokenization_2 = tokenization_2[-int(len(tokenization_2)*0.3):-1]
-        index = random.randint(0,len(tokenization_2)-1)
+        tokenization_2 = tokenization_2[-int(len(tokenization_2)*0.3):-int(len(tokenization_2)*0.1)]
+        if len(tokenization_2) != 0:
+            index = random.randint(0,len(tokenization_2)-1)
+        else:
+            index = -1
         #list_target_full_data[list_index_thirty[i]] = tokenization_2[index]
         list_target_thirty_data[i] = tokenization_2[index]
         #list_deb_traj_full_data[list_index_thirty[i]] = dataframe.iloc[list_index_thirty[i]]['Tokenization_2'][:-int(len(tokenization_2)*0.3)+index]
@@ -227,6 +233,11 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent
     dataframe_thirty['TARGET'] = list_target_thirty_data
     dataframe_thirty['DEB_TRAJ'] = list_deb_traj_thirty_data
 
+    for i in range(len(dataframe_thirty)):
+        if dataframe_thirty['Tokenization_2'][i][len(dataframe_thirty['DEB_TRAJ'][i])]!=dataframe_thirty['TARGET'][i]:
+            #raise ValueError('the target is not the token that is after the deb_traj') :
+            raise ValueError('the target is not the token that is after the deb_traj')
+
     #for the dataframe_ten
 
     list_target_ten_data = [0 for i in range(len(dataframe_ten))]
@@ -235,19 +246,29 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent
     for i in range(len(dataframe_ten)):
         tokenization_2 = dataframe_ten.iloc[i]['Tokenization_2']
         tokenization_2 = tokenization_2[-int(len(tokenization_2)*0.1):-1]
-        index = random.randint(0,len(tokenization_2)-1)
-        #list_target_full_data[list_index_ten[i]] = tokenization_2[index]
-        list_target_ten_data[i] = tokenization_2[index]
+        if len(tokenization_2) != 0:
+            index = random.randint(0,len(tokenization_2)-1)
+            list_target_ten_data[i] = tokenization_2[index]
         #list_deb_traj_full_data[list_index_ten[i]] = dataframe.iloc[list_index_ten[i]]['Tokenization_2'][:-int(len(tokenization_2)*0.1)+index]
-        list_deb_traj_ten_data[i] = dataframe_ten.iloc[i]['Tokenization_2'][:-int(len(dataframe_ten.iloc[i]['Tokenization_2'])*0.1)]
+            list_deb_traj_ten_data[i] = dataframe_ten.iloc[i]['Tokenization_2'][:-int(len(dataframe_ten.iloc[i]['Tokenization_2'])*0.1)]
         #then we add the tokens that are between the 10% and the last token and before the index
-        if index != 0:
+            if index != 0:
             #we append the element of tokenization_2[:index] to the list and not the list in itself
-            for token in tokenization_2[:index] :
-                list_deb_traj_ten_data[i].append(token)
+                for token in tokenization_2[:index] :
+                    list_deb_traj_ten_data[i].append(token)
+        else:
+            list_target_ten_data[i] = dataframe_ten.iloc[i]['Tokenization_2'][-1]
+            list_deb_traj_ten_data[i] = dataframe_ten.iloc[i]['Tokenization_2'][:-1]
+        
 
     dataframe_ten['TARGET'] = list_target_ten_data
     dataframe_ten['DEB_TRAJ'] = list_deb_traj_ten_data
+
+    for i in range(len(dataframe_ten)):
+        if dataframe_ten['Tokenization_2'][i][len(dataframe_ten['DEB_TRAJ'][i])]!=dataframe_ten['TARGET'][i]:
+            #raise ValueError('the target is not the token that is after the deb_traj') :
+            raise ValueError('the target is not the token that is after the deb_traj')
+
 
         
 
