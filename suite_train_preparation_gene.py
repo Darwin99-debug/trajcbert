@@ -300,4 +300,4 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent
     dataframe_full = pd.concat([dataframe_sixty,dataframe_thirty,dataframe_ten,dataframe_last,dataframe_sep],ignore_index=True)
     return dataframe_full
 
-prepare_train(data_train, 0.4, 0.25,0.15,0.1,0.1)
+df_full = prepare_train(data_train, 0.4, 0.25,0.15,0.1,0.1)
