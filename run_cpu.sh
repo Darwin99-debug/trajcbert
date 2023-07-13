@@ -14,9 +14,15 @@
 
 
 
-source /home/daril/scratch/MYENV/bin/activate
 module load scipy-stack/2023a
-
+VENV_DIR=$SLURM_TMPDIR/MYENV
+virtualenv  $VENV_DIR
+source $VENV_DIR/bin/activate
+pip install scikit-build --no-index
+pip install flake8 --no-index
+pip install h3
+pip install -r requirements.txt --no-index
+pip list
 python first_test_small_train.py
 
 
