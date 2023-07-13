@@ -20,7 +20,7 @@ from torch.nn.parallel import DistributedDataParallel
 #load the tokenizer from /home/daril_kw/data/tokenizer_final
 tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/data/tokenizer_final')
 #load the dataset from home/daril_kw/data/data_with_time_info_ok.json
-with open('/home/daril_kw/data//home/daril_kw/data/data_with_time_info_ok.json', 'r') as openfile:
+with open('/home/daril_kw/data/data_with_time_info_ok.json', 'r') as openfile:
     json_loaded = json.load(openfile)
     
 data_format = pd.DataFrame(data=json_loaded)
