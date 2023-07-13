@@ -165,36 +165,7 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent
             #we append the element of tokenization_2[:index] to the list and not the list in itself
             for token in tokenization_2[:index] :
                 list_deb_traj_sixty_data[i].append(token)
-        
-        
-        
-        """
-        tokenization_2 = dataframe_sixty.iloc[i]['Tokenization_2']
-        #we take the token that is between the 60% and the 30% last tokens
-        tokenization_2 = tokenization_2[-int(len(tokenization_2)*0.6):-int(len(tokenization_2)*0.3)]
-        #we take a random index in the list
-        index = random.randint(0,len(tokenization_2)-1)
-        dataframe_sixty.iloc[i]['TARGET'] = tokenization_2[index]
-        dataframe.iloc[list_index_sixty[i]]['TARGET'] = tokenization_2[index]
-        #we put in the column DEB_TRAJ the tokens that are before the target
-        dataframe_sixty.iloc[i]['DEB_TRAJ'] =  dataframe_sixty.iloc[i]['Tokenization_2'][:-int(len(tokenization_2)*0.6)+index]
-        dataframe.iloc[list_index_sixty[i]]['DEB_TRAJ'] =  dataframe.iloc[list_index_sixty[i]]['Tokenization_2'][:-int(len(tokenization_2)*0.6)+index]
-        """
 
-
-
-
-        """
-        #we put the token in the target column
-
-
-
-        dataframe_sixty.iloc[i]['TARGET'] = tokenization_2[index]
-        dataframe.iloc[list_index_sixty[i]]['TARGET'] = tokenization_2[index]
-        #we put in the column DEB_TRAJ the tokens that are before the target
-        dataframe_sixty.iloc[i]['DEB_TRAJ'] =  dataframe_sixty.iloc[i]['Tokenization_2'][:-int(len(tokenization_2)*0.6)+index]
-        dataframe.iloc[list_index_sixty[i]]['DEB_TRAJ'] =  dataframe.iloc[list_index_sixty[i]]['Tokenization_2'][:-int(len(tokenization_2)*0.6)+index]
-        """
     dataframe_sixty['TARGET'] = list_target_sixty_data
     
     dataframe_sixty['DEB_TRAJ'] = list_deb_traj_sixty_data
@@ -296,8 +267,14 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent
     dataframe_sep['TARGET'] = list_target_sep_data
     dataframe_sep['DEB_TRAJ'] = list_deb_traj_sep_data
 
-    #we get back the full dataframe IN THE ORIGINAL ORDER
+    #we get back the full dataframe 
     dataframe_full = pd.concat([dataframe_sixty,dataframe_thirty,dataframe_ten,dataframe_last,dataframe_sep],ignore_index=True)
-    return dataframe_full
+    # we put it in the right order (using the TRIP_ID column so that the dataframe is in the same order as the dataframe in input called dataframe)
+    dataframe_full = dataframe_full.sort_values(by=['TRIP_ID'])
+    #we verify that the dataframe is in the right order
+    for i in range(len(dataframe_full)):
+        if dataframe_full['TRIP_ID'][i] != dataframe['TRIP_ID'][i]:
+            raise ValueError('the dataframe is not in the right order') 
+
 
 df_full = prepare_train(data_train, 0.4, 0.25,0.15,0.1,0.1)
