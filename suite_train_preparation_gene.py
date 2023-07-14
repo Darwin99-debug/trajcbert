@@ -95,7 +95,7 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.3, ten_percent=
     #we create a list of the indexes of the rows of the dataframe
     list_index = list(range(len(dataframe)))
     #we shuffle the list of indexes
-    random.shuffle(list_index)
+    #random.shuffle(list_index)
     #we create a list of the indexes of the rows that will fall into each category
     list_index_sixty = list_index[:number_sixty]
     list_index_thirty = list_index[number_sixty:number_sixty+number_thirty]
@@ -270,8 +270,9 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.3, ten_percent=
     #we get back the full dataframe 
     dataframe_full = pd.concat([dataframe_sixty,dataframe_thirty,dataframe_ten,dataframe_last,dataframe_sep],ignore_index=True)
     # we put it in the right order (using the TRIP_ID column so that the dataframe is in the same order as the dataframe in input called dataframe)
-    dataframe_full = dataframe_full.sort_values(by=['TRIP_ID'])
+    #dataframe_full = dataframe_full.sort_values(by=['TRIP_ID'])
     #we verify that the dataframe is in the right order
+    #dataframe=dataframe.sort_values(by=['TRIP_ID'])
     for i in range(len(dataframe_full)):
         if dataframe_full['TRIP_ID'][i] != dataframe['TRIP_ID'][i]:
             raise ValueError('the dataframe is not in the right order') 
