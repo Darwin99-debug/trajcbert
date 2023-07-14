@@ -19,7 +19,7 @@ from torch.nn.parallel import DistributedDataParallel
 import h3
 from sklearn.metrics import f1_score
 
-with open('../data/train_clean.json', 'r') as openfile:
+with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
 
     # Reading from json file
     json_loaded = json.load(openfile)
@@ -80,7 +80,22 @@ liste_token_geo = list(set(liste_token_geo))
 nb_token_geo = len(liste_token_geo)
 
 #On ajoute les tokens géographiques au tokenizer
+contextual_info_token = []
+for i in range(len(data_clean)):
+    contextual_info_token.append(data_clean['CALL_TYPE'][i])
+    contextual_info_token.append(str(data_clean['TAXI_ID'][i]))
+    contextual_info_token.append(data_clean['DAY'][i])
+    contextual_info_token.append(data_clean['HOUR'][i])
+    contextual_info_token.append(data_clean['WEEK'][i])
+      
+
+#we remove the duplicates
+contextual_info_token = list(set(contextual_info_token))
+    
+
+#On ajoute les tokens géographiques au tokenizer
 tokenizer.add_tokens(liste_token_geo)
+tokenizer.add_tokens(contextual_info_token)
 print("On a le tokenizer final")
 
 #On a besoin du nombre de labels, celui-ci correspond au nombre de tokens géographiques + 1 (pour le token [SEQ] indiquant la fin de la séquence)
@@ -402,21 +417,18 @@ np.save(output_dir+'loss_values.npy',loss_values)
 np.save(output_dir+'accuracy_values.npy',accuracy_values)"""
 
 
-<<<<<<< HEAD
-model_to_save = model.module if hasattr(model, 'module') else model
-model_to_save.save_pretrained('/home/daril_kw/data/model_trained')
-
-np.save('/home/daril_kw/data/model_trained/loss_values.npy',loss_values)
-np.save('/home/daril_kw/data/model_trained/accuracy_values.npy',accuracy_values)
-=======
 # model_to_save = model.module if hasattr(model, 'module') else model
 
 # the hasattr function checks if the model has the attribute module or not
 #  the attribute module is used when we use the DataParallel function
 
-model.save_pretrained('models/first_test_small.hdf5')
+model.save_pretrained('/home/daril_kw/data/model_trained_cpu_version')
 
-np.save('models/loss_values.npy',loss_values)
-np.save('models/accuracy_values' ,accuracy_values)
+#np.save('/home/daril_kw/data/loss.npy',loss_values)
+#np.save('/home/daril_kw/data/acc.npy' ,accuracy_values)
 
->>>>>>> e8bc05adce6db32bb2a933d4ed12b43b644832a3
+#save the prediction dataloader
+#torch.save(validation_dataloader,'/home/daril_kw/data/validation_dataloader_v_small.pt')
+
+#save the prediction dataloader
+torch.save(prediction_dataloader,'/home/daril_kw/data/pred_dataloader_v_small.pt')

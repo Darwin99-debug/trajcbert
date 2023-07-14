@@ -64,6 +64,10 @@ if type(data_format['TAXI_ID'][0])!=str:
 if type(data_format['CALL_TYPE'][0])!=str:
     data_format['CALL_TYPE']=data_format['CALL_TYPE'].apply(lambda x: str(x))
 
+
+
+
+
 print("gestion du tokenizer commencée")
 tokenizer = BertTokenizer.from_pretrained("bert-base-cased")
 
@@ -80,8 +84,23 @@ liste_token_geo = list(set(liste_token_geo))
 #on garde le nombre de tokens géographiques pour la suite
 nb_token_geo = len(liste_token_geo)
 
+
+contextual_info_token = []
+for i in range(len(data_clean)):
+    contextual_info_token.append(data_clean['CALL_TYPE'][i])
+    contextual_info_token.append(str(data_clean['TAXI_ID'][i]))
+    contextual_info_token.append(data_clean['DAY'][i])
+    contextual_info_token.append(data_clean['HOUR'][i])
+    contextual_info_token.append(data_clean['WEEK'][i])
+      
+
+#we remove the duplicates
+contextual_info_token = list(set(contextual_info_token))
+    
+
 #On ajoute les tokens géographiques au tokenizer
 tokenizer.add_tokens(liste_token_geo)
+tokenizer.add_tokens(contextual_info_token)
 print("On a le tokenizer final")
 
 #On a besoin du nombre de labels, celui-ci correspond au nombre de tokens géographiques + 1 (pour le token [SEQ] indiquant la fin de la séquence)
