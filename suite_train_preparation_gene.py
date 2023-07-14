@@ -278,4 +278,4 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.3, ten_percent=
             raise ValueError('the dataframe is not in the right order') 
 
 
-df_full = prepare_train(data_train, 0.4, 0.25,0.15,0.1,0.1)
+df_full = prepare_train(data_train, 0.45, 0.3,0.15,0.05,0.05)
