@@ -62,8 +62,8 @@ if type(data_format['TAXI_ID'][0])!=str:
 if type(data_format['CALL_TYPE'][0])!=str:
     data_format['CALL_TYPE']=data_format['CALL_TYPE'].apply(lambda x: str(x))
 
-print("gestion du tokenizer commencée")
-tokenizer = BertTokenizer.from_pretrained("bert-base-cased")
+print("Staring the tokenization...\n")
+tokenizer = BertTokenizer.from_pretrained("/home/daril/trajcbert/BERT_MODEL/tokenizer")
 
 
 liste_token_geo = []
@@ -80,13 +80,14 @@ nb_token_geo = len(liste_token_geo)
 
 #On ajoute les tokens géographiques au tokenizer
 tokenizer.add_tokens(liste_token_geo)
-print("On a le tokenizer final")
+print("Tokenization done\n")
 
 #On a besoin du nombre de labels, celui-ci correspond au nombre de tokens géographiques + 1 (pour le token [SEQ] indiquant la fin de la séquence)
 
 nb_labels = nb_token_geo + 1
-
-model=BertForSequenceClassification.from_pretrained("bert-base-cased",num_labels=nb_labels)
+print(f"nb_labels = {nb_labels}\n")
+print("Starting the model...\n")
+model=BertForSequenceClassification.from_pretrained("/home/daril/trajcbert/BERT_MODEL/bert-base-cased",num_labels=nb_labels)
 #on adapte la taille de l'embedding pour qu'elle corresponde au nombre de tokens géographiques + 1
 model.resize_token_embeddings(len(tokenizer))
 
