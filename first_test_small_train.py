@@ -30,7 +30,7 @@ print("We put the data in a dataset.")
 data_format = pd.DataFrame(data=json_loaded)
 
 #we keep only 60 rows
-data_format = data_format[:60]
+data_format = data_format[:20]
 
 #we create the correct tokenization column
 data_format['Tokenization_2'] = data_format['POLYLINE'].apply(lambda x: [h3.geo_to_h3(x[i][0], x[i][1], 10) for i in range(len(x))])
