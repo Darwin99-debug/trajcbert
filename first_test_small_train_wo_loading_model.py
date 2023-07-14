@@ -30,7 +30,7 @@ print("We put the data in a dataset.")
 data_format = pd.DataFrame(data=json_loaded)
 
 #load the tokenizer
-tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/data//tokenizer_augmented')
+tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/data/tokenizer_augmented')
 
 #load the model
 model = BertForSequenceClassification.from_pretrained('/home/daril_kw/data/model_bert_augmented')
@@ -210,7 +210,7 @@ seed_val = 2023
 random.seed(seed_val)
 np.random.seed(seed_val)
 torch.manual_seed(seed_val)
-torch.cuda.manual_seed_all(seed_val)
+#torch.cuda.manual_seed_all(seed_val)
 
 
 #we store the loss and accuracy of each epoch
