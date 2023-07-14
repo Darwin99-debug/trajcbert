@@ -63,7 +63,7 @@ if type(data_format['CALL_TYPE'][0])!=str:
     data_format['CALL_TYPE']=data_format['CALL_TYPE'].apply(lambda x: str(x))
 
 print("Staring the tokenization...\n")
-tokenizer = BertTokenizer.from_pretrained("/home/daril/trajcbert/BERT_MODEL/tokenizer")
+tokenizer = BertTokenizer.from_pretrained("BERT_MODEL/tokenizer")
 
 
 liste_token_geo = []
@@ -87,7 +87,7 @@ print("Tokenization done\n")
 nb_labels = nb_token_geo + 1
 print(f"nb_labels = {nb_labels}\n")
 print("Starting the model...\n")
-model=BertForSequenceClassification.from_pretrained("/home/daril/trajcbert/BERT_MODEL/bert-base-cased",num_labels=nb_labels)
+model=BertForSequenceClassification.from_pretrained("BERT_MODEL/bert-base-cased",num_labels=nb_labels)
 #on adapte la taille de l'embedding pour qu'elle corresponde au nombre de tokens géographiques + 1
 model.resize_token_embeddings(len(tokenizer))
 
