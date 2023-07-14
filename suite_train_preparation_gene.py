@@ -276,6 +276,8 @@ def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.3, ten_percent=
     for i in range(len(dataframe_full)):
         if dataframe_full['TRIP_ID'][i] != dataframe['TRIP_ID'][i]:
             raise ValueError('the dataframe is not in the right order') 
+    
+    return dataframe_full
 
 
 df_full = prepare_train(data_train, 0.45, 0.3,0.15,0.05,0.05)
