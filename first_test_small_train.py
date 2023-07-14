@@ -79,6 +79,10 @@ liste_token_geo = list(set(liste_token_geo))
 #on garde le nombre de tokens géographiques pour la suite
 nb_token_geo = len(liste_token_geo)
 
+
+
+#On ajoute les tokens géographiques au tokenizer
+tokenizer.add_tokens(liste_token_geo)
 #On ajoute les tokens géographiques au tokenizer
 contextual_info_token = []
 for i in range(len(data_format)):
@@ -92,9 +96,6 @@ for i in range(len(data_format)):
 #we remove the duplicates
 contextual_info_token = list(set(contextual_info_token))
     
-
-#On ajoute les tokens géographiques au tokenizer
-tokenizer.add_tokens(liste_token_geo)
 tokenizer.add_tokens(contextual_info_token)
 print("On a le tokenizer final")
 
