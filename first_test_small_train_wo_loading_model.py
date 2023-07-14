@@ -19,7 +19,7 @@ from torch.nn.parallel import DistributedDataParallel
 import h3
 
 
-with open('/home/daril/scratch/data/trajcbert/data_first_test_small_train.json', 'r') as openfile:
+with open('/home/daril_kw/data/data_first_test_small_train.json', 'r') as openfile:
 
     # Reading from json file
     json_loaded = json.load(openfile)
@@ -30,10 +30,10 @@ print("We put the data in a dataset.")
 data_format = pd.DataFrame(data=json_loaded)
 
 #load the tokenizer
-tokenizer = BertTokenizer.from_pretrained('/home/daril/data/trajcbert/tokenizer_augmented')
+tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/data//tokenizer_augmented')
 
 #load the model
-model = BertForSequenceClassification.from_pretrained('/home/daril/data/trajcbert/model_bert_augmented')
+model = BertForSequenceClassification.from_pretrained('/home/daril_kw/data/model_bert_augmented')
 
 
 

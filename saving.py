@@ -112,5 +112,10 @@ model.save_pretrained('/home/daril_kw/data/model_bert_augmented')
 #save the tokenizer
 tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_augmented')
 #save the data_format under json format
+
+#for that we need to convert the data_format to a dictionary
+data_format = data_format.to_dict(orient='records')
+
 with open('/home/daril_kw/data/data_first_test_small_train.json', 'w') as outfile:
     json.dump(data_format, outfile)
+
