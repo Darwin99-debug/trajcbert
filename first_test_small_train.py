@@ -81,12 +81,12 @@ nb_token_geo = len(liste_token_geo)
 
 #On ajoute les tokens géographiques au tokenizer
 contextual_info_token = []
-for i in range(len(data_clean)):
-    contextual_info_token.append(data_clean['CALL_TYPE'][i])
-    contextual_info_token.append(str(data_clean['TAXI_ID'][i]))
-    contextual_info_token.append(data_clean['DAY'][i])
-    contextual_info_token.append(data_clean['HOUR'][i])
-    contextual_info_token.append(data_clean['WEEK'][i])
+for i in range(len(data_format)):
+    contextual_info_token.append(data_format['CALL_TYPE'][i])
+    contextual_info_token.append(str(data_format['TAXI_ID'][i]))
+    contextual_info_token.append(data_format['DAY'][i])
+    contextual_info_token.append(data_format['HOUR'][i])
+    contextual_info_token.append(data_format['WEEK'][i])
       
 
 #we remove the duplicates
