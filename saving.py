@@ -19,7 +19,7 @@ from torch.nn.parallel import DistributedDataParallel
 import h3
 
 
-with open('/home/daril/data/trajcbert/train_clean_small.json', 'r') as openfile:
+with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
 
     # Reading from json file
     json_loaded = json.load(openfile)
@@ -108,9 +108,9 @@ model=BertForSequenceClassification.from_pretrained("bert-base-cased",num_labels
 model.resize_token_embeddings(len(tokenizer))
 
 #save the model
-model.save_pretrained('/home/daril/data/trajcbert/model_bert_augmented')
+model.save_pretrained('/home/daril_kw/data/model_bert_augmented')
 #save the tokenizer
-tokenizer.save_pretrained('/home/daril/data/trajcbert/tokenizer_augmented')
+tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_augmented')
 #save the data_format under json format
-with open('/home/daril/data/trajcbert/data_first_test_small_train.json', 'w') as outfile:
+with open('/home/daril_kw/data/data_first_test_small_train.json', 'w') as outfile:
     json.dump(data_format, outfile)
