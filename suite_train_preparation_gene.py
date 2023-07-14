@@ -45,7 +45,7 @@ data_train, data_test = train_test_split(data_format, test_size=0.2, random_stat
 
 
 
-def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.25, ten_percent=0.15, last_prob=0.1, sep_prob=0.1 ):
+def prepare_train(dataframe, sixty_percent=0.4, thirty_percent=0.3, ten_percent=0.10, last_prob=0.1, sep_prob=0.1 ):
     #sixty_percent is the proportion of the time we will take the target between the 60% last tokens and the 30% last tokens
     #thirty_percent is the proportion of the time we will take the target between the 30% last tokens and the 10% last tokens
     #ten_percent is the proportion of the time we will take the target in the 10% last tokens
