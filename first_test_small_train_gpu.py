@@ -87,9 +87,12 @@ print("Tokenization done\n")
 nb_labels = nb_token_geo + 1
 print(f"nb_labels = {nb_labels}\n")
 print("Starting the model...\n")
-model=BertForSequenceClassification.from_pretrained("BERT_MODEL/bert-base-cased",num_labels=nb_labels)
-#on adapte la taille de l'embedding pour qu'elle corresponde au nombre de tokens géographiques + 1
-model.resize_token_embeddings(len(tokenizer))
+
+
+model=BertForSequenceClassification.from_pretrained("trajcbert_small_base_cased",num_labels=nb_labels)
+
+
+#  the len(tokenizer) is the number of tokens in the tokenizer
 
 
 print("gestion du format de l'input commencée")
