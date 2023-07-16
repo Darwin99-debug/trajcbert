@@ -63,7 +63,7 @@ if type(data_format['CALL_TYPE'][0])!=str:
     data_format['CALL_TYPE']=data_format['CALL_TYPE'].apply(lambda x: str(x))
 
 print("Staring the tokenization...\n")
-tokenizer = BertTokenizer.from_pretrained("BERT_MODEL/tokenizer")
+tokenizer = BertTokenizer.from_pretrained("BERT_MODEL/tokenizer/bert-base-cased")
 
 
 liste_token_geo = []
