@@ -89,7 +89,7 @@ print(f"nb_labels = {nb_labels}\n")
 print("Starting the model...\n")
 
 
-model=BertForSequenceClassification.from_pretrained("trajcbert_small_base_cased",num_labels=nb_labels)
+model=BertForSequenceClassification.from_pretrained("BERT_MODEL/trajcbert_small_base_cased",num_labels=nb_labels)
 
 
 #  the len(tokenizer) is the number of tokens in the tokenizer
