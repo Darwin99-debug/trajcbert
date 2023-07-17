@@ -152,7 +152,29 @@ for i in range(nb_categories-2):
         for k in tokenization_2[:index]:
             list_deb_traj_dict['list_deb_traj_category'+str(i)][j].append(k)
 
-for i in range(nb_categories-2):
+
+i = nb_categories-2
+df = df_dict['dataframe_category'+str(i)]
+for j in range(len(df)):
+    #we take the tokenization_2 column
+    tokenization_2 = df.iloc[j]['Tokenization_2']
+    #we take the last token
+    token = tokenization_2[-1]
+    #we put the token in the list of target
+    target_dict['list_target_category'+str(i)][j] = token
+    #we put the token before the target in the list of deb_traj : we add the token of the whole tokenization_2 before the target
+    list_deb_traj_dict['list_deb_traj_category'+str(i)][j] = df.iloc[j]['Tokenization_2'][:-1]
+
+
+for i in range(nb_categories-1):
     df_dict['dataframe_category'+str(i)]['TARGET'] = target_dict['list_target_category'+str(i)]
     df_dict['dataframe_category'+str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category'+str(i)]
 
+i=nb_categories-1
+df_dict['dataframe_category'+str(i)]['TARGET'] = target_dict['list_target_category'+str(i)]
+df_dict['dataframe_category'+str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category'+str(i)]
+
+#we verify that df_dict['dataframe_category'+str(i)]['TARGET'][j]==df_dict['dataframe_category'+str(i)]['Tokenization_2'][j][len(df_dict['dataframe_category'+str(i)]['DEB_TRAJ'][j])]
+for i in range(nb_categories):
+    if df_dict['dataframe_category'+str(i)]['TARGET'][j] != df_dict['dataframe_category'+str(i)]['Tokenization_2'][j][len(df_dict['dataframe_category'+str(i)]['DEB_TRAJ'][j])]:
+        print('i')
