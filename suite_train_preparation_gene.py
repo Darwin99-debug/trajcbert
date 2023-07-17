@@ -353,9 +353,9 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
     for i in range(nb_categories):
         target_cat_name = 'list_target_category' + str(i)
         #we want one target per row of the dataframe of the category selected (identified by i)
-        target_dict[target_cat_name] = [0 for i in range(len(df_dict['dataframe_category'+str(i)]))]
+        target_dict[target_cat_name] = [0 for j in range(len(df_dict['dataframe_category'+str(i)]))]
         #we want one list of deb_traj per row of the dataframe
-        list_deb_traj_dict[target_cat_name]= [[] for i in range(len(df_dict['dataframe_category'+str(i)]))]
+        list_deb_traj_dict[target_cat_name]= [[] for j in range(len(df_dict['dataframe_category'+str(i)]))]
 
 
     #we do the treatment for each category except the two last categories
