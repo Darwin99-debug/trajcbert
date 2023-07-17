@@ -430,10 +430,10 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
     for i in range(nb_categories):
         dataframe_full = pd.concat([dataframe_full,df_dict['dataframe_category'+str(i)]],ignore_index=True)
 
-    return dataframe_full, df_dict['dataframe_category'+str(0)]
+    return dataframe_full
 
 #we call the function
-df_full, df_0 = prepare_train_wo_duplicate(data_train)
+df_full = prepare_train_wo_duplicate(data_train)
 
             
 
