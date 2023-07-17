@@ -16,6 +16,7 @@ from torch.utils.data import TensorDataset, DataLoader, RandomSampler, Sequentia
 from transformers import get_linear_schedule_with_warmup
 from torch.optim import AdamW
 from torch.nn.parallel import DistributedDataParallel
+import gc
 
 
 
@@ -365,6 +366,9 @@ for epoch_i in range(0, epochs):
 
     # free up the cuda memory
     torch.cuda.empty_cache()
+
+    # free the garbage collector
+    gc.collect()
 print("")
 print("Training complete!")
 
