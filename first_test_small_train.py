@@ -81,6 +81,24 @@ nb_token_geo = len(liste_token_geo)
 
 #On ajoute les tokens géographiques au tokenizer
 tokenizer.add_tokens(liste_token_geo)
+
+
+contextual_info_token = []
+for i in range(len(data_format)):
+    contextual_info_token.append(data_format['CALL_TYPE'][i])
+    contextual_info_token.append(str(data_format['TAXI_ID'][i]))
+    contextual_info_token.append(data_format['DAY'][i])
+    contextual_info_token.append(data_format['HOUR'][i])
+    contextual_info_token.append(data_format['WEEK'][i])
+      
+
+#we remove the duplicates
+contextual_info_token = list(set(contextual_info_token))
+    
+
+#we add the new tokens to the tokenizer 
+tokenizer.add_tokens(contextual_info_token)
+
 print("On a le tokenizer final")
 
 #On a besoin du nombre de labels, celui-ci correspond au nombre de tokens géographiques + 1 (pour le token [SEQ] indiquant la fin de la séquence)
