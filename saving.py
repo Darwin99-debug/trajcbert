@@ -33,7 +33,7 @@ data_format = pd.DataFrame(data=json_loaded)
 # data_format = data_format[:60]
 
 #we create the correct tokenization column
-data_format['Tokenization_2'] = data_format['POLYLINE'].apply(lambda x: [h3.geo_to_h3(x[i][0], x[i][1], 10) for i in range(len(x))])
+data_format['Tokenization_2'] = data_format['POLYLINE'].apply(lambda x: [h3.geo_to_h3(x[i][1], x[i][0], 10) for i in range(len(x))])
 
 #on récupère la date à partir du timestamp
 data_format['DATE'] = data_format['TIMESTAMP'].apply(lambda x: datetime.datetime.fromtimestamp(x).strftime('%Y-%m-%d %H:%M:%S'))
@@ -108,13 +108,13 @@ model=BertForSequenceClassification.from_pretrained("bert-base-cased",num_labels
 model.resize_token_embeddings(len(tokenizer))
 
 #save the model
-model.save_pretrained('/home/daril_kw/data/model_bert_augmented')
+model.save_pretrained('/home/daril_kw/data/model_bert_augmented_full')
 #save the tokenizer
-tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_augmented')
+tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_augmented_full')
 #save the data_format under json format
 
 #for that we need to convert the data_format to a dictionary
 data_format = data_format.to_dict(orient='records')
 
-with open('/home/daril_kw/data/data_first_test_small_train.json', 'w') as outfile:
+with open('/home/daril_kw/data/data_first_test_small_train_full.json', 'w') as outfile:
     json.dump(data_format, outfile)
