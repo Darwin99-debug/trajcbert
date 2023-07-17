@@ -376,7 +376,7 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
             token = tokenization_2[index]
             #we put the token in the list of target
             target_dict['list_target_category'+str(i)][j] = token
-            #we put the token before the target in the list of deb_traj : we add the token befor the first threshold fisrt
+            #we put the token before the target in the list of deb_traj : we add the token befor the threshold associated to the category
             for k in df.iloc[j]['Tokenization_2'][:int(list_threshold[i]*len(df.iloc[j]['Tokenization_2']))]:
                 list_deb_traj_dict['list_deb_traj_category'+str(i)][j].append(k)
             #we add the token from tokenization_2 before the target to the list of deb_traj
