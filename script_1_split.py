@@ -151,3 +151,8 @@ for i in range(nb_categories-2):
         #we add the token from tokenization_2 before the target to the list of deb_traj
         for k in tokenization_2[:index]:
             list_deb_traj_dict['list_deb_traj_category'+str(i)][j].append(k)
+
+
+df_dict['dataframe_category'+str(i)]['TARGET'] = target_dict['list_target_category'+str(i)]
+df_dict['dataframe_category'+str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category'+str(i)]
+
