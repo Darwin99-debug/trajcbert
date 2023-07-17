@@ -352,8 +352,8 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
     list_deb_traj_dict = {}
     for i in range(nb_categories):
         target_cat_name = 'list_target_category' + str(i)
-        target_dict[target_cat_name] = [0 for i in range(len(globals()['dataframe_category'+str(i)]))]
-        list_deb_traj_dict[target_cat_name]= [[] for i in range(len(globals()['dataframe_category'+str(i)]))]
+        target_dict[target_cat_name] = [0 for i in range(len(df_dict['dataframe_category'+str(i)]))]
+        list_deb_traj_dict[target_cat_name]= [[] for i in range(len(df_dict['dataframe_category'+str(i)]))]
 
 
     #we do the treatment for each category except the two last categories
@@ -372,7 +372,7 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
             #we take the token
             token = tokenization_2[index]
             #we put the token in the list of target
-            globals()['list_target_category'+str(i)][j] = token
+            target_dict['list_target_category'+str(i)][j] = token
             #we put the token before the target in the list of deb_traj : we add the token befor the first threshold fisrt
             for k in df.iloc[j]['Tokenization_2'][:int(list_threshold[i]*len(df.iloc[j]['Tokenization_2']))]:
                 list_deb_traj_dict['list_deb_traj_category'+str(i)][j].append(k)
@@ -417,7 +417,7 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
                 print(i,j)
 
     #we get the full dataframe 
-    dataframe_full=pd.concat([globals()['dataframe_category'+str(i)] for i in range(nb_categories)],ignore_index=True)
+    dataframe_full=pd.concat([df_dict['dataframe_category'+str(i)] for i in range(nb_categories)],ignore_index=True)
     #we put it in the right order
     dataframe_full = dataframe_full.reindex(columns=dataframe.columns)
 
