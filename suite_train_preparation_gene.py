@@ -425,15 +425,15 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
             if df['Tokenization_2'][j][len(df['DEB_TRAJ'][j])]!=df['TARGET'][j]:
                 print(i,j)
     
-    #we get the full dataframe 
+    #we get the full dataframe with the same columns as the original dataframe
     dataframe_full=pd.concat([df_dict['dataframe_category'+str(i)] for i in range(nb_categories)],ignore_index=True)
     #we put it in the right order
     dataframe_full = dataframe_full.reindex(columns=dataframe.columns)
 
-    return dataframe_full
+    return dataframe_full, df_dict['dataframe_category'+str(0)]
 
 #we call the function
-df_full = prepare_train_wo_duplicate(data_train)
+df_full, df_0 = prepare_train_wo_duplicate(data_train)
 
             
 
