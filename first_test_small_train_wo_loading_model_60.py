@@ -19,21 +19,21 @@ from torch.nn.parallel import DistributedDataParallel
 import h3
 
 
-with open('/home/daril_kw/data/data_first_test_small_train.json', 'r') as openfile:
+with open('/home/daril/scratch/data/trajcbert/data_first_test_small_train_60_lines.json', 'r') as openfile:
 
     # Reading from json file
     json_loaded = json.load(openfile)
 
-print("We put the data in a dataset.")
+print("We put the data in a dataset.") 
  
 #we put them in a dataframe
 data_format = pd.DataFrame(data=json_loaded)
 
 #load the tokenizer
-tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/data/tokenizer_augmented')
+tokenizer = BertTokenizer.from_pretrained('/home/daril/trajcbert/BERT_MODEL/tokenizer_augmented_60')
 
 #load the model
-model = BertForSequenceClassification.from_pretrained('/home/daril_kw/data/model_bert_augmented')
+model = BertForSequenceClassification.from_pretrained('/home/daril/trajcbert/BERT_MODEL/model_bert_augmented_60')
 
 
 
@@ -163,8 +163,8 @@ prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, b
 
 
 #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-#we go on the cpu
-device = torch.device("cpu")
+#we go on the gpu
+device = torch.device("cuda")
 
 #model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_final",num_labels=nb_labels)
 model.to(device)
@@ -352,7 +352,7 @@ np.save(output_dir+'accuracy_values.npy',accuracy_values)"""
 # the hasattr function checks if the model has the attribute module or not
 #  the attribute module is used when we use the DataParallel function
 
-model.save_pretrained('models/model_trained_cpu_version')
+model.save_pretrained('models/model_trained_gpu_version')
 
 #np.save('/home/daril_kw/data/loss.npy',loss_values)
 #np.save('/home/daril_kw/data/acc.npy' ,accuracy_values)
@@ -361,4 +361,4 @@ model.save_pretrained('models/model_trained_cpu_version')
 #torch.save(validation_dataloader,'/home/daril_kw/data/validation_dataloader_v_small.pt')
 
 #save the prediction dataloader
-torch.save(prediction_dataloader,'models/pred_dataloader_v_small.pt')
+torch.save(prediction_dataloader,'models/pred_dataloader_v_small_60.pt')

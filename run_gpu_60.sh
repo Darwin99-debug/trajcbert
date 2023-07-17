@@ -3,7 +3,7 @@
 #SBATCH --gres=gpu:1
 # SBATCH --mem-per-gpu=16G
 #SBATCH --time=03:00:00 
-#SBATCH --job-name=first_small_trajcbert_on_gpu_s_and_venv_scipy
+#SBATCH --job-name=first_small_trajcbert_on_gpu_s_60
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
 #SBATCH --cpus-per-task=16 # number of cores
@@ -25,6 +25,6 @@ pip install h3
 pip install -r requirements.txt --no-index
 pip list
 
-python first_test_small_train_gpu.py
+python first_test_small_train_wo_loading_model_60.py
 
 
