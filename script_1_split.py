@@ -152,7 +152,7 @@ for i in range(nb_categories-2):
         for k in tokenization_2[:index]:
             list_deb_traj_dict['list_deb_traj_category'+str(i)][j].append(k)
 
-
-df_dict['dataframe_category'+str(i)]['TARGET'] = target_dict['list_target_category'+str(i)]
-df_dict['dataframe_category'+str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category'+str(i)]
+for i in range(nb_categories-2):
+    df_dict['dataframe_category'+str(i)]['TARGET'] = target_dict['list_target_category'+str(i)]
+    df_dict['dataframe_category'+str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category'+str(i)]
 
