@@ -25,6 +25,6 @@ pip install h3
 pip install -r requirements.txt --no-index
 pip list
 
-python first_test_small_train_gpu.py
+python first_test_small_train_wo_loading_model_60.py
 
 
