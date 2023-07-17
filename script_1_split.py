@@ -178,4 +178,4 @@ df_dict['dataframe_category'+str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_
 for i in range(nb_categories):
     for j in range(len(df_dict['dataframe_category'+str(i)])):
         if df_dict['dataframe_category'+str(i)]['TARGET'][j] != df_dict['dataframe_category'+str(i)]['Tokenization_2'][j][len(df_dict['dataframe_category'+str(i)]['DEB_TRAJ'][j])]:
-            print('i')
+            print(i)
