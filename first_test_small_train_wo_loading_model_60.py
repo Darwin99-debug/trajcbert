@@ -362,6 +362,9 @@ for epoch_i in range(0, epochs):
     accuracy_values.append(eval_accuracy)
     #we store the f1 score
     f1_values.append(eval_f1)
+
+    # free up the cuda memory
+    torch.cuda.empty_cache()
 print("")
 print("Training complete!")
 
