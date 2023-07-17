@@ -166,16 +166,22 @@ for j in range(len(df)):
     list_deb_traj_dict['list_deb_traj_category'+str(i)][j] = df.iloc[j]['Tokenization_2'][:-1]
 
 
-for i in range(nb_categories-1):
+for i in range(nb_categories):
     df_dict['dataframe_category'+str(i)]['TARGET'] = target_dict['list_target_category'+str(i)]
     df_dict['dataframe_category'+str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category'+str(i)]
 
-i=nb_categories-1
-df_dict['dataframe_category'+str(i)]['TARGET'] = target_dict['list_target_category'+str(i)]
-df_dict['dataframe_category'+str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category'+str(i)]
 
 #we verify that df_dict['dataframe_category'+str(i)]['TARGET'][j]==df_dict['dataframe_category'+str(i)]['Tokenization_2'][j][len(df_dict['dataframe_category'+str(i)]['DEB_TRAJ'][j])]
-for i in range(nb_categories):
+for i in range(nb_categories-1):
     for j in range(len(df_dict['dataframe_category'+str(i)])):
         if df_dict['dataframe_category'+str(i)]['TARGET'][j] != df_dict['dataframe_category'+str(i)]['Tokenization_2'][j][len(df_dict['dataframe_category'+str(i)]['DEB_TRAJ'][j])]:
             print(i)
+
+
+i = nb_categories-1
+df = df_dict['dataframe_category'+str(i)]
+for j in range(len(df)):
+    target_dict['list_target_category'+str(i)][j] = '[SEP]'
+    #we put the token before the target in the list of deb_traj : we add the token of the whole tokenization_2
+    list_deb_traj_dict['list_deb_traj_category'+str(i)][j] = df.iloc[j]['Tokenization_2']
+                
