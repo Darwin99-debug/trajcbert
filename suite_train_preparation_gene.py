@@ -290,7 +290,7 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
     for i in range(nb_categories):
         category_name = 'category' + str(i)
         categories[category_name] = []
-        #in the above line, we use globals() to create a list with a string as name
+        
     
     #we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
     #tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
@@ -344,7 +344,7 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
         # ie nb_rows_category
         #fill the dataframes 
         #the append does not exist for dataframes, we use the concat function 
-        df_dict['dataframe_category'+str(i)] = pd.concat([df_dict['dataframe_category'+str(i)],dataframe.iloc[globals()['list_index_category'+str(i)]]],ignore_index=True)
+        df_dict['dataframe_category'+str(i)] = pd.concat([df_dict['dataframe_category'+str(i)],dataframe.iloc[list_index_dict['list_index_category'+str(i)]]],ignore_index=True)
 
 
     #we create a list of targets and deb_traj for each category
