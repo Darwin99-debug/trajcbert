@@ -355,7 +355,8 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
         #we want one target per row of the dataframe of the category selected (identified by i)
         target_dict[target_cat_name] = [0 for j in range(len(df_dict['dataframe_category'+str(i)]))]
         #we want one list of deb_traj per row of the dataframe
-        list_deb_traj_dict[target_cat_name]= [[] for j in range(len(df_dict['dataframe_category'+str(i)]))]
+        list_deb_traj_name = 'list_deb_traj_category' + str(i)
+        list_deb_traj_dict[list_deb_traj_name]= [[] for j in range(len(df_dict['dataframe_category'+str(i)]))]
 
 
     #we do the treatment for each category except the two last categories
@@ -380,7 +381,7 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
                 list_deb_traj_dict['list_deb_traj_category'+str(i)][j].append(k)
             #we add the token from tokenization_2 before the target to the list of deb_traj
             for k in tokenization_2[:index]:
-                target_dict['list_deb_traj_category'+str(i)][j].append(k)
+                list_deb_traj_dict['list_deb_traj_category'+str(i)][j].append(k)
 
 
             
