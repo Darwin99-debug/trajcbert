@@ -26,12 +26,16 @@ with open('/home/daril_kw/data/data_with_time_info_ok.json', 'r') as openfile:
 
 data_format = pd.DataFrame(data=json_loaded)
 
+def add_spaces_for_concat(data_format, column):
+    data_format[column]=data_format[column].apply(lambda x: ' '+x)
+    return data_format
 
-data_format['HOUR']=data_format['HOUR'].apply(lambda x: ' '+x)
-data_format['WEEK']=data_format['WEEK'].apply(lambda x: ' '+x)
-data_format['CALL_TYPE']=data_format['CALL_TYPE'].apply(lambda x: ' '+x)
-data_format['TAXI_ID']=data_format['TAXI_ID'].apply(lambda x: ' '+x)
-data_format['DAY']=data_format['DAY'].apply(lambda x: ' '+x)
+data_format = add_spaces_for_concat(data_format, 'HOUR')
+data_format = add_spaces_for_concat(data_format, 'WEEK')
+data_format = add_spaces_for_concat(data_format, 'CALL_TYPE')
+data_format = add_spaces_for_concat(data_format, 'TAXI_ID')
+data_format = add_spaces_for_concat(data_format, 'DAY')
+
 
 
 # la colonne CONTEXT_INPUT sera la concaténation du jour de la semaine, de l'heure et de la semaien de l'année pui de la colonne CALL_TYPE, de la colonne TAXI_ID, d'un espace et du dernier token de la colonne Tokenization
