@@ -18,6 +18,33 @@ from torch.optim import AdamW
 from torch.nn.parallel import DistributedDataParallel
 import h3
 
+
+# ################################## LOADING THE CONFIG FILE ##########################################
+
+def load_config(config_file):
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+    return config
+
+config_file = 'config.json'
+config = load_config(config_file)
+
+# ################################## LOADING THE CONFIG FILE  END ##########################################
+
+
+
+# ################################## LOADING THE CONFIGs ##########################################
+
+batch_size = config["batch_size"]
+learning_rate = config["learning_rate"]
+epochs = config["num_epochs"]
+
+
+
+
+# ################################## LOADING THE CONFIGs END ##########################################
+
+
 with open('/home/daril/scratch/data/trajcbert/train_clean_small.json', 'r') as openfile:
 
     # Reading from json file
@@ -203,7 +230,7 @@ validation_masks = torch.tensor(validation_masks)
 test_masks = torch.tensor(test_masks)
 
 
-batch_size = 32
+# batch_size = 32
 
 # Create the DataLoader for our training set, one for validation set and one for test set
 
@@ -228,10 +255,10 @@ device = torch.device("cuda")
 model.to(device)
 #model = DistributedDataParallel(model)
 
-optimizer = torch.optim.AdamW(model.parameters(),lr = 2e-5,eps = 1e-8)
+optimizer = torch.optim.AdamW(model.parameters(),lr = learning_rate,eps = 1e-8)
 
 # Number of training epochs. The BERT authors recommend between 2 and 4.
-epochs = 4
+# epochs = 4
 
 # Total number of training steps is number of batches * number of epochs.
 total_steps = len(train_dataloader) * epochs
