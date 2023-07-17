@@ -19,6 +19,34 @@ from torch.nn.parallel import DistributedDataParallel
 import h3
 
 
+
+# ################################## LOADING THE CONFIG FILE ##########################################
+
+def load_config(config_file):
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+    return config
+
+config_file = 'config.json'
+config = load_config(config_file)
+
+# ################################## LOADING THE CONFIG FILE  END ##########################################
+
+
+
+# ################################## LOADING THE CONFIGs ##########################################
+
+batch_size = config["batch_size"]
+learning_rate = config["learning_rate"]
+epochs = config["num_epochs"]
+
+
+
+
+# ################################## LOADING THE CONFIGs END ##########################################
+
+
+
 with open('/home/daril/scratch/data/trajcbert/data_first_test_small_train_60_lines.json', 'r') as openfile:
 
     # Reading from json file
@@ -145,7 +173,7 @@ validation_masks = torch.tensor(validation_masks)
 test_masks = torch.tensor(test_masks)
 
 
-batch_size = 32
+# batch_size = 16
 
 # Create the DataLoader for our training set, one for validation set and one for test set
 
@@ -162,6 +190,9 @@ prediction_sampler = SequentialSampler(prediction_data)
 prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, batch_size=batch_size)
 
 
+
+################################# CONFIGURATION OF THE MODEL ##########################################
+
 #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #we go on the gpu
 device = torch.device("cuda")
@@ -170,10 +201,8 @@ device = torch.device("cuda")
 model.to(device)
 #model = DistributedDataParallel(model)
 
-optimizer = torch.optim.AdamW(model.parameters(),lr = 2e-5,eps = 1e-8)
+optimizer = torch.optim.AdamW(model.parameters(),lr = learning_rate,eps = 1e-8) 
 
-# Number of training epochs. The BERT authors recommend between 2 and 4.
-epochs = 2
 
 # Total number of training steps is number of batches * number of epochs.
 total_steps = len(train_dataloader) * epochs
@@ -217,6 +246,12 @@ torch.manual_seed(seed_val)
 loss_values = []
 accuracy_values = []
 f1_values = []
+################################# CONFIGURATION OF THE MODEL END ##########################################
+
+
+
+
+################################# TRAINING THE MODEL ##########################################
 
 # For each epoch...
 for epoch_i in range(0, epochs):
@@ -331,6 +366,8 @@ for epoch_i in range(0, epochs):
 print("")
 print("Training complete!")
 
+
+################################# TRAINING THE MODEL END ##########################################
 
 
 """

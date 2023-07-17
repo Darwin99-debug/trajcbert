@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=def-nkambou
 #SBATCH --gres=gpu:1
-# SBATCH --mem-per-gpu=32G
+#SBATCH --mem-per-gpu=32G
 #SBATCH --time=03:00:00 
 #SBATCH --job-name=first_small_trajcbert_on_gpu_s_60
 #SBATCH --output=outputs/%x-%j.out
