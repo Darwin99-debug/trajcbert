@@ -409,7 +409,7 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
     #we add the lists of target in the column target of the dataframe and same for deb_traj
     df_dict['dataframe_category'+str(i)]['TARGET'] = target_dict['list_target_category'+str(i)]
     df_dict['dataframe_category'+str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category'+str(i)]
-
+    """
     #we verifiy that for each category exept the last one dataframe'Tokenization_2'][i][len(dataframe['DEB_TRAJ'][i])]!=dataframe['TARGET'][i]
     # wuere i goes from 0 to len(dataframe)
     #and the dataframe is the dataframe_category
@@ -418,7 +418,7 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
         for j in range(len(df)):
             if df['Tokenization_2'][j][len(df['DEB_TRAJ'][j])]!=df['TARGET'][j]:
                 print(i,j)
-
+    """
     #we get the full dataframe 
     dataframe_full=pd.concat([df_dict['dataframe_category'+str(i)] for i in range(nb_categories)],ignore_index=True)
     #we put it in the right order
