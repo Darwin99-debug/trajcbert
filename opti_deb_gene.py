@@ -77,8 +77,8 @@ def main():
     model = BertForSequenceClassification.from_pretrained("bert-base-cased", num_labels=nb_labels)
     model.resize_token_embeddings(len(tokenizer))
 
-    data_format.to_json('/home/daril_kw/data/data_with_time_info_ok.json')
-    tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_final')
+    #data_format.to_json('/home/daril_kw/data/data_with_time_info_ok_opti.json')
+    #tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_final')
 
 if __name__ == "__main__":
     main()
