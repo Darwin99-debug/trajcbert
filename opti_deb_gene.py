@@ -34,6 +34,10 @@ def formatting_to_str(df, column):
     df[column] = df[column].astype(str)
     return df
 
+def call_type_to_nb(df):
+    df['CALL_TYPE'] = df['CALL_TYPE'].apply(lambda x: 0 if x == 'A' else (1 if x == 'B' else 2))
+    return df
+
 def add_geo_and_context_tokens_tokenizer(tokenizer, data_format):
     liste_token_geo = set()
     for i in range(len(data_format)):
@@ -63,6 +67,8 @@ def main():
     data_format = extract_time_info(data_format)
     data_format = data_format.drop(['MISSING_DATA','DATE','ORIGIN_CALL', 'DAY_TYPE', 'ORIGIN_CALL', 'ORIGIN_STAND', 'Nb_points', 'TIMESTAMP'], axis=1)
     data_format = formatting_to_str(data_format, 'TAXI_ID')
+    data_format = call_type_to_nb(data_format)
+    data_format = formatting_to_str(data_format, 'CALL_TYPE')
 
     tokenizer = BertTokenizer.from_pretrained("bert-base-cased")
     tokenizer, nb_token_geo = add_geo_and_context_tokens_tokenizer(tokenizer, data_format)
