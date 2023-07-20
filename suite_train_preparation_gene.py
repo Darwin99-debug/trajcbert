@@ -253,7 +253,8 @@ def prepare_train(data_train, duplication_rate=0, separation_rate=50):
         while len(sorted_data_train.iloc[i]['Tokenization_2'])//j>len(sorted_data_train.iloc[i+1]['Tokenization_2']):
             j+=1
         #j represents the number of trajectories that we will create from the trajectory i, we put it in a list
-        list_row_to_select[i].append(sorted_data_train.iloc[i]['TRIP_ID'],j)
+        list_row_to_select[i].append(sorted_data_train.iloc[i]['TRIP_ID'])
+        list_row_to_select[i].append(j)
 
     #now that we have the rows that we will separate or duplicate, we can select which rows we will separate and which we will duplicate
     #we create a list of index of the rows that we will separate
