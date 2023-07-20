@@ -268,7 +268,7 @@ def manage_separation(dataframe, list_index_to_separate):
     return data_train
 
 
-def prepare_train(data_train, duplication_rate=0, separation_rate=50):
+def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     """
     This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
     The separation rate is the proportion of rows that will separated into two different trajectories. 
@@ -276,8 +276,8 @@ def prepare_train(data_train, duplication_rate=0, separation_rate=50):
 
     """
     #we select the rows we are going to separate or duplicate
-    nb_to_separate = int(len(data_train)*separation_rate/100)
-    nb_to_duplicate = int(len(data_train)*duplication_rate/100)
+    nb_to_separate = int(len(dataframe)*separation_rate/100)
+    nb_to_duplicate = int(len(dataframe)*duplication_rate/100)
     nb_to_select=nb_to_separate+nb_to_duplicate
 
     #we create a seed to be able to reproduce the results
@@ -289,13 +289,13 @@ def prepare_train(data_train, duplication_rate=0, separation_rate=50):
     #but the 2nd longest trajectory is of length 255, so the two resulting trajectories will be longer than the 2nd longest trajectory
     # that is why we need to sort at each iteration
     #we create a dataframe that zill be the fisrt dataframe but sorted by the length of the trajectory and we keep the matching before sorting to ne able to find the rows in the original dataframe
-    data_train["LEN_TRAJ"]=data_train['Tokenization_2'].apply(lambda x: len(x))
-    sorted_data_train = data_train.sort_values(by=['LEN_TRAJ'], ascending=False)
+    dataframe["LEN_TRAJ"]=dataframe['Tokenization_2'].apply(lambda x: len(x))
+    sorted_dataframe= dataframe.sort_values(by=['LEN_TRAJ'], ascending=False)
     #we will track he rows thaks to the TRIP_ID
     list_row_to_select = [ [] for i in range(nb_to_select)]
     for i in range(nb_to_select):
         j=2
-        while len(sorted_data_train.iloc[i]['Tokenization_2'])//j>len(sorted_data_train.iloc[i+1]['Tokenization_2']):
+        while len(sorted_dataframe.iloc[i]['Tokenization_2'])//j>len(sorted_dataframe.iloc[i+1]['Tokenization_2']):
             j+=1
         #j represents the number of trajectories that we will create from the trajectory i, we put it in a list
         list_row_to_select[i].append(sorted_data_train.iloc[i]['TRIP_ID'])
@@ -311,14 +311,12 @@ def prepare_train(data_train, duplication_rate=0, separation_rate=50):
     #we take the rows that we did not select for separation
     list_index_to_duplicate = [i for i in list_row_to_select if i not in list_index_to_separate]
 
-
-        
-    data_train=manage_separation(data_train, list_index_to_separate)
+    dataframe_separated=manage_separation(dataframe, list_index_to_separate)
 
     #we call the funtion prepare_train_wo_duplicate with the list of rows to duplicate
-    df_full = prepare_train_wo_duplicate(data_train, liste_to_duplicate=list_index_to_duplicate)
+    df_full = prepare_train_wo_duplicate(dataframe_separated, liste_to_duplicate=list_index_to_duplicate)
 
-    return df_full
+    return df_full, dataframe_separated
 
 #we call the function
 df_full2 = prepare_train(data_train, duplication_rate=0, separation_rate=50)
