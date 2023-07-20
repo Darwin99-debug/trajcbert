@@ -285,6 +285,8 @@ def manage_separation(dataframe, list_index_to_separate):
     #we manage the separation 
     dict_row = {}
     dataframe_separated = dataframe.copy()
+    #we reinitalize the index of the dataframe
+    dataframe_separated.reset_index(drop=True, inplace=True)
 
 
     #we track the rows thanks to the TRIP_ID and put their index in a list
@@ -306,13 +308,13 @@ def manage_separation(dataframe, list_index_to_separate):
         #row contains the row that we will separate
         #we remove the row from the dataframe and replace it by the same row but with the Tokenization_2 column that is a piece of the Tokenization_2 column of the row seperated in list_index_to_separate[i][1] trajectories
         #we remove the original row from the dataframe but we keep it in the variable row
-    
-        dataframe_separated = dataframe.drop(list_index[i], axis=0)
+
+        dataframe_separated = dataframe_separated.drop(list_index[i], axis=0)
         #we create the list of trajectories
         list_traj = []
         #WE FILL THE LIST OF TRAJECTORIES
         #we take the Tokenization_2 column
-        tokenization_2 = row.iloc[0]['Tokenization_2']
+        tokenization_2 = row['Tokenization_2']
         #we take the length of the trajectory
         len_traj = len(tokenization_2)
         #we take the number of trajectories
