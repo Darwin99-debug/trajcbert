@@ -223,6 +223,51 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
 df_full = prepare_train_wo_duplicate(data_train)
 
 
+def manage_separation(dataframe, list_index_to_separate):
+    #we manage the separation 
+    dict_row = {}
+
+    for i in range(len(list_index_to_separate)):
+        #we select the row in data_train thanks to the TRIP_ID
+        row = data_train[data_train['TRIP_ID']==list_index_to_separate[i][0]]
+        #row contains the row that we will separate
+        #we remove the row from the dataframe and replace it by the same row but with the Tokenization_2 column that is a piece of the Tokenization_2 column of the row seperated in list_index_to_separate[i][1] trajectories
+        #we remove the original row from the dataframe but we keep it in a dictionnary
+        dict_row['row'+str(i)] = row
+        data_train = data_train[data_train['TRIP_ID']!=list_index_to_separate[i][0]]
+        #we create the list of trajectories
+        list_traj = []
+        #WE FILL THE LIST OF TRAJECTORIES
+        #we take the Tokenization_2 column
+        tokenization_2 = row.iloc[0]['Tokenization_2']
+        #we take the length of the trajectory
+        len_traj = len(tokenization_2)
+        #we take the number of trajectories
+        nb_traj = list_index_to_separate[i][1]
+        #we take the length of each trajectory
+        len_each_traj = len_traj//nb_traj
+        #we fill the list of trajectories
+        for j in range(nb_traj):
+            #we take the piece of the trajectory
+            traj = tokenization_2[j*len_each_traj:(j+1)*len_each_traj]
+            #we put it in the list of trajectories
+            list_traj.append(traj)
+        #if there is a rest, we add it to the last trajectory
+        rest = len_traj%nb_traj
+        if rest != 0:
+            list_traj[-1].append(tokenization_2[-rest:])
+        #we add the trajectories to the dataframe in new rows
+        for j in range(nb_traj):
+            #we create a new
+            new_row = row
+            #we change the Tokenization_2 column
+            new_row['Tokenization_2'] = list_traj[j]
+            #we add the row to the dataframe
+            dataframe = dataframe.append(new_row, ignore_index=True)
+        
+    return data_train
+
+
 def prepare_train(data_train, duplication_rate=0, separation_rate=50):
     """
     This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
@@ -266,36 +311,9 @@ def prepare_train(data_train, duplication_rate=0, separation_rate=50):
     #we take the rows that we did not select for separation
     list_index_to_duplicate = [i for i in list_row_to_select if i not in list_index_to_separate]
 
-    #we manage the separation 
-    for i in range(nb_to_separate):
-        #we select the row in data_train thanks to the TRIP_ID
-        row = data_train[data_train['TRIP_ID']==list_index_to_separate[i][0]]
-        #row contains the row that we will separate
-        #we remove the row from the dataframe and replace it by the same row but with the Tokenization_2 column that is a piece of the Tokenization_2 column of the row seperated in list_index_to_separate[i][1] trajectories
-        #we will remove the row from the dataframe at the end
-        #data_train = data_train[data_train['TRIP_ID']!=list_index_to_separate[i][0]]
-        #we create the list of trajectories
-        list_traj = []
-        #WE FILL THE LIST OF TRAJECTORIES
-        #we take the Tokenization_2 column
-        tokenization_2 = row.iloc[0]['Tokenization_2']
-        #we take the length of the trajectory
-        len_traj = len(tokenization_2)
-        #we take the number of trajectories
-        nb_traj = list_index_to_separate[i][1]
-        #we take the length of each trajectory
-        len_each_traj = len_traj//nb_traj
-        #we fill the list of trajectories
-        for j in range(nb_traj):
-            #we take the piece of the trajectory
-            traj = tokenization_2[j*len_each_traj:(j+1)*len_each_traj]
-            #we put it in the list of trajectories
-            list_traj.append(traj)
-        #if there is a rest, we add it to the last trajectory
-        rest = len_traj%nb_traj
-        if rest != 0:
-            list_traj[-1].append(tokenization_2[-rest:])
 
+        
+    data_train=manage_separation(data_train, list_index_to_separate)
 
     #we call the funtion prepare_train_wo_duplicate with the list of rows to duplicate
     df_full = prepare_train_wo_duplicate(data_train, liste_to_duplicate=list_index_to_duplicate)
