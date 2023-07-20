@@ -19,6 +19,14 @@ from torch.nn.parallel import DistributedDataParallel
 import gc
 
 
+# ################################## RECOVERY OF THE TIME ##########################################
+
+#we recover the time
+start_time = time.time()
+
+# ################################## RECOVERY OF THE TIME END ##########################################
+
+
 
 # ################################## LOADING THE CONFIG FILE ##########################################
 
@@ -405,3 +413,12 @@ model.save_pretrained('models/model_trained_gpu_version_full')
 
 #save the prediction dataloader
 torch.save(prediction_dataloader,'models/pred_dataloader_v_small_full.pt')
+
+
+# ################################## RECOVERY OF THE TIME ##########################################
+
+#we recover the time
+end_time = time.time()
+print("the training took : ", end_time-start_time)
+
+# ################################## RECOVERY OF THE TIME END ##########################################
