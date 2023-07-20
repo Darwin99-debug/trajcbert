@@ -228,14 +228,25 @@ def manage_separation(dataframe, list_index_to_separate):
     dict_row = {}
     dataframe_separated = dataframe.copy()
 
+    #we track the rows thanks to the TRIP_ID and put their index in a list
+    list_index = [j for j in range(len(dataframe_separated)) if dataframe_separated.iloc[j]['TRIP_ID']==list_index_to_separate[i][0]]
+
     for i in range(len(list_index_to_separate)):
         #we select the row in data_train thanks to the TRIP_ID
-        row = dataframe_separated[data_train['TRIP_ID']==list_index_to_separate[i][0]]
+        #row = dataframe_separated[data_train['TRIP_ID']==list_index_to_separate[i][0]]
+        #if the above line does not work, we can use the following line
+        #row = dataframe_separated.iloc[list_index_to_separate[i][0]]
+        #this line works only if the index of the dataframe is the same as the TRIP_ID but it is not the case so we have to transform the TRIP_ID into the index
+        
+        index = list_index[i]
+        row = dataframe.iloc[index]
+
+
         #row contains the row that we will separate
         #we remove the row from the dataframe and replace it by the same row but with the Tokenization_2 column that is a piece of the Tokenization_2 column of the row seperated in list_index_to_separate[i][1] trajectories
         #we remove the original row from the dataframe but we keep it in a dictionnary
         dict_row['row'+str(i)] = row
-        dataframe_separated = dataframe_separated[dataframe_separated['TRIP_ID']!=list_index_to_separate[i][0]]
+        dataframe_separated = dataframe.drop(index=index)
         #we create the list of trajectories
         list_traj = []
         #WE FILL THE LIST OF TRAJECTORIES
