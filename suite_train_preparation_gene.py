@@ -101,7 +101,7 @@ def create_df_cat(dataframe, nb_categories, nb_rows_dict, list_index_dict):
     return df_dict
 
 
-def create_target_deb_traj(nb_categories):
+def create_target_deb_traj(nb_categories, df_dict):
     target_dict = {}
     list_deb_traj_dict = {}
     for i in range(nb_categories):
@@ -197,7 +197,7 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     #we create a list of dataframe for each category 
     df_dict = create_df_cat(dataframe, nb_categories, nb_rows_dict, list_index_dict)
     #we create a list of targets and deb_traj for each category
-    target_dict, list_deb_traj_dict = create_target_deb_traj(nb_categories)    
+    target_dict, list_deb_traj_dict = create_target_deb_traj(nb_categories, df_dict)    
     target_dict, list_deb_traj_dict = fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, list_deb_traj_dict)
 
 
