@@ -47,7 +47,7 @@ epochs = config["num_epochs"]
 
 
 
-with open('/home/daril/scratch/data/trajcbert/train_clean.json', 'r') as openfile:
+with open('/home/daril/scratch/data/trajcbert/data_first_test_small_train_full.json', 'r') as openfile:
 
     # Reading from json file
     json_loaded = json.load(openfile)
