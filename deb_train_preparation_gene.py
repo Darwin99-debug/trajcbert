@@ -35,7 +35,7 @@ data_format = truncation_rows(data_format, 60)
 
 #we create the correct tokenization column
 def add_tokenization_column(df):
-    df['Tokenization_2'] = df['POLYLINE'].apply(lambda x: [h3.geo_to_h3(x[i][0], x[i][1], 10) for i in range(len(x))])
+    df['Tokenization_2'] = df['POLYLINE'].apply(lambda x: [h3.geo_to_h3(x[i][1], x[i][0], 10) for i in range(len(x))])
     return df
 
 data_format = add_tokenization_column(data_format)

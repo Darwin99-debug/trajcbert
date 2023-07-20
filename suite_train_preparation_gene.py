@@ -81,6 +81,7 @@ def rows_attribution_cat(dataframe, nb_categories):
             list_index_dict['list_index_category'+str(i)] = list_index[:nb_rows_dict['nb_rows_category'+str(i)]]
             #we remove the index that we just put in the list
             list_index = list_index[nb_rows_dict['nb_rows_category'+str(i)]:]
+
     return nb_rows_dict, list_index_dict
 
 
@@ -169,30 +170,34 @@ def verif_target_deb_traj(df_dict, nb_categories):
                 #raise ValueError('The target is not the next token of the deb_traj')
                 raise ValueError('The target is not the next token of the deb_traj')
 
-def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, decal_droite=False, uniforme=True):
-    
+def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[], decal_gauche=False, decal_droite=False, uniforme=True):
+    """
+liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     #we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
     #tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
     # for example, if ze have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
     #that means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
     #we create a list of threshold
     list_threshold = [0.3+i*((1-0.3)/(nb_categories-2)) for i in range(nb_categories-1)]
-    
+
+    for i in range(len(liste_to_duplicate)):
+        #we wont enter the loop if the list is empty
+        #we add the rows to duplicate to the dataframe
+        dataframe = pd.concat([dataframe,dataframe[dataframe['TAXI_ID']==liste_to_duplicate[i]]],ignore_index=True)
+
 
     #we create a seed to be able to reproduce the results
     random.seed(2023)
     #wealculate the number of rows that will fall into each category
     #we keep it in variables so that we can use it later
-    nb_rows_dict, list_index_dict = rows_attribution_cat(dataframe, nb_categories) 
+    nb_rows_dict, list_index_dict = rows_attribution_cat(dataframe, nb_categories)
+    
+
+
     #we create a list of dataframe for each category 
     df_dict = create_df_cat(dataframe, nb_categories, nb_rows_dict, list_index_dict)
     #we create a list of targets and deb_traj for each category
-    target_dict, list_deb_traj_dict = create_target_deb_traj(nb_categories)
-
-    #we do the treatment for each category except the two last categories
-
-    
-    
+    target_dict, list_deb_traj_dict = create_target_deb_traj(nb_categories)    
     target_dict, list_deb_traj_dict = fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, list_deb_traj_dict)
 
 
@@ -201,12 +206,10 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
         df_dict['dataframe_category'+str(i)]['TARGET'] = target_dict['list_target_category'+str(i)]
         df_dict['dataframe_category'+str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category'+str(i)]
     
-    #we verifiy that for each category exept the last one dataframe'Tokenization_2'][i][len(dataframe['DEB_TRAJ'][i])]!=dataframe['TARGET'][i]
+
+    #we verify that for each category exept the last one dataframe'Tokenization_2'][i][len(dataframe['DEB_TRAJ'][i])]!=dataframe['TARGET'][i]
     # wuere i goes from 0 to len(dataframe)
-    #and the dataframe is the dataframe_category
-
-
-                
+    #and the dataframe is the dataframe_category           
     verif_target_deb_traj(df_dict, nb_categories)
     
     #we get the full dataframe back
@@ -218,6 +221,96 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, d
 
 #we call the function
 df_full = prepare_train_wo_duplicate(data_train)
+
+
+def prepare_train(data_train, duplication_rate=0, separation_rate=50):
+    """
+    This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
+    The separation rate is the proportion of rows that will separated into two different trajectories. 
+    The duplication rate is the proportion of rows that will be duplicated, ie that will occur in two different trajectories with different targets.
+
+    """
+    #we select the rows we are going to separate or duplicate
+    nb_to_separate = int(len(data_train)*separation_rate/100)
+    nb_to_duplicate = int(len(data_train)*duplication_rate/100)
+    nb_to_select=nb_to_separate+nb_to_duplicate
+
+    #we create a seed to be able to reproduce the results
+    random.seed(2023)
+    #we select the rows we are going to separate or duplicate according to their length : we select the rows with the longest trajectories
+    #for that, we sort the dataframe by the length of the trajectory
+    #the thing is, the two part of a trajectory can be longer than the following longest trajectory
+    #that means we can have the longest trajectory of length 512 for example, wich means the two resulting trajectories will be of length 256
+    #but the 2nd longest trajectory is of length 255, so the two resulting trajectories will be longer than the 2nd longest trajectory
+    # that is why we need to sort at each iteration
+    #we create a dataframe that zill be the fisrt dataframe but sorted by the length of the trajectory and we keep the matching before sorting to ne able to find the rows in the original dataframe
+    data_train["LEN_TRAJ"]=data_train['Tokenization_2'].apply(lambda x: len(x))
+    sorted_data_train = data_train.sort_values(by=['LEN_TRAJ'], ascending=False)
+    #we will track he rows thaks to the TRIP_ID
+    list_row_to_select = [ [] for i in range(nb_to_select)]
+    for i in range(nb_to_select):
+        j=2
+        while len(sorted_data_train.iloc[i]['Tokenization_2'])//j>len(sorted_data_train.iloc[i+1]['Tokenization_2']):
+            j+=1
+        #j represents the number of trajectories that we will create from the trajectory i, we put it in a list
+        list_row_to_select[i].append(sorted_data_train.iloc[i]['TRIP_ID'],j)
+
+    #now that we have the rows that we will separate or duplicate, we can select which rows we will separate and which we will duplicate
+    #we create a list of index of the rows that we will separate
+    list_index_to_separate = []
+    #we create a list of index of the rows that we will duplicate
+    list_index_to_duplicate = []
+    #we choose randomly the rows that we will separate and the rows that we will duplicate
+    list_index_to_separate = random.sample(list_row_to_select, nb_to_separate)
+    #we take the rows that we did not select for separation
+    list_index_to_duplicate = [i for i in list_row_to_select if i not in list_index_to_separate]
+
+    #we manage the separation 
+    for i in range(nb_to_separate):
+        #we select the row in data_train thanks to the TRIP_ID
+        row = data_train[data_train['TRIP_ID']==list_index_to_separate[i][0]]
+        #row contains the row that we will separate
+        #we remove the row from the dataframe and replace it by the same row but with the Tokenization_2 column that is a piece of the Tokenization_2 column of the row seperated in list_index_to_separate[i][1] trajectories
+        #we will remove the row from the dataframe at the end
+        #data_train = data_train[data_train['TRIP_ID']!=list_index_to_separate[i][0]]
+        #we create the list of trajectories
+        list_traj = []
+        #WE FILL THE LIST OF TRAJECTORIES
+        #we take the Tokenization_2 column
+        tokenization_2 = row.iloc[0]['Tokenization_2']
+        #we take the length of the trajectory
+        len_traj = len(tokenization_2)
+        #we take the number of trajectories
+        nb_traj = list_index_to_separate[i][1]
+        #we take the length of each trajectory
+        len_each_traj = len_traj//nb_traj
+        #we fill the list of trajectories
+        for j in range(nb_traj):
+            #we take the piece of the trajectory
+            traj = tokenization_2[j*len_each_traj:(j+1)*len_each_traj]
+            #we put it in the list of trajectories
+            list_traj.append(traj)
+        #if there is a rest, we add it to the last trajectory
+        rest = len_traj%nb_traj
+        if rest != 0:
+            list_traj[-1].append(tokenization_2[-rest:])
+
+
+    #we call the funtion prepare_train_wo_duplicate with the list of rows to duplicate
+    df_full = prepare_train_wo_duplicate(data_train, liste_to_duplicate=list_index_to_duplicate)
+
+    return df_full
+
+#we call the function
+df_full2 = prepare_train(data_train, duplication_rate=0, separation_rate=50)
+
+
+
+
+
+
+
+
 
             
 
