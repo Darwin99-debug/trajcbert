@@ -230,6 +230,7 @@ def manage_separation(dataframe, list_index_to_separate):
 
     #we track the rows thanks to the TRIP_ID and put their index in a list
     list_index = [j for j in range(len(dataframe)) if dataframe['TRIP_ID'][j] in [list_index_to_separate[i][0] for i in range(len(list_index_to_separate))]]
+    print(list_index)
 
     for i in range(len(list_index_to_separate)):
         #we select the row in data_train thanks to the TRIP_ID
