@@ -226,15 +226,16 @@ df_full = prepare_train_wo_duplicate(data_train)
 def manage_separation(dataframe, list_index_to_separate):
     #we manage the separation 
     dict_row = {}
+    dataframe_separated = dataframe.copy()
 
     for i in range(len(list_index_to_separate)):
         #we select the row in data_train thanks to the TRIP_ID
-        row = data_train[data_train['TRIP_ID']==list_index_to_separate[i][0]]
+        row = dataframe_separated[data_train['TRIP_ID']==list_index_to_separate[i][0]]
         #row contains the row that we will separate
         #we remove the row from the dataframe and replace it by the same row but with the Tokenization_2 column that is a piece of the Tokenization_2 column of the row seperated in list_index_to_separate[i][1] trajectories
         #we remove the original row from the dataframe but we keep it in a dictionnary
         dict_row['row'+str(i)] = row
-        data_train = data_train[data_train['TRIP_ID']!=list_index_to_separate[i][0]]
+        dataframe_separated = dataframe_separated[dataframe_separated['TRIP_ID']!=list_index_to_separate[i][0]]
         #we create the list of trajectories
         list_traj = []
         #WE FILL THE LIST OF TRAJECTORIES
@@ -263,9 +264,9 @@ def manage_separation(dataframe, list_index_to_separate):
             #we change the Tokenization_2 column
             new_row['Tokenization_2'] = list_traj[j]
             #we add the row to the dataframe
-            dataframe = dataframe.append(new_row, ignore_index=True)
+            dataframe_separated = dataframe_separated.append(new_row, ignore_index=True)
         
-    return data_train
+    return dataframe_separated
 
 
 def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
