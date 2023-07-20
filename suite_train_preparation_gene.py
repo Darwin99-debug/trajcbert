@@ -245,7 +245,7 @@ def manage_separation(dataframe, list_index_to_separate):
         #we remove the row from the dataframe and replace it by the same row but with the Tokenization_2 column that is a piece of the Tokenization_2 column of the row seperated in list_index_to_separate[i][1] trajectories
         #we remove the original row from the dataframe but we keep it in a dictionnary
         dict_row['row'+str(i)] = row
-        dataframe_separated = dataframe.drop(index=list_index[i])
+        dataframe_separated = dataframe.drop(index=list_index[i][0])
         #we create the list of trajectories
         list_traj = []
         #WE FILL THE LIST OF TRAJECTORIES
