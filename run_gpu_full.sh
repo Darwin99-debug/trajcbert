@@ -3,7 +3,7 @@
 #SBATCH --gres=gpu:1
 #SBATCH --mem=40G
 #SBATCH --time=4-0:00
-#SBATCH --job-name=first_small_trajcbert_on_gpu_full_batch_size_32_4_DAYS
+#SBATCH --job-name=first_small_trajcbert_on_gpu_full_batch_size_32_4_DAYS_1_5_dataset
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
 #SBATCH --cpus-per-task=16 # number of cores
