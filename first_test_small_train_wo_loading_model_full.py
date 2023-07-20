@@ -19,6 +19,13 @@ from torch.nn.parallel import DistributedDataParallel
 import gc
 
 
+def free_cuda_memory():
+    print("Free up the cuda memory...")
+    # free up the cuda memory
+    torch.cuda.empty_cache()
+    gc.collect()
+
+
 # ################################## RECOVERY OF THE TIME ##########################################
 
 #we recover the time
@@ -64,6 +71,9 @@ print("We put the data in a dataset.")
  
 #we put them in a dataframe
 data_format = pd.DataFrame(data=json_loaded)
+
+# truncation of the dataset 
+data_format = data_format[:350000] # 350k trajectories
 
 #load the tokenizer
 tokenizer = BertTokenizer.from_pretrained('/home/daril/trajcbert/BERT_MODEL/tokenizer_augmented_full')
@@ -149,7 +159,8 @@ for i in tqdm(range(len(c_inputs))):
     #the attention mask is a list of 0 and 1, 0 for the padded tokens and 1 for the other tokens
     #the float(i>0) is 0 if i=0 (ie if the token is a padded token) and 1 if i>0 (ie if the token is not a padded token)
 
-
+# free up the cuda memory
+free_cuda_memory()
 
 #gestion des targets
 targets_dict={}
@@ -319,6 +330,7 @@ for epoch_i in range(0, epochs):
         optimizer.step()
         #we update the learning rate
         scheduler.step()
+    free_cuda_memory()
     # Calculate the average loss over all of the batches.  
     avg_train_loss = total_loss / len(train_dataloader)
     # Store the loss value for plotting the learning curve.
@@ -360,6 +372,7 @@ for epoch_i in range(0, epochs):
         nb_eval_examples += b_input_ids.size(0)
         #we accumulate the number of steps
         nb_eval_steps += 1
+#    TO DO  
     #we compute the accuracy
     eval_accuracy = eval_accuracy / nb_eval_examples
     #we compute the f1 score
@@ -372,14 +385,11 @@ for epoch_i in range(0, epochs):
     #we store the f1 score
     f1_values.append(eval_f1)
 
-    # free up the cuda memory
-    torch.cuda.empty_cache()
-
-    # free the garbage collector
-    gc.collect()
+    free_cuda_memory()
 print("")
 print("Training complete!")
 
+free_cuda_memory()
 
 ################################# TRAINING THE MODEL END ##########################################
 
