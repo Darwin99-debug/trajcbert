@@ -135,6 +135,13 @@ def main(rank, world_size):
     with open('/home/daril_kw/data/full_inputs.pkl', 'rb') as f:
         full_inputs = pickle.load(f)
 
+    targets_dict={}
+    for i in range(len(targets)):
+        if targets[i] not in targets_dict:
+            targets_dict[targets[i]]=len(targets_dict)
+
+    targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
+
     train_data, test_input, train_targets, test_targets = train_test_split(input_ids, targets_input,random_state=2023, test_size=0.2)
     train_inputs, validation_inputs, train_labels, validation_labels = train_test_split(train_data, train_targets,random_state=2023, test_size=0.1)
 
