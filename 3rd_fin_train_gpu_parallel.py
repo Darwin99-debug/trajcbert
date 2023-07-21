@@ -23,7 +23,7 @@ from torch.utils.data.distributed import DistributedSampler
 import argparse
 
 
-WORLD_S=6
+WORLD_S=2
 
 
 parser = argparse.ArgumentParser(description='cifar10 classification models, distributed data parallel test')
@@ -63,10 +63,17 @@ def main(rank, world_size):
     dist.init_process_group(backend=args.dist_backend, init_method=args.init_method, world_size=args.world_size, rank=rank)
     print("process group ready!")
 
-    group = torch.distributed.new_group(ranks=(1,))
-    print(f"BARRIER UP -> GPU:{current_device}")
-    torch.distributed.barrier(group=group)
-    print(f"BARRIER DOWN -> GPU:{current_device}")
+    
+    #torch.distributed.barrier()
+    #this line avoids the process to run ahead of others
+    #this is useful when you want to load a model on all processes
+    #if ze have a broken pipe error, it means that the process group is not ready yet
+    #to avoid this error, we use the barrier
+
+    if dist.get_rank() != 1:
+        dist.monitored_barrier() 
+    # this block is to raise an error if the process group is not initialized
+    
 
     print('From Rank: {}, ==> Making model..'.format(rank))
     """def setup(rank, world_size):
