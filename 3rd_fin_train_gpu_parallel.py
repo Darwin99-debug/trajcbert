@@ -64,7 +64,7 @@ def main(rank, world_size):
     dist.init_process_group(backend=args.dist_backend, init_method=args.init_method, world_size=args.world_size, rank=rank)
     print("process group ready!")
     group_gloo = dist.new_group(backend="gloo")
-    if rank not in [1]:
+    if rank not in [0]:
         dist.monitored_barrier(group=group_gloo, timeout=timedelta(seconds=2))
 
     
