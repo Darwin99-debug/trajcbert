@@ -63,6 +63,10 @@ def main(rank, world_size):
     dist.init_process_group(backend=args.dist_backend, init_method=args.init_method, world_size=args.world_size, rank=rank)
     print("process group ready!")
 
+    print(f"BARRIER UP -> GPU:{gpu}")
+    torch.distributed.barrier()
+    print(f"BARRIER DOWN -> GPU:{gpu}")
+
     print('From Rank: {}, ==> Making model..'.format(rank))
     """def setup(rank, world_size):
         os.environ['MASTER_ADDR'] = 'localhost'
