@@ -196,12 +196,12 @@ for i in tqdm(range(len(c_inputs))):
 
 
 #save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
-with open('/home/daril_kw/data/input_ids.pkl', 'wb') as fp:
+with open('/home/daril_kw/data/input_ids_60.pkl', 'wb') as fp:
     pickle.dump(input_ids, fp)
-with open('/home/daril_kw/data/attention_masks.pkl', 'wb') as fp:
+with open('/home/daril_kw/data/attention_masks_60.pkl', 'wb') as fp:
     pickle.dump(attention_masks, fp)
-with open('/home/daril_kw/data/targets.pkl', 'wb') as fp:
+with open('/home/daril_kw/data/targets_60.pkl', 'wb') as fp:
     pickle.dump(targets, fp)
-with open('/home/daril_kw/data/full_inputs.pkl', 'wb') as fp:
+with open('/home/daril_kw/data/full_inputs_60.pkl', 'wb') as fp:
     pickle.dump(full_inputs, fp)
     

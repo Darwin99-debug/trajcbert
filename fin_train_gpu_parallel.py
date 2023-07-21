@@ -78,16 +78,16 @@ def main(rank, world_size):
 #load the lists saved in deb_train_gpu_parallel.py
 # the lists saved full_inputs, inputs_ids, attention_masks and the targets in different files /home/daril_kw/data/input_ids.pkl, /home/daril_kw/data/attention_masks.pkl, /home/daril_kw/data/targets.pkl
 
-    with open('/home/daril_kw/data/input_ids.pkl', 'rb') as f:
+    with open('/home/daril_kw/data/input_ids_60.pkl', 'rb') as f:
         input_ids = pickle.load(f)
 
-    with open('/home/daril_kw/data/attention_masks.pkl', 'rb') as f:
+    with open('/home/daril_kw/data/attention_masks_60.pkl', 'rb') as f:
         attention_masks = pickle.load(f)
 
-    with open('/home/daril_kw/data/targets.pkl', 'rb') as f:
+    with open('/home/daril_kw/data/targets_60.pkl', 'rb') as f:
         targets = pickle.load(f)
 
-    with open('/home/daril_kw/data/full_inputs.pkl', 'rb') as f:
+    with open('/home/daril_kw/data/full_inputs_60.pkl', 'rb') as f:
         full_inputs = pickle.load(f)
 
     print("gestion des targets")
