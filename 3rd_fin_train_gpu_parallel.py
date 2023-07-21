@@ -321,9 +321,9 @@ def main(rank, world_size):
     print("")
     print("Training complete!")
     #cleanup
-    #dist.destroy_process_group()
+    dist.destroy_process_group()
     model_to_save = model.module if hasattr(model, 'module') else model
-    model_to_save.save_pretrained('/home/daril_kw/data/model_trained_parallel_gpu_test')
+    model_to_save.save_pretrained('/home/daril_kw/data/model_saved_even_with_error')
 
 import torch.multiprocessing as mp
 if __name__ == '__main__':
