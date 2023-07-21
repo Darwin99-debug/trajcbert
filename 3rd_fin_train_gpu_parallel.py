@@ -330,12 +330,13 @@ if __name__ == '__main__':
     """
 
     print("gestion des targets")
-
+    """
     targets_dict={}
     for i in range(len(targets)):
         if targets[i] not in targets_dict:
             targets_dict[targets[i]]=len(targets_dict)
 
     targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
+    """
     mp.spawn(main,args=(world_size,),nprocs=world_size)
 
