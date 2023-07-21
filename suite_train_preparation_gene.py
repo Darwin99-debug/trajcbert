@@ -304,8 +304,6 @@ def manage_separation(dataframe, list_index_to_separate):
         #this line works only if the index of the dataframe is the same as the TRIP_ID but it is not the case so we have to transform the TRIP_ID into the index
         
         row = dataframe.iloc[list_index[i]]
-        print(dataframe.info())
-
 
         #row contains the row that we will separate
         #we remove the row from the dataframe and replace it by the same row but with the Tokenization_2 column that is a piece of the Tokenization_2 column of the row seperated in list_index_to_separate[i][1] trajectories
