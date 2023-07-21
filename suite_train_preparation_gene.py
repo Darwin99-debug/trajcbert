@@ -114,15 +114,19 @@ def create_target_deb_traj(nb_categories, df_dict):
     return target_dict, list_deb_traj_dict
 
 def fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, list_deb_traj_dict):
+    for i in range (nb_categories):
+        df = df_dict['dataframe_category'+str(i)]
+        for j in range(len(df)):
+            if type(tokenization_2) != list:
+                        #on suppriime la liste du dataframe
+                        df=df.drop(j, axis=0)
+    
+    
     for i in range(nb_categories-2):
         df = df_dict['dataframe_category'+str(i)]
         for j in range(len(df)):
             #we take the tokenization_2 column
             tokenization_2 = df.iloc[j]['Tokenization_2']
-            if type(tokenization_2) != list:
-                #on suppriime la liste du dataframe
-                df=df.drop(j, axis=0)
-                break
             #we use the threshold corresponding to the category
             tokenization_2 = tokenization_2[int(list_threshold[i]*len(tokenization_2)):int(list_threshold[i+1]*len(tokenization_2))]
             #we take randomly a token in the tokenization_2 if it is not empty ie if the list is not emptyof tokens is not too small to be cut in nb_categories
