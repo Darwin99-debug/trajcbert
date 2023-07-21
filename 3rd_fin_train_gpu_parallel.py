@@ -63,8 +63,9 @@ def main(rank, world_size):
     dist.init_process_group(backend=args.dist_backend, init_method=args.init_method, world_size=args.world_size, rank=rank)
     print("process group ready!")
 
+    group = torch.distributed.new_group(ranks=(1,))
     print(f"BARRIER UP -> GPU:{current_device}")
-    torch.distributed.barrier()
+    torch.distributed.barrier(group=group)
     print(f"BARRIER DOWN -> GPU:{current_device}")
 
     print('From Rank: {}, ==> Making model..'.format(rank))
