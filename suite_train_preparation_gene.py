@@ -183,13 +183,9 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     #we create a list of threshold
     list_threshold = [0.3+i*((1-0.3)/(nb_categories-2)) for i in range(nb_categories-1)]
 
-    for i in range (nb_categories):
-        df = df_dict['dataframe_category'+str(i)]
-        for j in range(len(df)):
-            tokenization_2 = df.iloc[j]['Tokenization_2']
-            if type(tokenization_2) != list:
-                        #on suppriime la liste du dataframe
-                        df=df.drop(j, axis=0)
+    #we remove from the dataframe the rows that have a trajectory of length inferior to 3
+    dataframe['LEN_TRAJ']=dataframe['Tokenization_2'].apply(lambda x: len(x))
+    dataframe = dataframe[dataframe['LEN_TRAJ']>=3]
 
     for i in range(len(liste_to_duplicate)):
         #we wont enter the loop if the list is empty
@@ -207,6 +203,7 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
 
     #we create a list of dataframe for each category 
     df_dict = create_df_cat(dataframe, nb_categories, nb_rows_dict, list_index_dict)
+
     #we create a list of targets and deb_traj for each category
     target_dict, list_deb_traj_dict = create_target_deb_traj(nb_categories, df_dict)    
     target_dict, list_deb_traj_dict = fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, list_deb_traj_dict)
