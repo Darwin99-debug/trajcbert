@@ -227,6 +227,8 @@ def manage_separation_test(dataframe, list_index_to_separate):
     #we manage the separation 
     dict_row = {}
     dataframe_separated = dataframe.copy()
+    #we reinitalize the index of the dataframe
+    dataframe_separated.reset_index(drop=True, inplace=True)
 
 
     #we track the rows thanks to the TRIP_ID and put their index in a list
