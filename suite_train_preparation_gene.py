@@ -117,6 +117,7 @@ def fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, li
     for i in range (nb_categories):
         df = df_dict['dataframe_category'+str(i)]
         for j in range(len(df)):
+            tokenization_2 = df.iloc[j]['Tokenization_2']
             if type(tokenization_2) != list:
                         #on suppriime la liste du dataframe
                         df=df.drop(j, axis=0)
