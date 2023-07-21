@@ -122,6 +122,19 @@ def main(rank, world_size):
             targets_dict[targets[i]]=len(targets_dict)
 
     targets_input=[targets_dict[targets[i]] for i in range(len(targets))]"""
+
+    with open('/home/daril_kw/data/input_ids.pkl', 'rb') as f:
+        input_ids = pickle.load(f)
+
+    with open('/home/daril_kw/data/attention_masks.pkl', 'rb') as f:
+        attention_masks = pickle.load(f)
+
+    with open('/home/daril_kw/data/targets.pkl', 'rb') as f:
+        targets = pickle.load(f)
+
+    with open('/home/daril_kw/data/full_inputs.pkl', 'rb') as f:
+        full_inputs = pickle.load(f)
+
     train_data, test_input, train_targets, test_targets = train_test_split(input_ids, targets_input,random_state=2023, test_size=0.2)
     train_inputs, validation_inputs, train_labels, validation_labels = train_test_split(train_data, train_targets,random_state=2023, test_size=0.1)
 
@@ -295,6 +308,7 @@ def main(rank, world_size):
 import torch.multiprocessing as mp
 if __name__ == '__main__':
     world_size = WORLD_S
+    """
     with open('/home/daril_kw/data/input_ids.pkl', 'rb') as f:
         input_ids = pickle.load(f)
 
@@ -306,6 +320,7 @@ if __name__ == '__main__':
 
     with open('/home/daril_kw/data/full_inputs.pkl', 'rb') as f:
         full_inputs = pickle.load(f)
+    """
 
     print("gestion des targets")
 
