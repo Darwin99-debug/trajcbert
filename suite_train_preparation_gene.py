@@ -114,13 +114,7 @@ def create_target_deb_traj(nb_categories, df_dict):
     return target_dict, list_deb_traj_dict
 
 def fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, list_deb_traj_dict):
-    for i in range (nb_categories):
-        df = df_dict['dataframe_category'+str(i)]
-        for j in range(len(df)):
-            tokenization_2 = df.iloc[j]['Tokenization_2']
-            if type(tokenization_2) != list:
-                        #on suppriime la liste du dataframe
-                        df=df.drop(j, axis=0)
+    
     
     
     for i in range(nb_categories-2):
@@ -188,6 +182,14 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     #that means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
     #we create a list of threshold
     list_threshold = [0.3+i*((1-0.3)/(nb_categories-2)) for i in range(nb_categories-1)]
+
+    for i in range (nb_categories):
+        df = df_dict['dataframe_category'+str(i)]
+        for j in range(len(df)):
+            tokenization_2 = df.iloc[j]['Tokenization_2']
+            if type(tokenization_2) != list:
+                        #on suppriime la liste du dataframe
+                        df=df.drop(j, axis=0)
 
     for i in range(len(liste_to_duplicate)):
         #we wont enter the loop if the list is empty
