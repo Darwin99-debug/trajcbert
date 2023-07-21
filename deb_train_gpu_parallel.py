@@ -36,7 +36,7 @@ print("We put the data in a dataset.")
 data_format = pd.DataFrame(data=json_loaded)
 
 #we keep only 60 rows
-data_format = data_format[:60]
+data_format = data_format[:20]
 
 #we create the correct tokenization column
 data_format['Tokenization_2'] = data_format['POLYLINE'].apply(lambda x: [h3.geo_to_h3(x[i][0], x[i][1], 10) for i in range(len(x))])
@@ -196,12 +196,12 @@ for i in tqdm(range(len(c_inputs))):
 
 
 #save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
-with open('/home/daril_kw/data/input_ids_60.pkl', 'wb') as fp:
+with open('/home/daril_kw/data/input_ids_20.pkl', 'wb') as fp:
     pickle.dump(input_ids, fp)
-with open('/home/daril_kw/data/attention_masks_60.pkl', 'wb') as fp:
+with open('/home/daril_kw/data/attention_masks_20.pkl', 'wb') as fp:
     pickle.dump(attention_masks, fp)
-with open('/home/daril_kw/data/targets_60.pkl', 'wb') as fp:
+with open('/home/daril_kw/data/targets_20.pkl', 'wb') as fp:
     pickle.dump(targets, fp)
-with open('/home/daril_kw/data/full_inputs_60.pkl', 'wb') as fp:
+with open('/home/daril_kw/data/full_inputs_20.pkl', 'wb') as fp:
     pickle.dump(full_inputs, fp)
     

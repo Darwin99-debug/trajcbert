@@ -64,15 +64,12 @@ def main(rank, world_size):
     print("process group ready!")
 
     
-    #torch.distributed.barrier()
+    torch.distributed.barrier()
     #this line avoids the process to run ahead of others
     #this is useful when you want to load a model on all processes
     #if ze have a broken pipe error, it means that the process group is not ready yet
     #to avoid this error, we use the barrier
 
-    if dist.get_rank() != 1:
-        dist.monitored_barrier() 
-    # this block is to raise an error if the process group is not initialized
     
 
     print('From Rank: {}, ==> Making model..'.format(rank))
@@ -135,16 +132,16 @@ def main(rank, world_size):
 
     targets_input=[targets_dict[targets[i]] for i in range(len(targets))]"""
 
-    with open('/home/daril_kw/data/input_ids.pkl', 'rb') as f:
+    with open('/home/daril_kw/data/input_ids_20.pkl', 'rb') as f:
         input_ids = pickle.load(f)
 
-    with open('/home/daril_kw/data/attention_masks.pkl', 'rb') as f:
+    with open('/home/daril_kw/data/attention_masks_20.pkl', 'rb') as f:
         attention_masks = pickle.load(f)
 
-    with open('/home/daril_kw/data/targets.pkl', 'rb') as f:
+    with open('/home/daril_kw/data/targets_20.pkl', 'rb') as f:
         targets = pickle.load(f)
 
-    with open('/home/daril_kw/data/full_inputs.pkl', 'rb') as f:
+    with open('/home/daril_kw/data/full_inputs_20.pkl', 'rb') as f:
         full_inputs = pickle.load(f)
 
     targets_dict={}
