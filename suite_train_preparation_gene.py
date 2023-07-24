@@ -183,6 +183,7 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     #we create a list of threshold
 
     # Create the threshold for each category
+    # Create the threshold for each category
     list_threshold = [0.3 + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
 
     # Remove the useless rows and rows with trajectory length < 3
@@ -190,8 +191,8 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     dataframe['LEN_TRAJ'] = dataframe['Tokenization_2'].apply(lambda x: len(x))
     dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
 
-    # Make sure liste_to_duplicate contains unique TRIP_ID values
-    liste_to_duplicate = list(set(liste_to_duplicate))
+    # Convert liste_to_duplicate elements to tuples and create a set
+    liste_to_duplicate = set(tuple(item) for item in liste_to_duplicate)
 
     # Filter the original dataframe to include only the unique TRIP_ID values
     duplicated_rows = dataframe[dataframe['TRIP_ID'].isin(liste_to_duplicate)].copy()
