@@ -194,9 +194,7 @@ def prepare_train_duplication(dataframe, nb_categories=5, liste_to_duplicate=[],
     for i in range(len(liste_to_duplicate)):
         #we wont enter the loop if the list is empty
         #we add the rows to duplicate to the dataframe
-        duplicate_rows = pd.DataFrame()
-        for i in range(len(liste_to_duplicate)):
-            duplicate_rows = pd.concat([duplicate_rows, dataframe[dataframe['TRIP_ID'] == liste_to_duplicate[i]]], ignore_index=True)
+        duplicate_rows = dataframe[dataframe['TRIP_ID'] == liste_to_duplicate[i]]
         dataframe = pd.concat([dataframe, duplicate_rows], ignore_index=True)
 
     #we create a seed to be able to reproduce the results
@@ -227,7 +225,7 @@ def prepare_train_duplication(dataframe, nb_categories=5, liste_to_duplicate=[],
     for i in range(nb_categories):
         dataframe_full = pd.concat([dataframe_full, df_dict['dataframe_category'+str(i)]], ignore_index=True)
 
-    return dataframe_full
+    return dataframe_full 
 
 #we call the function
 df_full = prepare_train_duplication(data_train)
