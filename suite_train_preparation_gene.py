@@ -181,16 +181,24 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     # for example, if ze have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
     #that means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
     #we create a list of threshold
-    list_threshold = [0.3+i*((1-0.3)/(nb_categories-2)) for i in range(nb_categories-1)]
+
+    # Create the threshold for each category
+    list_threshold = [0.3 + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
 
     # Remove the useless rows and rows with trajectory length < 3
     dataframe['Tokenization_2'] = dataframe['Tokenization_2'].apply(lambda x: x if type(x) == list else [])
     dataframe['LEN_TRAJ'] = dataframe['Tokenization_2'].apply(lambda x: len(x))
     dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
 
-    for i in range(len(liste_to_duplicate)):
-        # Add the rows to duplicate to the dataframe
-        dataframe = pd.concat([dataframe, dataframe[dataframe['TRIP_ID'] == liste_to_duplicate[i]]], ignore_index=True)
+    # Make sure liste_to_duplicate contains unique TRIP_ID values
+    liste_to_duplicate = list(set(liste_to_duplicate))
+
+    # Filter the original dataframe to include only the unique TRIP_ID values
+    duplicated_rows = dataframe[dataframe['TRIP_ID'].isin(liste_to_duplicate)].copy()
+
+    # Duplicate rows for each unique TRIP_ID value
+    for trip_id in liste_to_duplicate:
+        duplicated_rows = pd.concat([duplicated_rows, dataframe[dataframe['TRIP_ID'] == trip_id]], ignore_index=True)
 
     # Create a seed to be able to reproduce the results
     random.seed(2023)
