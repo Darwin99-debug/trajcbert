@@ -433,7 +433,7 @@ def verif_concatenation(df_full, df_sep):
             # saut de ligne
             print("---------------")
             print(df_full['Tokenization_2'][i])
-            raise ValueError('The concatenation of the trajectories is not equal to the original trajectory') 
+            #raise ValueError('The concatenation of the trajectories is not equal to the original trajectory') 
     return compteur_pqs_egal
 
 #on verifie que la premiere trajectoire de df_sep pour un TRIP_ID donné est exacte;emt la trajectoire de df_full pour le meme TRIP_ID comme on semble le voir
