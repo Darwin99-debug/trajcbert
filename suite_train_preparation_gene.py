@@ -194,12 +194,14 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     # Convert liste_to_duplicate elements to tuples and create a set
     liste_to_duplicate = set(tuple(item) for item in liste_to_duplicate)
 
-    # Filter the original dataframe to include only the unique TRIP_ID values
-    duplicated_rows = dataframe[dataframe['TRIP_ID'].isin(liste_to_duplicate)].copy()
+    # Create an empty DataFrame to store duplicated rows
+    duplicated_rows = pd.DataFrame()
 
     # Duplicate rows for each unique TRIP_ID value
     for trip_id in liste_to_duplicate:
-        duplicated_rows = pd.concat([duplicated_rows, dataframe[dataframe['TRIP_ID'] == trip_id]], ignore_index=True)
+        # Filter rows with the current trip_id and append them to duplicated_rows
+        rows_to_append = dataframe[dataframe['TRIP_ID'] == trip_id]
+        duplicated_rows = duplicated_rows.append(rows_to_append, ignore_index=True)
 
     # Create a seed to be able to reproduce the results
     random.seed(2023)
