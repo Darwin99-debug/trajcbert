@@ -362,8 +362,8 @@ def manage_separation(dataframe, list_index_to_separate):
         """
         for j in range(nb_traj):
         #we put i the dict the row that we will add to the dataframe with the list_traj[j] in the Tokenization_2 column
+            row['Tokenization_2'] = list_traj[j]
             dict_data[len(dict_data)] = row
-            dict_data[len(dict_data)-1]['Tokenization_2'] = list_traj[j]
 
     #we remove from the dict the rows that are separated
     for i in range(len(list_index_to_separate)):
