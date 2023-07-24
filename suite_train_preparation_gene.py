@@ -411,7 +411,14 @@ verif_separation(df_sep, list_row_to_sep)
 #for that we use df_full and df_sep and see if the concatenation of Tokenization_2 of df_sep is equal to the Tokenization_2 of df_full
 def verif_concatenation(df_full, df_sep):
     for i in range(len(df_sep)):
-        if df_sep.iloc[i]['Tokenization_2'] != df_full.iloc[i]['Tokenization_2']:
+        #we get the rows that have the same TRIP_ID
+        df_full_trip_id = df_full[df_full['TRIP_ID']==df_sep.iloc[i]['TRIP_ID']]
+        #we concatenate the trajectories
+        traj_concat = []
+        for j in range(len(df_full_trip_id)):
+            traj_concat += df_full_trip_id.iloc[j]['Tokenization_2']
+        #we verify that the concatenation of the trajectories is equal to the original trajectory
+        if traj_concat != df_sep.iloc[i]['Tokenization_2']:
             raise ValueError('The concatenation of the trajectories is not equal to the original trajectory')
     return 'The concatenation of the trajectories is equal to the original trajectory'
 
