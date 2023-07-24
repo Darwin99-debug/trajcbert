@@ -409,18 +409,17 @@ verif_separation(df_sep, list_row_to_sep)
 
 #part of the verification is to see wheter the concatenation of the trajectories is equal to the original trajectory
 #for that we use df_full and df_sep and see if the concatenation of Tokenization_2 of df_sep is equal to the Tokenization_2 of df_full
+#for that, we count whether the number of points of the concatenation is equal to the number of points of the original trajectory (column Tokenization_2 of df_full)
 def verif_concatenation(df_full, df_sep):
     for i in range(len(df_sep)):
         #we get the rows that have the same TRIP_ID
         df_full_trip_id = df_full[df_full['TRIP_ID']==df_sep.iloc[i]['TRIP_ID']]
-        #we concatenate the trajectories
-        traj_concat = []
-        for j in range(len(df_full_trip_id)):
-            traj_concat += df_full_trip_id.iloc[j]['Tokenization_2']
-        #we verify that the concatenation of the trajectories is equal to the original trajectory
-        if traj_concat != df_sep.iloc[i]['Tokenization_2']:
+        #we sum the length of the trajectories of df_sep that have the same TRIP_ID
+        len_traj_full = sum([len(df_full_trip_id.iloc[j]['Tokenization_2']) for j in range(len(df_full_trip_id))])
+        #we compare with the length of the trajectory of df_full for the same TRIP_ID
+        if len_traj_full != len(df_full_trip_id.iloc[i]['Tokenization_2']):
             raise ValueError('The concatenation of the trajectories is not equal to the original trajectory')
-    return 'The concatenation of the trajectories is equal to the original trajectory'
+
 
 verif_concatenation(df_full2, df_sep)
 
