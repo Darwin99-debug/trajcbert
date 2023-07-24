@@ -199,8 +199,10 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
 
     # Duplicate rows for each unique TRIP_ID value
     for trip_id in liste_to_duplicate:
+        # Convert trip_id back to a list before comparison
+        trip_id_list = list(trip_id)
         # Filter rows with the current trip_id and append them to duplicated_rows
-        rows_to_append = dataframe[dataframe['TRIP_ID'] == trip_id]
+        rows_to_append = dataframe[dataframe['TRIP_ID'].apply(lambda x: x == trip_id_list)]
         duplicated_rows = duplicated_rows.append(rows_to_append, ignore_index=True)
 
     # Create a seed to be able to reproduce the results
