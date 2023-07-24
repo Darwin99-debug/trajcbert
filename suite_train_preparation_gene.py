@@ -192,7 +192,7 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     for i in range(len(liste_to_duplicate)):
         #we wont enter the loop if the list is empty
         #we add the rows to duplicate to the dataframe
-        dataframe = pd.concat([dataframe,dataframe[dataframe['TAXI_ID']==liste_to_duplicate[i]]],ignore_index=True)
+        dataframe = pd.concat([dataframe,dataframe[dataframe['TRIP_ID']==liste_to_duplicate[i]]],ignore_index=True)
 
 
     #we create a seed to be able to reproduce the results
