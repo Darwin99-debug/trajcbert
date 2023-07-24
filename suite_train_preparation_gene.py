@@ -451,8 +451,8 @@ def verif(df_full, df_sep):
         
 
 
-a=verif_concatenation(df_full2, df_sep)
-b=verif(df_full2, df_sep)
+a=verif_concatenation(df_full, df_sep)
+b=verif(df_full, df_sep)
 
 
 
