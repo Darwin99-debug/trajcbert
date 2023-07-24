@@ -206,7 +206,8 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
         duplicated_dfs.append(rows_to_append)
 
     # Concatenate all duplicated DataFrames
-    duplicated_rows = pd.concat(duplicated_dfs, ignore_index=True)
+    if len(liste_to_duplicate) > 0:
+        duplicated_rows = pd.concat(duplicated_dfs, ignore_index=True)
 
     # Create a seed to be able to reproduce the results
     random.seed(2023)
