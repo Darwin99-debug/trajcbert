@@ -292,7 +292,7 @@ def manage_separation_test(dataframe, list_index_to_separate):
     return dataframe_separated
 
 
-
+"""
 def manage_separation(dataframe, list_index_to_separate):
     #we manage the separation 
     dict_data = {}
@@ -348,7 +348,7 @@ def manage_separation(dataframe, list_index_to_separate):
         if rest != 0:
             list_traj[-1].append(tokenization_2[-rest:])
         #we add the trajectories to the dataframe in new rows
-        """
+        
         for j in range(nb_traj):
             #we create a new row that will be added to the dataframe, for that we can use the function  concat
             #dataframe_separated = pd.concat([dataframe_separated,row],ignore_index=True)
@@ -359,7 +359,7 @@ def manage_separation(dataframe, list_index_to_separate):
             dataframe_separated.loc[[len(dataframe_separated)-1],['Tokenization_2']] = list_traj[j]
             #the concat function add the row at the end of the dataframe so we can take the last row
             #we add the trajectory to the Tokenization_2 column
-        """
+        
         for j in range(nb_traj):
         #we put i the dict the row that we will add to the dataframe with the list_traj[j] in the Tokenization_2 column
             dataframe_separated.loc[len(dataframe)] = row
@@ -377,7 +377,38 @@ def manage_separation(dataframe, list_index_to_separate):
         
     #return dataframe_separated
 
+"""
 
+def manage_separation(dataframe, list_index_to_separate):
+    dataframe_separated = dataframe.copy()
+    dataframe_separated.reset_index(drop=True, inplace=True)
+
+    for i in range(len(list_index_to_separate)):
+        row = dataframe_separated.loc[list_index[i]].copy()
+
+        dataframe_separated = dataframe_separated.drop(list_index[i], axis=0)
+
+        list_traj = []
+        tokenization_2 = row['Tokenization_2']
+        len_traj = len(tokenization_2)
+        nb_traj = list_index_to_separate[i][1]
+        len_each_traj = len_traj // nb_traj
+        for j in range(nb_traj):
+            traj = tokenization_2[j * len_each_traj:(j + 1) * len_each_traj]
+            list_traj.append(traj)
+        rest = len_traj % nb_traj
+        if rest != 0:
+            list_traj[-1].append(tokenization_2[-rest:])
+
+        for j in range(nb_traj):
+            new_row = row.copy()
+            new_row['Tokenization_2'] = list_traj[j]
+            dataframe_separated = dataframe_separated.append(new_row)
+
+    for i in range(len(list_index_to_separate)):
+        del dataframe_separated.loc[list_index[i]]
+
+    return dataframe_separated
 
 def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     """
