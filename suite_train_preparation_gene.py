@@ -423,8 +423,8 @@ def verif_concatenation(df_full, df_sep):
             print(df_full['TRIP_ID'][i], sum_len_traj, len_traj)
             # saut de ligne
             print("---------------")
-            print(df['Tokenization_2'][0])
-            print(df['Tokenization_2'][1])
+            #we get the two tokenization_2 columns corresponding to df
+            print(df['Tokenization_2'])
             # saut de ligne
             print("---------------")
             print(df_full['Tokenization_2'][i])
