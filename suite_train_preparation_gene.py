@@ -389,7 +389,7 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
 #we call the function
-df_full2, df_sep, list_row_to_sep = prepare_train(data_train, duplication_rate=0, separation_rate=50)
+df_full2, df_sep, list_row_to_sep, unused = prepare_train(data_train, duplication_rate=0, separation_rate=50)
 
 
 
