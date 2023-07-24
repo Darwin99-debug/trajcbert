@@ -342,6 +342,7 @@ def manage_separation(dataframe, list_index_to_separate):
         if rest != 0:
             list_traj[-1].append(tokenization_2[-rest:])
         #we add the trajectories to the dataframe in new rows
+        """
         for j in range(nb_traj):
             #we create a new row that will be added to the dataframe, for that we can use the function  concat
             #dataframe_separated = pd.concat([dataframe_separated,row],ignore_index=True)
@@ -352,6 +353,10 @@ def manage_separation(dataframe, list_index_to_separate):
             dataframe_separated.loc[[len(dataframe_separated)-1],['Tokenization_2']] = list_traj[j]
             #the concat function add the row at the end of the dataframe so we can take the last row
             #we add the trajectory to the Tokenization_2 column
+        """
+        for j in range(nb_traj):
+            print(list_traj[j])
+            print(type(list_traj[j]))
 
 
             
