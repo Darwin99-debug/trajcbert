@@ -441,7 +441,7 @@ def verif_concatenation(df_full, df_sep):
 def verif(df_full, df_sep):
     compte_pqs_egal=0
     for i in range(len(df_full)):
-        df=df_sep[df_sep['TRIP_ID']==df_full['TRIP_ID'][i]]
+        df=df_sep[df_sep['TRIP_ID']!=df_full['TRIP_ID'][i]]
         if df.iloc[0]['Tokenization_2']!=df_full['Tokenization_2'][i]:
             print(df_full['TRIP_ID'][i])
             print(df['Tokenization_2'])
