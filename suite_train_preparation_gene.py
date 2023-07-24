@@ -297,9 +297,11 @@ def manage_separation(dataframe, list_index_to_separate):
     dataframe_separated = dataframe.copy()
     dataframe_separated.reset_index(drop=True, inplace=True)
 
+    # Create a dictionary to map TRIP_ID to its index in list_index_to_separate
+    trip_id_to_index = {trip_id: i for i, (trip_id, _) in enumerate(list_index_to_separate)}
+
     # Sort list_index based on the order of TRIP_ID in list_index_to_separate
-    list_index_to_separate.sort(key=lambda x: x[0])
-    list_index = [idx for idx in dataframe_separated.index if dataframe_separated.loc[idx, 'TRIP_ID'] in [list_index_to_separate[i][0] for i in range(len(list_index_to_separate))]]
+    list_index = sorted(dataframe_separated.index, key=lambda idx: trip_id_to_index.get(dataframe_separated.loc[idx, 'TRIP_ID'], float('inf')))
 
     modified_rows = []
 
@@ -334,6 +336,8 @@ def manage_separation(dataframe, list_index_to_separate):
     dataframe_separated.reset_index(drop=True, inplace=True)
 
     return dataframe_separated
+
+
 def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     """
     This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
