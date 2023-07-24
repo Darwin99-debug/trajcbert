@@ -192,15 +192,17 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
 
     # Convert liste_to_duplicate elements to tuples and create a set
-    liste_to_duplicate = set(tuple(map(tuple, item)) for item in liste_to_duplicate)
+    liste_to_duplicate = set(tuple(map(tuple, [item])) for item in liste_to_duplicate)
 
     # Create an empty DataFrame to store duplicated rows
     duplicated_rows = pd.DataFrame()
 
     # Duplicate rows for each unique TRIP_ID value
     for trip_id in liste_to_duplicate:
+        # Convert trip_id back to a list before comparison
+        trip_id_list = list(trip_id[0])
         # Filter rows with the current trip_id and append them to duplicated_rows
-        rows_to_append = dataframe[dataframe['TRIP_ID'].apply(lambda x: np.array_equal(x, trip_id))]
+        rows_to_append = dataframe[dataframe['TRIP_ID'].apply(lambda x: np.array_equal(x, trip_id_list))]
         duplicated_rows = duplicated_rows.append(rows_to_append, ignore_index=True)
 
     # Create a seed to be able to reproduce the results
