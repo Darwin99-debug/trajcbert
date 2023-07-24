@@ -383,6 +383,8 @@ def manage_separation(dataframe, list_index_to_separate):
     dataframe_separated = dataframe.copy()
     dataframe_separated.reset_index(drop=True, inplace=True)
 
+    list_index = [j for j in range(len(dataframe)) if dataframe['TRIP_ID'][j] in [list_index_to_separate[i][0] for i in range(len(list_index_to_separate))]]
+
     for i in range(len(list_index_to_separate)):
         row = dataframe_separated.loc[list_index[i]].copy()
 
