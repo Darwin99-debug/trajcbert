@@ -410,30 +410,31 @@ verif_separation(df_sep, list_row_to_sep)
 #part of the verification is to see wheter the concatenation of the trajectories is equal to the original trajectory
 #for that we use df_full and df_sep and see if the concatenation of Tokenization_2 of df_sep is equal to the Tokenization_2 of df_full
 #for that, we count whether the number of points of the concatenation is equal to the number of points of the original trajectory (column Tokenization_2 of df_full)
+def verif_concatenation(df_full, df_sep):
+    for i in range(len(df_sep)):
+        #we get the rows that have the same TRIP_ID in df_sep as the row i of df_full
+        df = df_sep[df_sep['TRIP_ID']==df_full['TRIP_ID'][i]]
+        #we get the sum of the length of the trajectories of df
+        sum_len_traj = sum([len(df.iloc[j]['Tokenization_2']) for j in range(len(df))])
+        #we get the length of the original trajectory
+        len_traj = len(df_full['Tokenization_2'][i])
+        #we verify that the sum of the length of the trajectories of df is equal to the length of the original trajectory
+        if sum_len_traj != len_traj:
+            print(df_full['TRIP_ID'][i], sum_len_traj, len_traj)
+            # saut de ligne
+            print("---------------")
+        #we get the two tokenization_2 columns corresponding to df and we print them ENTIRE
+            print(df['Tokenization_2'])
 
-for i in range(len(df_sep)):
-    #we get the rows that have the same TRIP_ID in df_sep as the row i of df_full
-    df = df_sep[df_sep['TRIP_ID']==df_full['TRIP_ID'][i]]
-    #we get the sum of the length of the trajectories of df
-    sum_len_traj = sum([len(df.iloc[j]['Tokenization_2']) for j in range(len(df))])
-    #we get the length of the original trajectory
-    len_traj = len(df_full['Tokenization_2'][i])
-    #we verify that the sum of the length of the trajectories of df is equal to the length of the original trajectory
-    if sum_len_traj != len_traj:
-        print(df_full['TRIP_ID'][i], sum_len_traj, len_traj)
-        # saut de ligne
-        print("---------------")
-    #we get the two tokenization_2 columns corresponding to df and we print them ENTIRE
-        print(df['Tokenization_2'])
-        print(df['Tokenization_2'])
+            # saut de ligne
+            print("---------------")
+            print(df_full['Tokenization_2'][i])
+            raise ValueError('The concatenation of the trajectories is not equal to the original trajectory') 
 
-        # saut de ligne
-        print("---------------")
-        print(df_full['Tokenization_2'][i])
-        raise ValueError('The concatenation of the trajectories is not equal to the original trajectory') 
+        
 
-    
 
+verif_concatenation(df_full2, df_sep)
 
 
 
