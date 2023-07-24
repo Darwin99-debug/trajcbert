@@ -183,49 +183,39 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     #we create a list of threshold
     list_threshold = [0.3+i*((1-0.3)/(nb_categories-2)) for i in range(nb_categories-1)]
 
-    #we remove the useless rows (those wo have an element that is not a list in the column Tokenization_2)
-    dataframe['Tokenization_2']=dataframe['Tokenization_2'].apply(lambda x: x if type(x)==list else [])
-    #we remove from the dataframe the rows that have a trajectory of length inferior to 3
-    dataframe['LEN_TRAJ']=dataframe['Tokenization_2'].apply(lambda x: len(x))
-    dataframe = dataframe[dataframe['LEN_TRAJ']>=3]
+    # Remove the useless rows and rows with trajectory length < 3
+    dataframe['Tokenization_2'] = dataframe['Tokenization_2'].apply(lambda x: x if type(x) == list else [])
+    dataframe['LEN_TRAJ'] = dataframe['Tokenization_2'].apply(lambda x: len(x))
+    dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
 
     for i in range(len(liste_to_duplicate)):
-        #we wont enter the loop if the list is empty
-        #we add the rows to duplicate to the dataframe
-        dataframe = pd.concat([dataframe,dataframe[dataframe['TRIP_ID']==liste_to_duplicate[i]]],ignore_index=True)
+        # Add the rows to duplicate to the dataframe
+        dataframe = pd.concat([dataframe, dataframe[dataframe['TRIP_ID'] == liste_to_duplicate[i]]], ignore_index=True)
 
-
-    #we create a seed to be able to reproduce the results
+    # Create a seed to be able to reproduce the results
     random.seed(2023)
-    #wealculate the number of rows that will fall into each category
-    #we keep it in variables so that we can use it later
+    # Calculate the number of rows that will fall into each category
     nb_rows_dict, list_index_dict = rows_attribution_cat(dataframe, nb_categories)
-    
 
-
-    #we create a list of dataframe for each category 
+    # Create a list of dataframe for each category
     df_dict = create_df_cat(dataframe, nb_categories, nb_rows_dict, list_index_dict)
 
-    #we create a list of targets and deb_traj for each category
-    target_dict, list_deb_traj_dict = create_target_deb_traj(nb_categories, df_dict)    
+    # Create a list of targets and deb_traj for each category
+    target_dict, list_deb_traj_dict = create_target_deb_traj(nb_categories, df_dict)
     target_dict, list_deb_traj_dict = fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, list_deb_traj_dict)
 
-
-    #we add the lists of target in the column target of the dataframe and same for deb_traj
+    # Add the lists of target and deb_traj in the dataframe for each category
     for i in range(nb_categories):
-        df_dict['dataframe_category'+str(i)]['TARGET'] = target_dict['list_target_category'+str(i)]
-        df_dict['dataframe_category'+str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category'+str(i)]
-    
+        df_dict['dataframe_category' + str(i)]['TARGET'] = target_dict['list_target_category' + str(i)]
+        df_dict['dataframe_category' + str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category' + str(i)]
 
-    #we verify that for each category exept the last one dataframe'Tokenization_2'][i][len(dataframe['DEB_TRAJ'][i])]!=dataframe['TARGET'][i]
-    # wuere i goes from 0 to len(dataframe)
-    #and the dataframe is the dataframe_category           
+    # Verify that for each category except the last one dataframe['Tokenization_2'][i][len(dataframe['DEB_TRAJ'][i])] != dataframe['TARGET'][i]
     verif_target_deb_traj(df_dict, nb_categories)
-    
-    #we get the full dataframe back
+
+    # Get the full dataframe back
     dataframe_full = pd.DataFrame()
     for i in range(nb_categories):
-        dataframe_full = pd.concat([dataframe_full,df_dict['dataframe_category'+str(i)]],ignore_index=True)
+        dataframe_full = pd.concat([dataframe_full, df_dict['dataframe_category' + str(i)]], ignore_index=True)
 
     return dataframe_full
 
