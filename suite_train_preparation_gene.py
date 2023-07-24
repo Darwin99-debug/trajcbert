@@ -421,7 +421,7 @@ def verif_concatenation(df_full, df_sep):
         #we verify that the sum of the length of the trajectories of df is equal to the length of the original trajectory
         if sum_len_traj != len_traj:
             print(df_full['TRIP_ID'][i], sum_len_traj, len_traj)
-            print(df['Tokenization_2'])
+            print(df['Tokenization_2'][k] for k in range(len(df)))
             print(df_full['Tokenization_2'][i])
             raise ValueError('The concatenation of the trajectories is not equal to the original trajectory') 
 
