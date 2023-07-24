@@ -386,7 +386,7 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     #we call the funtion prepare_train_wo_duplicate with the list of rows to duplicate
     df_full = prepare_train_wo_duplicate(dataframe_separated, liste_to_duplicate=list_index_to_duplicate)
 
-    return df_full, dataframe_separated, list_index_to_separate
+    return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
 #we call the function
 df_full2, df_sep, list_row_to_sep = prepare_train(data_train, duplication_rate=0, separation_rate=50)
@@ -420,18 +420,6 @@ def verif_concatenation(df_full, df_sep):
         len_traj = len(df_full['Tokenization_2'][i])
         #we verify that the sum of the length of the trajectories of df is equal to the length of the original trajectory
         if sum_len_traj != len_traj:
-            print(df_full['TRIP_ID'][i], sum_len_traj, len_traj)
-            # saut de ligne
-            print("---------------")
-        #we get the two tokenization_2 columns corresponding to df and we print them ENTIRE
-            print(df['Tokenization_2'])
-            #we print the rows 40 and 41 of df_sep
-            print(df_sep.iloc[40]['Tokenization_2'])
-            print(df_sep.iloc[41]['Tokenization_2'])
-
-            # saut de ligne
-            print("---------------")
-            print(df_full['Tokenization_2'][i])
             raise ValueError('The concatenation of the trajectories is not equal to the original trajectory') 
     return 'The concatenation of the trajectories is equal to the original trajectory'
 
@@ -443,5 +431,5 @@ a=verif_concatenation(df_full, df_sep)
 
 
     
-
-
+#on pase à la duplication
+df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=10, separation_rate=50)
