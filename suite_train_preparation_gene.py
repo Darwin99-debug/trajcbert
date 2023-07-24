@@ -425,6 +425,8 @@ def verif_concatenation(df_full, df_sep):
             print("---------------")
         #we get the two tokenization_2 columns corresponding to df and we print them ENTIRE
             print(df['Tokenization_2'])
+            #we print the rows 40 and 41 of df_sep
+            print(df_sep.iloc[40:42]['Tokenization_2'])
 
             # saut de ligne
             print("---------------")
