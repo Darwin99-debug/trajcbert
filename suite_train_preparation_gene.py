@@ -287,7 +287,7 @@ def manage_separation_test(dataframe, list_index_to_separate):
             #we create a new row that will be added to the dataframe, for that we can use the function  concat
             dataframe_separated = pd.concat([dataframe_separated,row],ignore_index=True)
             #we add the trajectory to the Tokenization_2 column
-            dataframe_separated['Tokenization_2'][len(dataframe_separated)-1] = list_traj[j]
+            dataframe_separated.loc[[len(dataframe_separated)-1],['Tokenization_2']] = list_traj[j]
         
     return dataframe_separated
 
