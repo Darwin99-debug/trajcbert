@@ -439,4 +439,4 @@ a=verif_concatenation(df_full, df_sep)
 
     
 #on pase à la duplication
-df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=10, separation_rate=50)
+df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
