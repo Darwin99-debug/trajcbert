@@ -297,12 +297,10 @@ def manage_separation(dataframe, list_index_to_separate):
     dataframe_separated = dataframe.copy()
     dataframe_separated.reset_index(drop=True, inplace=True)
 
-    # Create a list of TRIP_IDs from list_index_to_separate
-    trip_ids_to_separate = [item[0] for item in list_index_to_separate]
+    list_index = [idx for idx in dataframe_separated.index if dataframe_separated.loc[idx, 'TRIP_ID'] in [list_index_to_separate[i][0] for i in range(len(list_index_to_separate))]]
+    #to avoid inversion of the rows, we sort the list_index_to_seperate by the index of the rows. to manage to do that we recreate the list_index_to_separate with the order of list_index 
+    #we not only put the trip_id but also the number of trajectories calculated in the prepare_train function
 
-    # Sort both list_index and list_index_to_separate based on the TRIP_ID values
-    list_index = [idx for idx in dataframe_separated.index if dataframe_separated.loc[idx, 'TRIP_ID'] in trip_ids_to_separate]
-    list_index_to_separate = sorted(list_index_to_separate, key=lambda x: x[0])
     modified_rows = []
 
     for i in range(len(list_index_to_separate)):
