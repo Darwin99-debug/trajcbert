@@ -390,9 +390,17 @@ df_full2, df_sep, list_row_to_sep = prepare_train(data_train, duplication_rate=0
 
 
 
+#after that, we verify that the rows that we separated are well separated
+#we us the list_row_to_sep that we created in the prepare_train function to see if the rows that we separated are well separated
+# for j that goes from 0 to len(list_row_to_sep), we verify that the number of rows with the taxi_id list_row_to_sep[j][0] is equal to list_row_to_sep[j][1]
 
+def verif_separation(dataframe, list_row_to_sep):
+    for j in range(len(list_row_to_sep)):
+        if len(dataframe[dataframe['TAXI_ID']==list_row_to_sep[j][0]])!=list_row_to_sep[j][1]:
+            raise ValueError('The rows are not well separated')
+    return 'The rows are well separated'
 
-
+verif_separation(df_sep, list_row_to_sep)
 
             
 
