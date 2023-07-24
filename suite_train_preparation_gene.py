@@ -298,9 +298,8 @@ def manage_separation(dataframe, list_index_to_separate):
     dataframe_separated.reset_index(drop=True, inplace=True)
 
     list_index = [idx for idx in dataframe_separated.index if dataframe_separated.loc[idx, 'TRIP_ID'] in [list_index_to_separate[i][0] for i in range(len(list_index_to_separate))]]
-    #to avoid inversion of the rows, we sort the list_index_to_seperate by the index of the rows corresponding to the TRIP_ID
-    list_index_to_separate.sort(key=lambda x: list_index.index(x[0]))
-    modified_rows = []
+    #to avoid inversion of the rows, we sort the list_index_to_seperate by the order of the list_index
+    list_index_to_separate = [list_index_to_separate[i] for i in range(len(list_index_to_separate)) if list_index_to_separate[i][0] in [dataframe_separated.loc[idx, 'TRIP_ID'] for idx in list_index]]
 
     for i in range(len(list_index_to_separate)):
         row = dataframe_separated.loc[list_index[i]].copy()
