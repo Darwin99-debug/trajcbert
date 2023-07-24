@@ -402,10 +402,20 @@ df_full2, df_sep, list_row_to_sep = prepare_train(data_train, duplication_rate=0
 def verif_separation(dataframe, list_row_to_sep):
     for j in range(len(list_row_to_sep)):
         if len(dataframe[dataframe['TRIP_ID']==list_row_to_sep[j][0]])!=list_row_to_sep[j][1]:
-            print(j, list_row_to_sep[j][0], list_row_to_sep[j][1], len(dataframe[dataframe['TRIP_ID']==list_row_to_sep[j][0]]))
+            raise ValueError('The rows are not well separated')
     return 'The rows are well separated'
 
 verif_separation(df_sep, list_row_to_sep)
+
+#part of the verification is to see wheter the concatenation of the trajectories is equal to the original trajectory
+#for that we use df_full and df_sep and see if the concatenation of Tokenization_2 of df_sep is equal to the Tokenization_2 of df_full
+def verif_concatenation(df_full, df_sep):
+    for i in range(len(df_sep)):
+        if df_sep.iloc[i]['Tokenization_2'] != df_full.iloc[i]['Tokenization_2']:
+            raise ValueError('The concatenation of the trajectories is not equal to the original trajectory')
+    return 'The concatenation of the trajectories is equal to the original trajectory'
+
+verif_concatenation(df_full2, df_sep)
 
 
 
