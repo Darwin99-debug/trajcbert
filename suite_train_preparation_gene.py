@@ -191,11 +191,15 @@ def prepare_train_duplication(dataframe, nb_categories=5, liste_to_duplicate=[],
     dataframe['LEN_TRAJ']=dataframe['Tokenization_2'].apply(lambda x: len(x))
     dataframe = dataframe[dataframe['LEN_TRAJ']>=3]
 
+    # Create a list to store DataFrames of rows to be duplicated
+    duplicate_dataframes = []
+
     for i in range(len(liste_to_duplicate)):
-        #we wont enter the loop if the list is empty
-        #we add the rows to duplicate to the dataframe
         duplicate_rows = dataframe[dataframe['TRIP_ID'] == liste_to_duplicate[i]]
-        dataframe = pd.concat([dataframe, duplicate_rows], ignore_index=True)
+        duplicate_dataframes.append(duplicate_rows)
+
+    # Concatenate all DataFrames of rows to be duplicated at once
+    dataframe = pd.concat([dataframe] + duplicate_dataframes, ignore_index=True)
 
     #we create a seed to be able to reproduce the results
     random.seed(2023)
