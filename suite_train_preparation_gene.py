@@ -302,9 +302,9 @@ def manage_separation(dataframe, list_index_to_separate):
         # the dict_data contains the rows of the dataframe with the TRIP_ID as key
 
         
-    #dataframe_separated = dataframe.copy()
+    dataframe_separated = dataframe.copy()
     #we reinitalize the index of the dataframe
-    #dataframe_separated.reset_index(drop=True, inplace=True)
+    dataframe_separated.reset_index(drop=True, inplace=True)
 
 
     #we track the rows thanks to the TRIP_ID and put their index in a list
@@ -319,13 +319,13 @@ def manage_separation(dataframe, list_index_to_separate):
         #row = dataframe_separated.iloc[list_index_to_separate[i][0]]
         #this line works only if the index of the dataframe is the same as the TRIP_ID but it is not the case so we have to transform the TRIP_ID into the index
         
-        row = dataframe.iloc[list_index[i]]
+        row = dataframe_separated.loc[list_index[i]].copy() 
 
         #row contains the row that we will separate
         #we remove the row from the dataframe and replace it by the same row but with the Tokenization_2 column that is a piece of the Tokenization_2 column of the row seperated in list_index_to_separate[i][1] trajectories
         #we remove the original row from the dataframe but we keep it in the variable row
 
-        #dataframe_separated = dataframe_separated.drop(list_index[i], axis=0)
+        dataframe_separated = dataframe_separated.drop(list_index[i], axis=0)
         #we create the list of trajectories
         list_traj = []
         #WE FILL THE LIST OF TRAJECTORIES
@@ -362,18 +362,18 @@ def manage_separation(dataframe, list_index_to_separate):
         """
         for j in range(nb_traj):
         #we put i the dict the row that we will add to the dataframe with the list_traj[j] in the Tokenization_2 column
-            row['Tokenization_2'] = list_traj[j]
-            dict_data[len(dict_data)] = row
+            dataframe_separated.loc[len(dataframe)] = row
+            dataframe_separated.loc[len(dataframe) - 1, 'Tokenization_2'] = list_traj[j]
 
     #we remove from the dict the rows that are separated
     for i in range(len(list_index_to_separate)):
         del dict_data[list_index_to_separate[i][0]]
-
+#test
     #we return the dict as a dataframe
-    dataframe_separated_to_return = pd.DataFrame.from_dict(dict_data, orient='index')
-    dataframe_separated_to_return.reset_index(drop=True, inplace=True)
+    #dataframe_separated_to_return = pd.DataFrame.from_dict(dict_data, orient='index')
+    #dataframe_separated_to_return.reset_index(drop=True, inplace=True)
 
-    return dataframe_separated_to_return      
+    return dataframe_separated    
         
     #return dataframe_separated
 
