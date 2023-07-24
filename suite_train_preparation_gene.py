@@ -355,8 +355,11 @@ def manage_separation(dataframe, list_index_to_separate):
             #we add the trajectory to the Tokenization_2 column
         """
         for j in range(nb_traj):
-            print(list_traj[j])
-            print(type(list_traj[j]))
+            #si list_traj[j] est vide ou si c'est un NAN, on l'affiche
+            if list_traj[j] == [] or list_traj[j] == np.nan:
+                print(list_traj[j])
+
+        
 
 
             
