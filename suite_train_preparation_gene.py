@@ -173,9 +173,11 @@ def verif_target_deb_traj(df_dict, nb_categories):
                 #raise ValueError('The target is not the next token of the deb_traj')
                 raise ValueError('The target is not the next token of the deb_traj')
 
-def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[], decal_gauche=False, decal_droite=False, uniforme=True):
+
+def prepare_train_duplication(dataframe, nb_categories=5, liste_to_duplicate=[], decal_gauche=False, decal_droite=False, uniforme=True):
     """
-liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
+    liste_to_duplicate is a list of TAXI_ID that we want to duplicate
+    """
     #we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
     #tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
     # for example, if ze have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
@@ -192,8 +194,10 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     for i in range(len(liste_to_duplicate)):
         #we wont enter the loop if the list is empty
         #we add the rows to duplicate to the dataframe
-        dataframe = pd.concat([dataframe,dataframe[dataframe['TRIP_ID']==liste_to_duplicate[i]]],ignore_index=True)
-
+        duplicate_rows = pd.DataFrame()
+        for i in range(len(liste_to_duplicate)):
+            duplicate_rows = pd.concat([duplicate_rows, dataframe[dataframe['TRIP_ID'] == liste_to_duplicate[i]]], ignore_index=True)
+        dataframe = pd.concat([dataframe, duplicate_rows], ignore_index=True)
 
     #we create a seed to be able to reproduce the results
     random.seed(2023)
@@ -201,8 +205,6 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     #we keep it in variables so that we can use it later
     nb_rows_dict, list_index_dict = rows_attribution_cat(dataframe, nb_categories)
     
-
-
     #we create a list of dataframe for each category 
     df_dict = create_df_cat(dataframe, nb_categories, nb_rows_dict, list_index_dict)
 
@@ -210,14 +212,12 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     target_dict, list_deb_traj_dict = create_target_deb_traj(nb_categories, df_dict)    
     target_dict, list_deb_traj_dict = fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, list_deb_traj_dict)
 
-
     #we add the lists of target in the column target of the dataframe and same for deb_traj
     for i in range(nb_categories):
         df_dict['dataframe_category'+str(i)]['TARGET'] = target_dict['list_target_category'+str(i)]
         df_dict['dataframe_category'+str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category'+str(i)]
     
-
-    #we verify that for each category exept the last one dataframe'Tokenization_2'][i][len(dataframe['DEB_TRAJ'][i])]!=dataframe['TARGET'][i]
+    #we verify that for each category except the last one dataframe'Tokenization_2'][i][len(dataframe['DEB_TRAJ'][i])]!=dataframe['TARGET'][i]
     # wuere i goes from 0 to len(dataframe)
     #and the dataframe is the dataframe_category           
     verif_target_deb_traj(df_dict, nb_categories)
@@ -225,12 +225,12 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
     #we get the full dataframe back
     dataframe_full = pd.DataFrame()
     for i in range(nb_categories):
-        dataframe_full = pd.concat([dataframe_full,df_dict['dataframe_category'+str(i)]],ignore_index=True)
+        dataframe_full = pd.concat([dataframe_full, df_dict['dataframe_category'+str(i)]], ignore_index=True)
 
     return dataframe_full
 
 #we call the function
-df_full = prepare_train_wo_duplicate(data_train)
+df_full = prepare_train_duplication(data_train)
 
 
 def manage_separation_test(dataframe, list_index_to_separate):
