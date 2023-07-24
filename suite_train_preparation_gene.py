@@ -437,12 +437,12 @@ def verif_concatenation(df_full, df_sep):
             print(df_full['Tokenization_2'][i])
             """
             #raise ValueError('The concatenation of the trajectories is not equal to the original trajectory') 
-            return compteur_pqs_egal
+    return compteur_pqs_egal
 
         
 
 
-verif_concatenation(df_full2, df_sep)
+a=verif_concatenation(df_full2, df_sep)
 
 
 
