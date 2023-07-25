@@ -174,7 +174,7 @@ def manage_separation(dataframe, list_index_to_separate):
 
     for i in range(len(list_index_to_separate)):
         row = dataframe_separated.loc[list_index[i]].copy()
-        dataframe_separated.drop(list_index[i], inplace=True)
+        dataframe_separated = dataframe_separated.drop(list_index[i])  # Use .loc[] here
 
         list_traj = []
         tokenization_2 = row['Tokenization_2']
@@ -195,7 +195,7 @@ def manage_separation(dataframe, list_index_to_separate):
 
     for i in range(len(list_index_to_separate)):
         idx_to_remove = [idx for idx in dataframe_separated.index if dataframe_separated.loc[idx, 'TRIP_ID'] == list_index_to_separate[i][0]]
-        dataframe_separated.drop(idx_to_remove, inplace=True)
+        dataframe_separated = dataframe_separated.drop(idx_to_remove)  # Use .loc[] here
 
     for row in modified_rows:
         dataframe_separated = pd.concat([dataframe_separated, row.to_frame().T])
