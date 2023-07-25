@@ -330,4 +330,4 @@ def verif_length(dataframe, list_row_to_sep, list_row_to_dup):
     return 'The dataframe has the good length'
 
 verif_length(df_full_dup, list_row_to_sep_dup, list_row_to_dup)
-verif_length(df_full_dup1, list_row_to_sep_dup1, list_row_to_dup1)
+verif_length(df_full_dup1, list_row_to_sep_dup1, list_row_to_dup1) 
