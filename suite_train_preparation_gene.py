@@ -392,13 +392,15 @@ if len(df_full_dup1) != len(df_full) + len(list_row_to_dup1) + nb_lignes_sep1 - 
 
 
 #we get the lines that must have been duplicated
-df_dup = df_full_dup[df_full_dup['TRIP_ID'].isin([list_row_to_dup1[i][0] for i in range(len(list_row_to_dup1))])]
+df_dup = df_full_dup1[df_full_dup1['TRIP_ID'].isin([list_row_to_dup1[i][0] for i in range(len(list_row_to_dup1))])]
 #we print their cardinal
 print(len(df_dup))
 #we print the fisrt line that ;ust have ben duplicated in the original dataframe but only the tokenization_2 column
-print(df_dup[df_dup['TRIP_ID']==list_row_to_dup[0][0]]['Tokenization_2'])
+print(df_dup[df_dup['TRIP_ID']==list_row_to_dup1[0][0]]['Tokenization_2'])
 #we print the lines corresponding to the fisrt line that must have been duplicated in the original dataframe but that time in the dataframe after duplication ie df_full_dup1 but only the tokenization_2 column
-print(df_full_dup1[df_full_dup1['TRIP_ID']==list_row_to_dup[0][0]]['Tokenization_2'])
+print(df_full_dup1[df_full_dup1['TRIP_ID']==list_row_to_dup1[0][0]]['Tokenization_2'])
+#we print the matching trip_id
+print(list_row_to_dup1[0][0])
 
 
 #we want to verify if df_full_dup1 is equal to the dataframe (permutation of the rows included) that have been formatted but without the duplication and separation (df_full)
