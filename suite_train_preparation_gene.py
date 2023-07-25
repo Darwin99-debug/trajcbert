@@ -385,9 +385,9 @@ df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_trai
 
 
 #we verify that the dataframe obtained with prepare_train as the good length
-#what we call good length is its original length + the number of rows that we duplicated + the number of rows that we separated * the number of sub-trajectories that we created from the original trajectory - the number of rows that we separated
+#what we call good length is its original length + the number of rows that we duplicated * (the number of duplication) - the number of rows that we duplicated+ the number of rows that we separated * the number of sub-trajectories that we created from the original trajectory - the number of rows that we separated
 def verif_length(dataframe, list_row_to_sep, list_row_to_dup):
-    if len(dataframe) != len(data_train) + len(list_row_to_dup) + sum([list_row_to_sep[i][1] for i in range(len(list_row_to_sep))]) - len(list_row_to_sep):
+    if len(dataframe) != len(data_train) + sum([list_row_to_sep[i][1] for i in range(len(list_row_to_sep))]) - len(list_row_to_sep) + sum([list_row_to_dup[i][1] for i in range(len(list_row_to_dup))]) - len(list_row_to_dup):
         raise ValueError('The dataframe does not have the good length')
     return 'The dataframe has the good length'
 
