@@ -441,11 +441,11 @@ a=verif_concatenation(df_full, df_sep)
 df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
 df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_train(data_train, duplication_rate=30, separation_rate=50)
 #on verifie la longueur du dataframe df_full_dup qui doit être égale à la longueur du dataframe df_full + le nombre de lignes dupliquées + le nombre de lignes séparées (selon en combien de traj on a séparé les lignes)
-nb_lignes_sep=0
-for i in range(len(list_row_to_sep_dup)):
-    nb_lignes_sep+=list_row_to_sep_dup[i][1]
-if len(df_full_dup) != len(df_full) + len(list_row_to_dup) + nb_lignes_sep - len(list_row_to_sep_dup):
-    print(len(df_full_dup), len(df_full) + len(list_row_to_dup) + nb_lignes_sep - len(list_row_to_sep_dup))
+nb_lignes_sep1=0
+for i in range(len(list_row_to_sep_dup1)):
+    nb_lignes_sep1+=list_row_to_sep_dup1[i][1]
+if len(df_full_dup1) != len(df_full) + len(list_row_to_dup1) + nb_lignes_sep1 - len(list_row_to_sep_dup1):
+    print(len(df_full_dup1), len(df_full) + len(list_row_to_dup1) + nb_lignes_sep1 - len(list_row_to_sep_dup1))
 
 
 #we get the lines that must have been duplicated
