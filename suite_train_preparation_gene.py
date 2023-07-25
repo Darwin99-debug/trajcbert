@@ -383,40 +383,12 @@ a=verif_concatenation(df_full, df_sep)
 #on pase à la duplication
 df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
 df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_train(data_train, duplication_rate=50, separation_rate=0)
-#on verifie la longueur du dataframe df_full_dup qui doit être égale à la longueur du dataframe df_full + le nombre de lignes dupliquées + le nombre de lignes séparées (selon en combien de traj on a séparé les lignes)
-nb_lignes_sep1=0
-for i in range(len(list_row_to_sep_dup1)):
-    nb_lignes_sep1+=list_row_to_sep_dup1[i][1]
-if len(df_full_dup1) != len(df_full) + len(list_row_to_dup1) + nb_lignes_sep1 - len(list_row_to_sep_dup1):
-    print(len(df_full_dup1), len(df_full) + len(list_row_to_dup1) + nb_lignes_sep1 - len(list_row_to_sep_dup1))
 
 
-#we get the lines that must have been duplicated
-df_dup = df_full_dup1[df_full_dup1['TRIP_ID'].isin([list_row_to_dup1[i][0] for i in range(len(list_row_to_dup1))])]
-#we print their cardinal
-print(len(df_dup))
-#we print the fisrt line that ;ust have ben duplicated in the original dataframe but only the tokenization_2 column
-#print(df_dup[df_dup['TRIP_ID']==list_row_to_dup1[0][0]]['Tokenization_2'])
-#we print the lines corresponding to the fisrt line that must have been duplicated in the original dataframe but that time in the dataframe after duplication ie df_full_dup1 but only the tokenization_2 column
-#print(df_full_dup1[df_full_dup1['TRIP_ID']==list_row_to_dup1[0][0]]['Tokenization_2'])
-#we print the matching trip_id
-#print(list_row_to_dup1[0][0])
 
-
-#we want to verify if df_full_dup1 is equal to the dataframe (permutation of the rows included) that have been formatted but without the duplication and separation (df_full)
-#we need to put the rows of df_full_dup1 in the same order as the original dataframe, for that we can sort the rows of df_full_dup1 by the TRIP_ID and idem for the original dataframe
-def comparison_equality_df(df_full_dup1, dataframe_origin):
-    #we sort the rows of df_full_dup1 by the TRIP_ID
-    df_full_dup1.sort_values(by=['TRIP_ID'], inplace=True)
-    #we sort the rows of the original dataframe by the TRIP_ID
-    dataframe_origin.sort_values(by=['TRIP_ID'], inplace=True)
-    #we reset the index of the two dataframes
-    df_full_dup1.reset_index(drop=True, inplace=True)
-    dataframe_origin.reset_index(drop=True, inplace=True)
-    #we compare the two dataframes
-    if df_full_dup1.equals(dataframe_origin):
-        return 'The two dataframes are equal'
-    else:
-        return 'The two dataframes are not equal'
-    
-a=comparison_equality_df(df_full_dup1, df_full)
+#we verify that the dataframe obtained with prepare_train as the good length
+#what we call good length is its original length + the number of rows that we duplicated + the number of rows that we separated * the number of sub-trajectories that we created from the original trajectory - the number of rows that we separated
+def verif_length(dataframe, list_row_to_sep, list_row_to_dup):
+    if len(dataframe) != len(data_train) + len(list_row_to_dup) + sum([list_row_to_sep[i][1] for i in range(len(list_row_to_sep))]) - len(list_row_to_sep):
+        raise ValueError('The dataframe does not have the good length')
+    return 'The dataframe has the good length'
