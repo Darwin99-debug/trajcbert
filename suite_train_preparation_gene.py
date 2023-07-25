@@ -392,7 +392,7 @@ if len(df_full_dup1) != len(df_full) + len(list_row_to_dup1) + nb_lignes_sep1 - 
 
 
 #we get the lines that must have been duplicated
-df_dup = df_full_dup[df_full_dup['TRIP_ID'].isin([list_row_to_dup[i][0] for i in range(len(list_row_to_dup))])]
+df_dup = df_full_dup[df_full_dup['TRIP_ID'].isin([list_row_to_dup1[i][0] for i in range(len(list_row_to_dup1))])]
 #we print their cardinal
 print(len(df_dup))
 #we print the fisrt line that ;ust have ben duplicated in the original dataframe but only the tokenization_2 column
