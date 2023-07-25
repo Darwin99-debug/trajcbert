@@ -286,7 +286,9 @@ for that, we count whether the number of points of the concatenation is equal to
             concatenation.extend(df.iloc[j]['Tokenization_2'])
         if concatenation != df_full['Tokenization_2'][i]:
             print('concatenation : ', concatenation)
+            print('______________________________________________')
             print('df_full : ', df_full['Tokenization_2'][i])
+            raise ValueError('The concatenation of the trajectories is not equal to the original trajectory')
     return 'The nb of points resuting from the concatenation of the trajectories is equal to the nb of points in the original trajectory'
 
 
