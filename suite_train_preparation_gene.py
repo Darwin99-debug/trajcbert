@@ -114,9 +114,6 @@ def create_target_deb_traj(nb_categories, df_dict):
     return target_dict, list_deb_traj_dict
 
 def fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, list_deb_traj_dict):
-    
-    
-    
     for i in range(nb_categories-2):
         df = df_dict['dataframe_category'+str(i)]
         for j in range(len(df)):
@@ -192,18 +189,19 @@ liste_to_duplicate is a list of TRIP_ID that we want to duplicate
     dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
 
     # Convert liste_to_duplicate elements to tuples and create a set
-    liste_to_duplicate = [item[0] for item in liste_to_duplicate]
+    liste_to_duplicate_trip_id = [item[0] for item in liste_to_duplicate]
 
     # Create a dataframe to store duplicated rows
     duplicated_rows = pd.DataFrame()
 
 
-    # Duplicate rows for each unique TRIP_ID value
-    for trip_id in liste_to_duplicate:
+    # Duplicate rows for each unique TRIP_ID value. we use the 2nd argument of each sublist of liste_to_duplicate to know how many times we duplicate the row
+    for trip_id in liste_to_duplicate_trip_id:
         #we find the row that have the same TRIP_ID
         df = dataframe[dataframe['TRIP_ID'] == trip_id]
         #we add the row to the dataframe of duplicated rows
-        duplicated_rows = pd.concat([duplicated_rows, df], ignore_index=True)
+        for i in range(liste_to_duplicate[liste_to_duplicate_trip_id.index(trip_id)][1]-1):
+            duplicated_rows = pd.concat([duplicated_rows, df], ignore_index=True)
         
     
     #we add the duplicated rows to the dataframe
@@ -392,3 +390,6 @@ def verif_length(dataframe, list_row_to_sep, list_row_to_dup):
     if len(dataframe) != len(data_train) + len(list_row_to_dup) + sum([list_row_to_sep[i][1] for i in range(len(list_row_to_sep))]) - len(list_row_to_sep):
         raise ValueError('The dataframe does not have the good length')
     return 'The dataframe has the good length'
+
+verif_length(df_full_dup, list_row_to_sep_dup, list_row_to_dup)
+verif_length(df_full_dup1, list_row_to_sep_dup1, list_row_to_dup1)
