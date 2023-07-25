@@ -208,7 +208,8 @@ def manage_separation(dataframe, list_index_to_separate):
 
 
 def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
-
+    dataframe_original = dataframe
+    dataframe = dataframe_original.copy()
     """
     This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
     The separation rate is the proportion of rows that will separated into two different trajectories. 
