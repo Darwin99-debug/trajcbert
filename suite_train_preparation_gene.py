@@ -192,22 +192,23 @@ liste_to_duplicate is a list of TRIP_ID that we want to duplicate
     dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
 
     # Convert liste_to_duplicate elements to tuples and create a set
-    liste_to_duplicate = set(tuple(map(np.int64, [item[0]])) for item in liste_to_duplicate)
+    liste_to_duplicate = [item[0] for item in liste_to_duplicate]
 
-    # Create a list to store duplicated DataFrames
-    duplicated_dfs = []
+    # Create a list to store duplicated rows
+    duplicated_rows = []
+
 
     # Duplicate rows for each unique TRIP_ID value
     for trip_id in liste_to_duplicate:
-        # Convert trip_id back to a list before comparison
-        trip_id_list = list(trip_id)
-        # Filter rows with the current trip_id and add them to the list of duplicated DataFrames
-        rows_to_append = dataframe[dataframe['TRIP_ID'].apply(lambda x: np.array_equal(x, trip_id_list))]
-        duplicated_dfs.append(rows_to_append)
+        #we find the row that have the same TRIP_ID
+        df = dataframe[dataframe['TRIP_ID'] == trip_id]
+        #we duplicate the row
+        duplicated_rows.append(df.copy())
+        
 
     # Concatenate all duplicated DataFrames
     if len(liste_to_duplicate) > 0:
-        duplicated_rows = pd.concat(duplicated_dfs, ignore_index=True)
+        duplicated_rows = pd.concat(duplicated_rows, ignore_index=True)
 
     # Create a seed to be able to reproduce the results
     random.seed(2023)
