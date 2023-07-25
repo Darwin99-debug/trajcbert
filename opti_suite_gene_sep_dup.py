@@ -272,6 +272,7 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
 
 
 
+
 #after that, we verify that the rows that we separated are well separated
 #we us the list_row_to_sep that we created in the prepare_train function to see if the rows that we separated are well separated
 # for j that goes from 0 to len(list_row_to_sep), we verify that the number of rows with the trip_id list_row_to_sep[j][0] is equal to list_row_to_sep[j][1]
@@ -330,7 +331,7 @@ if __name__ == "__main__":
     df_full = prepare_train_wo_duplicate(data_train)
 
     # Verify separation and concatenation
-    df_sep, list_row_to_sep = prepare_train(data_train, duplication_rate=0, separation_rate=50)
+    df_full1, df_sep, list_row_to_sep, list_row_to_dup = prepare_train(data_train, duplication_rate=0, separation_rate=50)
     verif_separation(df_sep, list_row_to_sep)
     verif_concatenation(df_full, df_sep)
 
