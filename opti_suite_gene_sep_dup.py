@@ -281,7 +281,6 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
 
-
 def verif_separation(dataframe, list_row_to_sep):
     """
     we verify that the rows that we separated are well separated
@@ -366,7 +365,7 @@ if __name__ == '__main__':
     data_train, data_test = train_test_split(data_format, test_size=0.2, random_state=2023)
 
     #we call the function
-    df_full = prepare_train_wo_duplicate(data_train)
+    df_full = attribution_deb_traj_and_target(data_train)
     #we call the function
     df_full2, df_sep, list_row_to_sep, unused = prepare_train(data_train, duplication_rate=0, separation_rate=50)
     verif_separation(df_sep, list_row_to_sep)
