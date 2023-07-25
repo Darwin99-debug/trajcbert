@@ -17,11 +17,13 @@ from torch.nn.parallel import DistributedDataParallel
 def truncation_rows(df, nb_rows):
     return df[:nb_rows]
 
-def add_tokenization_column(df):
-    df['Tokenization_2'] = df['POLYLINE'].apply(lambda x: [h3.geo_to_h3(x[i][0], x[i][1], 10) for i in range(len(x))])
+def add_tokenization_column(df, config):
+    """Add a column with the tokenization of the POLYLINE column"""
+    df['Tokenization_2'] = df['POLYLINE'].apply(lambda x: [h3.geo_to_h3(x[i][0], x[i][1], config) for i in range(len(x))])
     return df
 
 def extract_time_info(df):
+    """Add columns with the day, hour and week of the year knowing the timestamp"""
     df['DATE'] = df['TIMESTAMP'].apply(lambda x: datetime.datetime.fromtimestamp(x).strftime('%Y-%m-%d %H:%M:%S'))
     df['DAY'] = df['DATE'].apply(lambda x: str(datetime.datetime.strptime(x.split(' ')[0],'%Y-%m-%d').isocalendar()[2]))
     df['HOUR'] = df['DATE'].apply(lambda x: x.split(' ')[1].split(':')[0])
@@ -29,23 +31,30 @@ def extract_time_info(df):
     return df
 
 def formatting_to_str(df, column):
+    """Transform the column to string type"""
     if isinstance(df[column][0], str):
         return df
     df[column] = df[column].astype(str)
     return df
 
 def call_type_to_nb(df):
+    """Transform the column CALL_TYPE to a number"""
     df['CALL_TYPE'] = df['CALL_TYPE'].apply(lambda x: 0 if x == 'A' else (1 if x == 'B' else 2))
     return df
 
 def add_geo_and_context_tokens_tokenizer(tokenizer, data_format):
+    """Add the geo and contextual tokens to the tokenizer + return the tokenizer and the number of geographical tokens"""
+
+    # get the geographical tokens
     liste_token_geo = set()
     for i in range(len(data_format)):
         liste_token_geo.update(data_format['Tokenization_2'][i])
 
+    # add the geographical tokens to the tokenizer + get the number of geographical tokens
     nb_token_geo = len(liste_token_geo)
     tokenizer.add_tokens(liste_token_geo)
 
+    # get the contextual tokens
     contextual_info_token = set()
     for i in range(len(data_format)):
         contextual_info_token.add(data_format['CALL_TYPE'][i])
@@ -53,11 +62,17 @@ def add_geo_and_context_tokens_tokenizer(tokenizer, data_format):
         contextual_info_token.add(data_format['DAY'][i])
         contextual_info_token.add(data_format['HOUR'][i])
         contextual_info_token.add(data_format['WEEK'][i])
-    
+
+
+    # add the contextual tokens to the tokenizer
     tokenizer.add_tokens(contextual_info_token)
     return tokenizer, nb_token_geo
 
+
 def main():
+
+    h3_config_size = 10
+
     with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
         json_loaded = json.load(openfile)
 
