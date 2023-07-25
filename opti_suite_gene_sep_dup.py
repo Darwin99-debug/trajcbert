@@ -263,10 +263,12 @@ def verif_separation(dataframe, list_row_to_sep):
 
 
 
-#part of the verification is to see wheter the concatenation of the trajectories is equal to the original trajectory
-#for that we use df_full and df_sep and see if the concatenation of Tokenization_2 of df_sep is equal to the Tokenization_2 of df_full
-#for that, we count whether the number of points of the concatenation is equal to the number of points of the original trajectory (column Tokenization_2 of df_full)
+
 def verif_concatenation(df_full, df_sep):
+    """
+part of the verification is to see whether the concatenation of the subtrajectories is equal to the original trajectory
+for that, we count whether the number of points of the concatenation is equal to the number of points of the original trajectory (column Tokenization_2 of df_full)
+    """
     for i in range(len(df_full)):
         #we get the rows that have the same TRIP_ID in df_sep as the row i of df_full
         df = df_sep[df_sep['TRIP_ID']==df_full['TRIP_ID'][i]]
@@ -277,7 +279,10 @@ def verif_concatenation(df_full, df_sep):
         #we verify that the sum of the length of the trajectories of df is equal to the length of the original trajectory
         if sum_len_traj != len_traj:
             raise ValueError('The concatenation of the trajectories is not equal to the original trajectory') 
-    return 'The concatenation of the trajectories is equal to the original trajectory'
+        #we concatenate the tokenization_2 of the rows of df_sep for a trip_id and compare it to the tokenization_2 of the row of df_full for the same trip_id
+        if ''.join([df.iloc[j]['Tokenization_2'] for j in range(len(df))]) != df_full['Tokenization_2'][i]:
+            raise ValueError('The concatenation of the trajectories is not equal to the original trajectory')
+    return 'The nb of points resuting from the concatenation of the trajectories is equal to the nb of points in the original trajectory'
 
 
 #we verify that the dataframe obtained with prepare_train as the good length
