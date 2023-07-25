@@ -101,7 +101,7 @@ def manage_duplication(dataframe, liste_to_duplicate):
 
 
 
-def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[], decal_gauche=False, decal_droite=False, uniforme=True):
+def attribution_deb_traj_and_target(dataframe, nb_categories=5, liste_to_duplicate=[], decal_gauche=False, decal_droite=False, uniforme=True):
 
     """Prepare the training data without duplicates
     liste_to_duplicate is a list of TRIP_ID that we want to duplicate 
@@ -123,8 +123,6 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[]
     dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
 
     
-    #we add the rows to duplicate to the dataframe
-    dataframe = manage_duplication(dataframe, liste_to_duplicate)
 
     # Create a seed to be able to reproduce the results
     random.seed(2023)
@@ -147,7 +145,6 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[]
     
     # Concatenate the dataframes and return the result
     return pd.concat([df_dict[f'dataframe_category{i}'] for i in range(nb_categories)], ignore_index=True)
-
 
 
 def manage_separation(dataframe, list_index_to_separate):
@@ -204,25 +201,14 @@ def manage_separation(dataframe, list_index_to_separate):
 
     return dataframe_separated
 
-
-def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
+def row_selection(dataframe, nb_to_select):
     """
-    This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
-    The separation rate is the proportion of rows that will separated into two different trajectories. 
-    The duplication rate is the proportion of rows that will be duplicated, ie that will occur in two different trajectories with different targets.
-
+    This function selects the rows that we will separate or duplicate without makimg any distinction
+    between the two treatments for now
     """
-    #we copy to avoid caveat
-    dataframe_original = dataframe
-    dataframe = dataframe_original.copy()
-
-    #we select the rows we are going to separate or duplicate
-    nb_to_separate = int(len(dataframe)*separation_rate/100)
-    nb_to_duplicate = int(len(dataframe)*duplication_rate/100)
-    nb_to_select=nb_to_separate+nb_to_duplicate
-
     #we create a seed to be able to reproduce the results
     random.seed(2023)
+
     #we select the rows we are going to separate or duplicate according to their length : we select the rows with the longest trajectories
     #for that, we sort the dataframe by the length of the trajectory
     #the thing is, the two part of a trajectory can be longer than the following longest trajectory
@@ -241,8 +227,16 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
         #j represents the number of trajectories that we will create from the trajectory i, we put it in a list
         list_row_to_select[i].append(sorted_dataframe.iloc[i]['TRIP_ID'])
         list_row_to_select[i].append(j)
+    
+    return list_row_to_select
 
-    #now that we have the rows that we will separate or duplicate, we can select which rows we will separate and which we will duplicate
+
+def attribution_duplicate_or_separate(list_row_to_select, nb_to_duplicate, nb_to_separate):
+    """
+    This function attributes the rows that we will separate and the rows that we will duplicate
+    knowing the number of rows that we will separate and the number of rows that we will duplicate
+    and the list of rows that we will separate or duplicate
+    """
     #we create a list of index of the rows that we will separate
     list_index_to_separate = []
     #we create a list of index of the rows that we will duplicate
@@ -252,10 +246,37 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     #we take the rows that we did not select for separation
     list_index_to_duplicate = [i for i in list_row_to_select if i not in list_index_to_separate]
 
+
+def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
+    """
+    This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
+    The separation rate is the proportion of rows that will separated into two different trajectories. 
+    The duplication rate is the proportion of rows that will be duplicated, ie that will occur in two different trajectories with different targets.
+    """
+
+    #we copy to avoid caveat
+    dataframe_original = dataframe
+    dataframe = dataframe_original.copy()
+
+    #we calculate the number of rows that we will separate and the number of rows that we will duplicate
+    nb_to_separate = int(len(dataframe)*separation_rate/100)
+    nb_to_duplicate = int(len(dataframe)*duplication_rate/100)
+    nb_to_select=nb_to_separate+nb_to_duplicate
+
+    #we select the rows we are going to separate or duplicate with the number of times we will duplicate them or separate them
+    list_row_to_select = row_selection(dataframe, nb_to_select)
+
+    #we attribute the rows that we will separate and the rows that we will duplicate among the rows that we selected
+    list_index_to_duplicate, list_index_to_separate = attribution_duplicate_or_separate(list_row_to_select, nb_to_duplicate, nb_to_separate)
+
+    #we separate the rows that were chosen to be separated
     dataframe_separated=manage_separation(dataframe, list_index_to_separate)
 
-    #we call the funtion prepare_train_wo_duplicate with the list of rows to duplicate
-    df_full = prepare_train_wo_duplicate(dataframe_separated, liste_to_duplicate=list_index_to_duplicate)
+    #we duplicate the rows that were chosen to be duplicated
+    dataframe_sep_and_dup = manage_duplication(dataframe_separated, list_index_to_duplicate)
+
+    #we attribute the target and the deb_traj to the rows
+    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup)
 
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
