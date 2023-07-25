@@ -9,12 +9,14 @@ import json
 
 
 def add_spaces_for_concat(data_format, column):
+    """Add spaces before and after the values of the column"""
     data_format[column]=data_format[column].apply(lambda x: ' '+x)
     return data_format
 
 
 
 def rows_attribution_cat(dataframe, nb_categories):
+    """Distribute the rows of the dataframe among categories"""
     nb_rows_per_cat = len(dataframe) // nb_categories
     nb_rows_dict = {f'nb_rows_category{i}': nb_rows_per_cat for i in range(nb_categories)}
     remainder = len(dataframe) % nb_categories
@@ -78,31 +80,12 @@ def fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, li
 
     return target_dict, list_deb_traj_dict
 
-def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[], decal_gauche=False, decal_droite=False, uniforme=True):
-    dataframe_original = dataframe
-    dataframe = dataframe_original.copy()
-    """Prepare the training data without duplicates
-    liste_to_duplicate is a list of TRIP_ID that we want to duplicate 
-    we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
-    tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
-    for example, if ze have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
-    that means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
-    we create a list of threshold"""
-
-    # Create the threshold for each category
-    list_threshold = [0.3 + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
-
-    # Remove the useless rows and rows with trajectory length < 3
-    dataframe.loc[:, 'Tokenization_2'] = dataframe['Tokenization_2'].apply(lambda x: x if type(x) == list else [])
-    dataframe.loc[:, "LEN_TRAJ"] = dataframe['Tokenization_2'].apply(lambda x: len(x))
-    dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
-
+def manage_duplication(dataframe, liste_to_duplicate):
     # Convert liste_to_duplicate elements to tuples and create a set
     liste_to_duplicate_trip_id = [item[0] for item in liste_to_duplicate]
 
     # Create a dataframe to store duplicated rows
     duplicated_rows = pd.DataFrame()
-
 
     # Duplicate rows for each unique TRIP_ID value. we use the 2nd argument of each sublist of liste_to_duplicate to know how many times we duplicate the row
     for trip_id in liste_to_duplicate_trip_id:
@@ -114,26 +97,63 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[]
         
     
     #we add the duplicated rows to the dataframe
-    dataframe = pd.concat([dataframe, duplicated_rows], ignore_index=True)
+    return pd.concat([dataframe, duplicated_rows], ignore_index=True)
+
+
+
+def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[], decal_gauche=False, decal_droite=False, uniforme=True):
+
+    """Prepare the training data without duplicates
+    liste_to_duplicate is a list of TRIP_ID that we want to duplicate 
+    we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
+    tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
+    for example, if ze have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
+    that means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
+    we create a list of threshold"""
+
+    dataframe_original = dataframe
+    dataframe = dataframe_original.copy()
+
+    # Create the threshold for each category
+    list_threshold = [0.3 + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
+
+    # Remove the useless rows and rows with trajectory length < 3
+    dataframe.loc[:, 'Tokenization_2'] = dataframe['Tokenization_2'].apply(lambda x: x if type(x) == list else [])
+    dataframe.loc[:, "LEN_TRAJ"] = dataframe['Tokenization_2'].apply(lambda x: len(x))
+    dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
+
+    
+    #we add the rows to duplicate to the dataframe
+    dataframe = manage_duplication(dataframe, liste_to_duplicate)
 
     # Create a seed to be able to reproduce the results
     random.seed(2023)
+    # Create a dictionary of the number of rows per category
     nb_rows_dict = rows_attribution_cat(dataframe, nb_categories)
+    # Create a dictionary of lists of indexes of rows per category
     list_index_dict = {f'list_index_category{i}': np.array(random.sample(range(len(dataframe)), nb_rows_dict[f'nb_rows_category{i}'])) for i in range(nb_categories)}
 
+    # Create a dictionary of dataframes, each dataframe corresponding to a category
     df_dict = create_df_cat(dataframe, nb_categories, nb_rows_dict, list_index_dict)
+
+    # Create a dictionary of lists of targets and a dictionary of lists of deb_traj
     target_dict, list_deb_traj_dict = create_target_deb_traj(nb_categories, df_dict)
     target_dict, list_deb_traj_dict = fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, list_deb_traj_dict)
 
+    # Add the target and deb_traj columns to each dataframe
     for i in range(nb_categories):
         df_dict[f'dataframe_category{i}']['TARGET'] = target_dict[f'list_target_category{i}']
         df_dict[f'dataframe_category{i}']['DEB_TRAJ'] = list_deb_traj_dict[f'list_deb_traj_category{i}']
     
+    # Concatenate the dataframes and return the result
     return pd.concat([df_dict[f'dataframe_category{i}'] for i in range(nb_categories)], ignore_index=True)
 
 
 
 def manage_separation(dataframe, list_index_to_separate):
+    """
+    This function separates the rows of the dataframe according to the list of rows to separate
+    """
     dataframe_separated = dataframe.copy()
     dataframe_separated.reset_index(drop=True, inplace=True)
 
@@ -147,30 +167,36 @@ def manage_separation(dataframe, list_index_to_separate):
 
     for i in range(len(list_index_to_separate)):
         row = dataframe_separated.loc[list_index[i]].copy()
-        dataframe_separated = dataframe_separated.drop(list_index[i])  # Use .loc[] here
+        dataframe_separated = dataframe_separated.drop(list_index[i]) 
 
+        # Separate the trajectory into nb_traj sub-trajectories
         list_traj = []
         tokenization_2 = row['Tokenization_2']
         len_traj = len(tokenization_2)
         nb_traj = list_index_to_separate[i][1]
         len_each_traj = len_traj // nb_traj
+        # Create nb_traj sub-trajectories of equal length if possible
         for j in range(nb_traj):
             traj = tokenization_2[j * len_each_traj:(j + 1) * len_each_traj]
             list_traj.append(traj)
         rest = len_traj % nb_traj
+        # Add the remaining points to the last sub-trajectory (if any, which is the case if len_traj is not a multiple of nb_traj)
         if rest != 0:
             for point in tokenization_2[-rest:]:
                 list_traj[-1].append(point)
 
+        # Create a new row for each sub-trajectory
         for j in range(nb_traj):
             new_row = row.copy()
             new_row['Tokenization_2'] = list_traj[j]
             modified_rows.append(new_row)
 
+    # Remove the rows that we separated
     for i in range(len(list_index_to_separate)):
         idx_to_remove = [idx for idx in dataframe_separated.index if dataframe_separated.loc[idx, 'TRIP_ID'] == list_index_to_separate[i][0]]
         dataframe_separated = dataframe_separated.drop(idx_to_remove)  # Use .loc[] here
 
+    # Add the new rows
     for row in modified_rows:
         dataframe_separated = pd.concat([dataframe_separated, row.to_frame().T])
 
@@ -180,14 +206,16 @@ def manage_separation(dataframe, list_index_to_separate):
 
 
 def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
-    dataframe_original = dataframe
-    dataframe = dataframe_original.copy()
     """
     This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
     The separation rate is the proportion of rows that will separated into two different trajectories. 
     The duplication rate is the proportion of rows that will be duplicated, ie that will occur in two different trajectories with different targets.
 
     """
+    #we copy to avoid caveat
+    dataframe_original = dataframe
+    dataframe = dataframe_original.copy()
+
     #we select the rows we are going to separate or duplicate
     nb_to_separate = int(len(dataframe)*separation_rate/100)
     nb_to_duplicate = int(len(dataframe)*duplication_rate/100)
@@ -228,35 +256,17 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
 
     #we call the funtion prepare_train_wo_duplicate with the list of rows to duplicate
     df_full = prepare_train_wo_duplicate(dataframe_separated, liste_to_duplicate=list_index_to_duplicate)
-    """
-    #we want to print the Tokenization_2 of a random row of df_full and the deb_traj + the target of the same row in dataframe_separated
-    #we select a random row of df_full
-    random_row = random.randint(0, len(df_full)-1)
-    #we get the Tokenization_2 of the random row of df_full
-    tokenization_2 = df_full.iloc[random_row]['Tokenization_2']
-    #we print the Tokenization_2 of the random row of df_full
-    print('Tokenization_2 of the random row of df_full : ', tokenization_2)
-    #we get the Target of the random row of df_full
-    target = df_full.iloc[random_row]['TARGET']
-    #we print the Target of the random row of df_full
-    print('Target of the random row of df_full : ', target)
-    #we get the deb_traj of the random row of df_full
-    deb_traj = df_full.iloc[random_row]['DEB_TRAJ']
-    #we print the deb_traj of the random row of df_full
-    print('deb_traj of the random row of df_full : ', deb_traj)"""
-
-
 
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
 
 
-
-#after that, we verify that the rows that we separated are well separated
-#we us the list_row_to_sep that we created in the prepare_train function to see if the rows that we separated are well separated
-# for j that goes from 0 to len(list_row_to_sep), we verify that the number of rows with the trip_id list_row_to_sep[j][0] is equal to list_row_to_sep[j][1]
-
 def verif_separation(dataframe, list_row_to_sep):
+    """
+    we verify that the rows that we separated are well separated
+    the idea is to verify that the number of rows that we separated is equal to the number of sub-trajectories 
+    that we created from the original trajectory
+    """
     for j in range(len(list_row_to_sep)):
         if len(dataframe[dataframe['TRIP_ID']==list_row_to_sep[j][0]])!=list_row_to_sep[j][1]:
             raise ValueError('The rows are not well separated')
@@ -293,9 +303,17 @@ for that, we count whether the number of points of the concatenation is equal to
     return 'The nb of points resuting from the concatenation of the trajectories is equal to the nb of points in the original trajectory'
 
 
-#we verify that the dataframe obtained with prepare_train as the good length
-#what we call good length is its original length + the number of rows that we duplicated * (the number of duplication) - the number of rows that we duplicated+ the number of rows that we separated * the number of sub-trajectories that we created from the original trajectory - the number of rows that we separated
+
 def verif_length(dataframe, list_row_to_sep, list_row_to_dup):
+    """
+we verify that the dataframe obtained with prepare_train as the good length
+what we call good length is :
+   its original length
+ + the number of rows that we duplicated * (the number of duplication) 
+ - the number of rows that we duplicated 
+ + the number of rows that we separated * the number of sub-trajectories that we created from the original trajectory
+ - the number of rows that we separated
+    """
     if len(dataframe) != len(data_train) + sum([list_row_to_sep[i][1] for i in range(len(list_row_to_sep))]) - len(list_row_to_sep) + sum([list_row_to_dup[i][1] for i in range(len(list_row_to_dup))]) - len(list_row_to_dup):
         raise ValueError('The dataframe does not have the good length')
     return 'The dataframe has the good length'
