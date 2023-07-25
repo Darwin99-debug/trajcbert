@@ -163,8 +163,8 @@ df_full = prepare_train_wo_duplicate(data_train)
 
 
 def manage_separation(dataframe, list_index_to_separate):
-    dataframe_separated = dataframe.copy()
-    
+    #dataframe_separated = dataframe.copy()
+    dataframe_separated.reset_index(drop=True, inplace=True)
 
     # Create a dictionary to map TRIP_ID to its index in list_index_to_separate
     trip_id_to_index = {trip_id: i for i, (trip_id, _) in enumerate(list_index_to_separate)}
