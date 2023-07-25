@@ -252,6 +252,7 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
 
     #we call the funtion prepare_train_wo_duplicate with the list of rows to duplicate
     df_full = prepare_train_wo_duplicate(dataframe_separated, liste_to_duplicate=list_index_to_duplicate)
+    """
     #we want to print the Tokenization_2 of a random row of df_full and the deb_traj + the target of the same row in dataframe_separated
     #we select a random row of df_full
     random_row = random.randint(0, len(df_full)-1)
@@ -266,7 +267,7 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     #we get the deb_traj of the random row of df_full
     deb_traj = df_full.iloc[random_row]['DEB_TRAJ']
     #we print the deb_traj of the random row of df_full
-    print('deb_traj of the random row of df_full : ', deb_traj)
+    print('deb_traj of the random row of df_full : ', deb_traj)"""
 
 
 
