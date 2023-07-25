@@ -246,6 +246,8 @@ def attribution_duplicate_or_separate(list_row_to_select, nb_to_duplicate, nb_to
     #we take the rows that we did not select for separation
     list_index_to_duplicate = [i for i in list_row_to_select if i not in list_index_to_separate]
 
+    return list_index_to_duplicate, list_index_to_separate
+
 
 def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     """
