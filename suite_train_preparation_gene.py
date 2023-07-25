@@ -207,8 +207,7 @@ liste_to_duplicate is a list of TRIP_ID that we want to duplicate
         
 
     # Concatenate all duplicated DataFrames
-    if len(liste_to_duplicate) > 0:
-        duplicated_rows = pd.concat(duplicated_rows, ignore_index=True)
+    duplicated_rows = pd.concat(duplicated_rows, ignore_index=True)
 
     # Create a seed to be able to reproduce the results
     random.seed(2023)
