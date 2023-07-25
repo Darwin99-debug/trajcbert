@@ -116,7 +116,7 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[]
     list_threshold = [0.3 + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
 
     # Remove the useless rows and rows with trajectory length < 3
-    dataframe['Tokenization_2'] = dataframe['Tokenization_2'].apply(lambda x: x if type(x) == list else [])
+    dataframe.loc[:, 'Tokenization_2'] = dataframe['Tokenization_2'].apply(lambda x: x if type(x) == list else [])
     dataframe.loc[:, "LEN_TRAJ"] = dataframe['Tokenization_2'].apply(lambda x: len(x))
     dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
 
