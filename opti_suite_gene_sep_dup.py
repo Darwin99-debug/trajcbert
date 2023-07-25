@@ -99,7 +99,7 @@ def fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, li
 
     return target_dict, list_deb_traj_dict
 
-def prepare_train_wo_duplicate(dataframe, nb_categories=5, decal_gauche=False, decal_droite=False, uniforme=True):
+def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[], decal_gauche=False, decal_droite=False, uniforme=True):
     """Prepare the training data without duplicates
     liste_to_duplicate is a list of TRIP_ID that we want to duplicate 
     we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
