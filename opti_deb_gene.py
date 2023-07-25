@@ -63,7 +63,6 @@ def add_geo_and_context_tokens_tokenizer(tokenizer, data_format):
         contextual_info_token.add(data_format['HOUR'][i])
         contextual_info_token.add(data_format['WEEK'][i])
 
-
     # add the contextual tokens to the tokenizer
     tokenizer.add_tokens(contextual_info_token)
     return tokenizer, nb_token_geo
@@ -92,8 +91,8 @@ def main():
     model = BertForSequenceClassification.from_pretrained("bert-base-cased", num_labels=nb_labels)
     model.resize_token_embeddings(len(tokenizer))
 
-    #data_format.to_json('/home/daril_kw/data/data_with_time_info_ok_opti.json')
-    #tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_final')
+    data_format.to_json('/home/daril_kw/data/data_with_time_info_ok_opti.json')
+    tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_final')
 
 if __name__ == "__main__":
     main()

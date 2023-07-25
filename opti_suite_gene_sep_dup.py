@@ -7,13 +7,10 @@ import torch
 import json
 
 
-
 def add_spaces_for_concat(data_format, column):
     """Add spaces before and after the values of the column"""
     data_format[column]=data_format[column].apply(lambda x: ' '+x)
     return data_format
-
-
 
 def rows_attribution_cat(dataframe, nb_categories):
     """Distribute the rows of the dataframe among categories"""
