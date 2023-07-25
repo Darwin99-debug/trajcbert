@@ -280,7 +280,11 @@ for that, we count whether the number of points of the concatenation is equal to
         if sum_len_traj != len_traj:
             raise ValueError('The concatenation of the trajectories is not equal to the original trajectory') 
         #we concatenate the tokenization_2 of the rows of df_sep for a trip_id and compare it to the tokenization_2 of the row of df_full for the same trip_id
-        if ''.join([df.iloc[j]['Tokenization_2'] for j in range(len(df))]) != df_full['Tokenization_2'][i]:
+        #we cannot use the join function because the tokenization_2 are lists
+        concatenation = []
+        for j in range(len(df)):
+            concatenation.extend(df.iloc[j]['Tokenization_2'])
+        if concatenation != df_full['Tokenization_2'][i]:
             raise ValueError('The concatenation of the trajectories is not equal to the original trajectory')
     return 'The nb of points resuting from the concatenation of the trajectories is equal to the nb of points in the original trajectory'
 
