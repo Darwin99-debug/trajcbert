@@ -152,6 +152,8 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[]
     
     return pd.concat([df_dict[f'dataframe_category{i}'] for i in range(nb_categories)], ignore_index=True)
 
+#we call the function
+df_full = prepare_train_wo_duplicate(data_train)
 
 
 
@@ -269,6 +271,9 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
 
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
+#we call the function
+df_full2, df_sep, list_row_to_sep, unused = prepare_train(data_train, duplication_rate=0, separation_rate=50)
+
 
 
 
@@ -283,6 +288,7 @@ def verif_separation(dataframe, list_row_to_sep):
             raise ValueError('The rows are not well separated')
     return 'The rows are well separated'
 
+verif_separation(df_sep, list_row_to_sep)
 
 #part of the verification is to see wheter the concatenation of the trajectories is equal to the original trajectory
 #for that we use df_full and df_sep and see if the concatenation of Tokenization_2 of df_sep is equal to the Tokenization_2 of df_full
@@ -301,8 +307,17 @@ def verif_concatenation(df_full, df_sep):
     return 'The concatenation of the trajectories is equal to the original trajectory'
 
 
+verif_concatenation(df_full, df_sep)
+
+
+
+
+
 
     
+#on passe à la duplication
+df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
+df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_train(data_train, duplication_rate=50, separation_rate=0)
 
 
 #we verify that the dataframe obtained with prepare_train as the good length
@@ -312,33 +327,5 @@ def verif_length(dataframe, list_row_to_sep, list_row_to_dup):
         raise ValueError('The dataframe does not have the good length')
     return 'The dataframe has the good length'
 
-
-if __name__ == "__main__":
-    # Load the tokenizer
-    tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/data/tokenizer_final')
-
-    # Load the dataset
-    with open('/home/daril_kw/data/data_with_time_info_ok.json', 'r') as openfile:
-        json_loaded = json.load(openfile)
-
-    # Prepare data format
-    data_format = prepare_data_format(json_loaded)
-
-    # Split the dataset into train and test
-    data_train, data_test = split_data(data_format, test_size=0.2)
-
-    # Prepare train data without duplicates and separation
-    df_full = prepare_train_wo_duplicate(data_train)
-
-    # Verify separation and concatenation
-    df_full1, df_sep, list_row_to_sep, list_row_to_dup = prepare_train(data_train, duplication_rate=0, separation_rate=50)
-    verif_separation(df_sep, list_row_to_sep)
-    verif_concatenation(df_full, df_sep)
-
-    # Prepare train data with duplicates and separation
-    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
-    df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_train(data_train, duplication_rate=50, separation_rate=0)
-
-    # Verify dataframes' lengths
-    verif_length(df_full_dup, list_row_to_sep_dup, list_row_to_dup)
-    verif_length(df_full_dup1, list_row_to_sep_dup1, list_row_to_dup1)
+verif_length(df_full_dup, list_row_to_sep_dup, list_row_to_dup)
+verif_length(df_full_dup1, list_row_to_sep_dup1, list_row_to_dup1)
