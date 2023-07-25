@@ -439,10 +439,20 @@ a=verif_concatenation(df_full, df_sep)
     
 #on pase à la duplication
 df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
-
+df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_train(data_train, duplication_rate=30, separation_rate=50)
 #on verifie la longueur du dataframe df_full_dup qui doit être égale à la longueur du dataframe df_full + le nombre de lignes dupliquées + le nombre de lignes séparées (selon en combien de traj on a séparé les lignes)
 nb_lignes_sep=0
 for i in range(len(list_row_to_sep_dup)):
     nb_lignes_sep+=list_row_to_sep_dup[i][1]
 if len(df_full_dup) != len(df_full) + len(list_row_to_dup) + nb_lignes_sep - len(list_row_to_sep_dup):
     print(len(df_full_dup), len(df_full) + len(list_row_to_dup) + nb_lignes_sep - len(list_row_to_sep_dup))
+
+
+#we get the lines that must have been duplicated
+df_dup = df_full_dup[df_full_dup['TRIP_ID'].isin([list_row_to_dup[i][0] for i in range(len(list_row_to_dup))])]
+#we print their cardinal
+print(len(df_dup))
+#we print the fisrt line that ;ust have ben duplicated in the original dataframe
+print(data_train[data_train['TRIP_ID']==list_row_to_dup[0][0]]) 
+#we print the lines corresponding to the fisrt line that must have been duplicated in the original dataframe but that time in the dataframe after duplication ie df_full_dup1
+print(df_full_dup1[df_full_dup1['TRIP_ID']==list_row_to_dup[0][0]])
