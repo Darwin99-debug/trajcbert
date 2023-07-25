@@ -175,13 +175,14 @@ def verif_target_deb_traj(df_dict, nb_categories):
 
 def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[], decal_gauche=False, decal_droite=False, uniforme=True):
     """
-liste_to_duplicate is a list of TAXI_ID that we want to duplicate 
+liste_to_duplicate is a list of TRIP_ID that we want to duplicate 
     we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
     tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
     for example, if ze have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
     that means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
     we create a list of threshold"""
 
+    # Create the threshold for each category
     # Create the threshold for each category
     list_threshold = [0.3 + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
 
@@ -191,7 +192,7 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate
     dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
 
     # Convert liste_to_duplicate elements to tuples and create a set
-    liste_to_duplicate = set(tuple(map(tuple, [item])) for item in liste_to_duplicate)
+    liste_to_duplicate = set(tuple(map(np.int64, [item[0]])) for item in liste_to_duplicate)
 
     # Create a list to store duplicated DataFrames
     duplicated_dfs = []
@@ -199,7 +200,7 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate
     # Duplicate rows for each unique TRIP_ID value
     for trip_id in liste_to_duplicate:
         # Convert trip_id back to a list before comparison
-        trip_id_list = list(trip_id[0])
+        trip_id_list = list(trip_id)
         # Filter rows with the current trip_id and add them to the list of duplicated DataFrames
         rows_to_append = dataframe[dataframe['TRIP_ID'].apply(lambda x: np.array_equal(x, trip_id_list))]
         duplicated_dfs.append(rows_to_append)
@@ -238,64 +239,6 @@ liste_to_duplicate is a list of TAXI_ID that we want to duplicate
 #we call the function
 df_full = prepare_train_wo_duplicate(data_train)
 
-
-def manage_separation_test(dataframe, list_index_to_separate):
-    #we manage the separation 
-    dict_row = {}
-    dataframe_separated = dataframe.copy()
-    #we reinitalize the index of the dataframe
-    dataframe_separated.reset_index(drop=True, inplace=True)
-
-
-    #we track the rows thanks to the TRIP_ID and put their index in a list
-    list_index = [j for j in range(len(dataframe)) if dataframe['TRIP_ID'][j] in [list_index_to_separate[i][0] for i in range(len(list_index_to_separate))]]
-
-
-
-    for i in range(len(list_index_to_separate)):
-        #we select the row in data_train thanks to the TRIP_ID
-        #row = dataframe_separated[data_train['TRIP_ID']==list_index_to_separate[i][0]]
-        #if the above line does not work, we can use the following line
-        #row = dataframe_separated.iloc[list_index_to_separate[i][0]]
-        #this line works only if the index of the dataframe is the same as the TRIP_ID but it is not the case so we have to transform the TRIP_ID into the index
-        
-        row = dataframe.iloc[list_index[i]]
-
-
-        #row contains the row that we will separate
-        #we remove the row from the dataframe and replace it by the same row but with the Tokenization_2 column that is a piece of the Tokenization_2 column of the row seperated in list_index_to_separate[i][1] trajectories
-        #we remove the original row from the dataframe but we keep it in the variable row
-    
-        dataframe_separated = dataframe.drop(list_index[i], axis=0)
-        #we create the list of trajectories
-        list_traj = []
-        #WE FILL THE LIST OF TRAJECTORIES
-        #we take the Tokenization_2 column
-        tokenization_2 = row.iloc[0]['Tokenization_2']
-        #we take the length of the trajectory
-        len_traj = len(tokenization_2)
-        #we take the number of trajectories
-        nb_traj = list_index_to_separate[i][1]
-        #we take the length of each trajectory
-        len_each_traj = len_traj//nb_traj
-        #we fill the list of trajectories
-        for j in range(nb_traj):
-            #we take the piece of the trajectory
-            traj = tokenization_2[j*len_each_traj:(j+1)*len_each_traj]
-            #we put it in the list of trajectories
-            list_traj.append(traj)
-        #if there is a rest, we add it to the last trajectory
-        rest = len_traj%nb_traj
-        if rest != 0:
-            list_traj[-1].append(tokenization_2[-rest:])
-        #we add the trajectories to the dataframe in new rows
-        for j in range(nb_traj):
-            #we create a new row that will be added to the dataframe, for that we can use the function  concat
-            dataframe_separated = pd.concat([dataframe_separated,row],ignore_index=True)
-            #we add the trajectory to the Tokenization_2 column
-            dataframe_separated.loc[[len(dataframe_separated)-1],['Tokenization_2']] = list_traj[j]
-        
-    return dataframe_separated
 
 
 
@@ -458,7 +401,7 @@ print(df_dup[df_dup['TRIP_ID']==list_row_to_dup[0][0]]['Tokenization_2'])
 print(df_full_dup1[df_full_dup1['TRIP_ID']==list_row_to_dup[0][0]]['Tokenization_2'])
 
 
-#we want to verify if df_full_dup1 is equal to the original dataframe (permutation of the rows included)
+#we want to verify if df_full_dup1 is equal to the dataframe (permutation of the rows included) that have been formatted but without the duplication and separation (df_full)
 #we need to put the rows of df_full_dup1 in the same order as the original dataframe, for that we can sort the rows of df_full_dup1 by the TRIP_ID and idem for the original dataframe
 def comparison_equality_df(df_full_dup1, dataframe_origin):
     #we sort the rows of df_full_dup1 by the TRIP_ID
@@ -474,4 +417,4 @@ def comparison_equality_df(df_full_dup1, dataframe_origin):
     else:
         return 'The two dataframes are not equal'
     
-comparison_equality_df(df_full_dup1, data_train)
+a=comparison_equality_df(df_full_dup1, df_full)
