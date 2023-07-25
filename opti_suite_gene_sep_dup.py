@@ -313,7 +313,6 @@ def verif_length(dataframe, list_row_to_sep, list_row_to_dup):
 
 
 if __name__ == "__main__":
-    if __name__ == "__main__":
     # Load the tokenizer
     tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/data/tokenizer_final')
 
