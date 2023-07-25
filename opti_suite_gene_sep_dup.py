@@ -159,7 +159,8 @@ def manage_separation(dataframe, list_index_to_separate):
             list_traj.append(traj)
         rest = len_traj % nb_traj
         if rest != 0:
-            list_traj[-1].append(tokenization_2[-rest:])
+            for point in tokenization_2[-rest:]:
+                list_traj[-1].append(point)
 
         for j in range(nb_traj):
             new_row = row.copy()
