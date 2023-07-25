@@ -65,6 +65,8 @@ def create_target_deb_traj(nb_categories, df_dict):
 
 def fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, list_deb_traj_dict):
     """Fill the target and deb_traj lists"""
+
+    #Manage the first categories
     for i in range(nb_categories-2):
         df = df_dict[f'dataframe_category{i}']
         for j in range(len(df)):
@@ -73,6 +75,7 @@ def fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, li
             end_idx = int(list_threshold[i+1] * len(tokenization_2))
             tokenization_2 = tokenization_2[start_idx:end_idx]
             
+            # in case the trajectory is too short to be split, we take the last token of the trajectory
             if len(tokenization_2) != 0:
                 index = random.randint(0, len(tokenization_2)-1)
             else:
@@ -83,6 +86,7 @@ def fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, li
             list_deb_traj_dict[f'list_deb_traj_category{i}'][j].extend(df.iloc[j]['Tokenization_2'][:start_idx])
             list_deb_traj_dict[f'list_deb_traj_category{i}'][j].extend(tokenization_2[:index])
 
+    #Manage the last two categories
     i = nb_categories - 2
     df = df_dict[f'dataframe_category{i}']
     for j in range(len(df)):
@@ -248,6 +252,23 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
 
     #we call the funtion prepare_train_wo_duplicate with the list of rows to duplicate
     df_full = prepare_train_wo_duplicate(dataframe_separated, liste_to_duplicate=list_index_to_duplicate)
+    #we want to print the Tokenization_2 of a random row of df_full and the deb_traj + the target of the same row in dataframe_separated
+    #we select a random row of df_full
+    random_row = random.randint(0, len(df_full)-1)
+    #we get the Tokenization_2 of the random row of df_full
+    tokenization_2 = df_full.iloc[random_row]['Tokenization_2']
+    #we print the Tokenization_2 of the random row of df_full
+    print('Tokenization_2 of the random row of df_full : ', tokenization_2)
+    #we get the Target of the random row of df_full
+    target = df_full.iloc[random_row]['TARGET']
+    #we print the Target of the random row of df_full
+    print('Target of the random row of df_full : ', target)
+    #we get the deb_traj of the random row of df_full
+    deb_traj = df_full.iloc[random_row]['DEB_TRAJ']
+    #we print the deb_traj of the random row of df_full
+    print('deb_traj of the random row of df_full : ', deb_traj)
+
+
 
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
