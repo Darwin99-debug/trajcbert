@@ -117,7 +117,7 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[]
 
     # Remove the useless rows and rows with trajectory length < 3
     dataframe['Tokenization_2'] = dataframe['Tokenization_2'].apply(lambda x: x if type(x) == list else [])
-    dataframe['LEN_TRAJ'] = dataframe['Tokenization_2'].apply(lambda x: len(x))
+    dataframe.loc[:, "LEN_TRAJ"] = dataframe['Tokenization_2'].apply(lambda x: len(x))
     dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
 
     # Convert liste_to_duplicate elements to tuples and create a set
@@ -226,7 +226,7 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     #but the 2nd longest trajectory is of length 255, so the two resulting trajectories will be longer than the 2nd longest trajectory
     # that is why we need to sort at each iteration
     #we create a dataframe that zill be the fisrt dataframe but sorted by the length of the trajectory and we keep the matching before sorting to ne able to find the rows in the original dataframe
-    dataframe["LEN_TRAJ"]=dataframe['Tokenization_2'].apply(lambda x: len(x))
+    dataframe.loc[:, "LEN_TRAJ"] = dataframe['Tokenization_2'].apply(lambda x: len(x))
     sorted_dataframe= dataframe.sort_values(by=['LEN_TRAJ'], ascending=False)
     #we will track he rows thaks to the TRIP_ID
     list_row_to_select = [ [] for i in range(nb_to_select)]
