@@ -207,8 +207,9 @@ liste_to_duplicate is a list of TRIP_ID that we want to duplicate
         
 
     # Concatenate all duplicated DataFrames
-
-    duplicated_rows = pd.concat(duplicated_rows, ignore_index=True)
+    if len(liste_to_duplicate) > 0:
+        print("on rentre")
+        duplicated_rows = pd.concat(duplicated_rows, ignore_index=True)
 
     # Create a seed to be able to reproduce the results
     random.seed(2023)
@@ -238,7 +239,7 @@ liste_to_duplicate is a list of TRIP_ID that we want to duplicate
     return dataframe_full
 
 #we call the function
-#df_full = prepare_train_wo_duplicate(data_train)
+df_full = prepare_train_wo_duplicate(data_train)
 
 
 
@@ -339,7 +340,7 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
 #we call the function
-#df_full2, df_sep, list_row_to_sep, unused = prepare_train(data_train, duplication_rate=0, separation_rate=50)
+df_full2, df_sep, list_row_to_sep, unused = prepare_train(data_train, duplication_rate=0, separation_rate=50)
 
 
 
@@ -355,7 +356,7 @@ def verif_separation(dataframe, list_row_to_sep):
             raise ValueError('The rows are not well separated')
     return 'The rows are well separated'
 
-#verif_separation(df_sep, list_row_to_sep)
+verif_separation(df_sep, list_row_to_sep)
 
 #part of the verification is to see wheter the concatenation of the trajectories is equal to the original trajectory
 #for that we use df_full and df_sep and see if the concatenation of Tokenization_2 of df_sep is equal to the Tokenization_2 of df_full
@@ -374,7 +375,7 @@ def verif_concatenation(df_full, df_sep):
     return 'The concatenation of the trajectories is equal to the original trajectory'
 
 
-#a=verif_concatenation(df_full, df_sep)
+a=verif_concatenation(df_full, df_sep)
 
 
 
@@ -397,11 +398,11 @@ df_dup = df_full_dup1[df_full_dup1['TRIP_ID'].isin([list_row_to_dup1[i][0] for i
 #we print their cardinal
 print(len(df_dup))
 #we print the fisrt line that ;ust have ben duplicated in the original dataframe but only the tokenization_2 column
-print(df_dup[df_dup['TRIP_ID']==list_row_to_dup1[0][0]]['Tokenization_2'])
+#print(df_dup[df_dup['TRIP_ID']==list_row_to_dup1[0][0]]['Tokenization_2'])
 #we print the lines corresponding to the fisrt line that must have been duplicated in the original dataframe but that time in the dataframe after duplication ie df_full_dup1 but only the tokenization_2 column
-print(df_full_dup1[df_full_dup1['TRIP_ID']==list_row_to_dup1[0][0]]['Tokenization_2'])
+#print(df_full_dup1[df_full_dup1['TRIP_ID']==list_row_to_dup1[0][0]]['Tokenization_2'])
 #we print the matching trip_id
-print(list_row_to_dup1[0][0])
+#print(list_row_to_dup1[0][0])
 
 
 #we want to verify if df_full_dup1 is equal to the dataframe (permutation of the rows included) that have been formatted but without the duplication and separation (df_full)
