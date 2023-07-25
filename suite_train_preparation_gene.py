@@ -439,7 +439,7 @@ a=verif_concatenation(df_full, df_sep)
     
 #on pase à la duplication
 df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
-df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_train(data_train, duplication_rate=30, separation_rate=50)
+df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_train(data_train, duplication_rate=30, separation_rate=0)
 #on verifie la longueur du dataframe df_full_dup qui doit être égale à la longueur du dataframe df_full + le nombre de lignes dupliquées + le nombre de lignes séparées (selon en combien de traj on a séparé les lignes)
 nb_lignes_sep1=0
 for i in range(len(list_row_to_sep_dup1)):
