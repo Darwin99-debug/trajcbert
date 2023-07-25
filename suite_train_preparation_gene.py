@@ -171,16 +171,6 @@ def verif_target_deb_traj(df_dict, nb_categories):
                 raise ValueError('The target is not the next token of the deb_traj')
 
 def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[], decal_gauche=False, decal_droite=False, uniforme=True):
-    """
-liste_to_duplicate is a list of TRIP_ID that we want to duplicate 
-    we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
-    tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
-    for example, if ze have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
-    that means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
-    we create a list of threshold"""
-
-    # Create the threshold for each category
-    # Create the threshold for each category
     list_threshold = [0.3 + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
 
     # Remove the useless rows and rows with trajectory length < 3
@@ -189,26 +179,23 @@ liste_to_duplicate is a list of TRIP_ID that we want to duplicate
     dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
 
     # Convert liste_to_duplicate elements to tuples and create a set
-    liste_to_duplicate_trip_id = [item[0] for item in liste_to_duplicate]
+    liste_to_duplicate_trip_id = set(item[0] for item in liste_to_duplicate)
 
-    # Create a dataframe to store duplicated rows
-    duplicated_rows = pd.DataFrame()
+    # Create a dictionary to store duplicated rows for each TRIP_ID
+    duplicated_rows_dict = {}
 
+    # Duplicate rows for each unique TRIP_ID value.
+    for trip_id, duplicate_count in liste_to_duplicate:
+        if trip_id in liste_to_duplicate_trip_id:
+            df = dataframe[dataframe['TRIP_ID'] == trip_id]
+            duplicated_rows_dict[trip_id] = pd.concat([df] * duplicate_count, ignore_index=True)
 
-    # Duplicate rows for each unique TRIP_ID value. we use the 2nd argument of each sublist of liste_to_duplicate to know how many times we duplicate the row
-    for trip_id in liste_to_duplicate_trip_id:
-        #we find the row that have the same TRIP_ID
-        df = dataframe[dataframe['TRIP_ID'] == trip_id]
-        #we add the row to the dataframe of duplicated rows
-        for i in range(liste_to_duplicate[liste_to_duplicate_trip_id.index(trip_id)][1]-1):
-            duplicated_rows = pd.concat([duplicated_rows, df], ignore_index=True)
-        
-    
-    #we add the duplicated rows to the dataframe
+    # Concatenate all duplicated rows
+    duplicated_rows = pd.concat(duplicated_rows_dict.values(), ignore_index=True)
+
+    # Concatenate original dataframe with duplicated rows
     dataframe = pd.concat([dataframe, duplicated_rows], ignore_index=True)
 
-    # Create a seed to be able to reproduce the results
-    random.seed(2023)
     # Calculate the number of rows that will fall into each category
     nb_rows_dict, list_index_dict = rows_attribution_cat(dataframe, nb_categories)
 
@@ -221,18 +208,18 @@ liste_to_duplicate is a list of TRIP_ID that we want to duplicate
 
     # Add the lists of target and deb_traj in the dataframe for each category
     for i in range(nb_categories):
-        df_dict['dataframe_category' + str(i)]['TARGET'] = target_dict['list_target_category' + str(i)]
-        df_dict['dataframe_category' + str(i)]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category' + str(i)]
+        category_key = 'dataframe_category' + str(i)
+        df_dict[category_key]['TARGET'] = target_dict['list_target_category' + str(i)]
+        df_dict[category_key]['DEB_TRAJ'] = list_deb_traj_dict['list_deb_traj_category' + str(i)]
 
     # Verify that for each category except the last one dataframe['Tokenization_2'][i][len(dataframe['DEB_TRAJ'][i])] != dataframe['TARGET'][i]
     verif_target_deb_traj(df_dict, nb_categories)
 
     # Get the full dataframe back
-    dataframe_full = pd.DataFrame()
-    for i in range(nb_categories):
-        dataframe_full = pd.concat([dataframe_full, df_dict['dataframe_category' + str(i)]], ignore_index=True)
+    dataframe_full = pd.concat(df_dict.values(), ignore_index=True)
 
     return dataframe_full
+
 
 #we call the function
 df_full = prepare_train_wo_duplicate(data_train)
