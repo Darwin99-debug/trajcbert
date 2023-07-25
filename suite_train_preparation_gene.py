@@ -175,14 +175,13 @@ def verif_target_deb_traj(df_dict, nb_categories):
 
 def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[], decal_gauche=False, decal_droite=False, uniforme=True):
     """
-liste_to_duplicate is a list of TAXI_ID that we want to duplicate """
-    #we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
-    #tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
-    # for example, if ze have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
-    #that means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
-    #we create a list of threshold
+liste_to_duplicate is a list of TAXI_ID that we want to duplicate 
+    we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
+    tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
+    for example, if ze have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
+    that means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
+    we create a list of threshold"""
 
-    # Create the threshold for each category
     # Create the threshold for each category
     list_threshold = [0.3 + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
 
@@ -440,3 +439,10 @@ a=verif_concatenation(df_full, df_sep)
     
 #on pase à la duplication
 df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
+
+#on verifie la longueur du dataframe df_full_dup qui doit être égale à la longueur du dataframe df_full + le nombre de lignes dupliquées + le nombre de lignes séparées (selon en combien de traj on a séparé les lignes)
+nb_lignes_sep=0
+for i in range(len(list_row_to_sep_dup)):
+    nb_lignes_sep+=list_row_to_sep_dup[i][1]
+if len(df_full_dup) != len(df_full) + len(list_row_to_dup) + nb_lignes_sep - len(list_row_to_sep_dup):
+    print(len(df_full_dup), len(df_full) + len(list_row_to_dup) + nb_lignes_sep - len(list_row_to_sep_dup))
