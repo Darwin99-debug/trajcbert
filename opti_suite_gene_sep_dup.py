@@ -157,9 +157,7 @@ df_full = prepare_train_wo_duplicate(data_train)
 
 
 def manage_separation(dataframe, list_index_to_separate):
-    # Make a copy of the original DataFrame to avoid modifying the input DataFrame
     dataframe_separated = dataframe.copy()
-    # Reset the index to ensure consecutive integer index for the new DataFrame
     dataframe_separated.reset_index(drop=True, inplace=True)
 
     # Create a dictionary to map TRIP_ID to its index in list_index_to_separate
@@ -167,6 +165,8 @@ def manage_separation(dataframe, list_index_to_separate):
 
     # Sort the DataFrame indices based on the order of TRIP_ID in list_index_to_separate
     list_index = sorted(dataframe_separated.index, key=lambda idx: trip_id_to_index.get(dataframe_separated.loc[idx, 'TRIP_ID'], float('inf')))
+
+    new_rows = []
 
     # Loop through each TRIP_ID and its corresponding nb_traj value
     for i, (trip_id, nb_traj) in enumerate(list_index_to_separate):
@@ -184,17 +184,20 @@ def manage_separation(dataframe, list_index_to_separate):
             # If there's a remainder, append the remaining elements to the last sub-trajectory
             list_traj[-1].extend(tokenization_2[-rest:])
 
-        # Create new rows for each sub-trajectory and append them to the DataFrame
+        # Create new rows for each sub-trajectory and store them in a list
         for j in range(nb_traj):
             new_row = dataframe_separated.iloc[idx].copy()
             new_row['Tokenization_2'] = list_traj[j]
-            dataframe_separated = dataframe_separated.append(new_row, ignore_index=True)
+            new_rows.append(new_row)
 
     # Create a boolean mask to filter out rows based on TRIP_ID
     mask = ~dataframe_separated['TRIP_ID'].isin(trip_id for trip_id, _ in list_index_to_separate)
 
     # Filter out rows based on the mask, keeping only the rows with different TRIP_IDs
     dataframe_separated = dataframe_separated[mask]
+
+    # Concatenate the original DataFrame with the list of modified rows to create the final DataFrame
+    dataframe_separated = pd.concat([dataframe_separated] + new_rows, ignore_index=True)
 
     return dataframe_separated
 
