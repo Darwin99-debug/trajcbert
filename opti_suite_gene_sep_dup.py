@@ -35,7 +35,6 @@ data_format['CONTEXT_INPUT'] =data_format['Tokenization_2'].apply(lambda x: x[-1
 #Comme cette colonne contiient les informations en string séparé par un espace, on récupère la liste correspondante puis on compte le nombre d'éléments de cette liste
 len_context_info = len(data_format['CONTEXT_INPUT'][0].split(' '))
 
-
 #we separate the dataframe into train and test 
 data_train, data_test = train_test_split(data_format, test_size=0.2, random_state=2023)
 
@@ -316,11 +315,11 @@ verif_concatenation(df_full, df_sep)
 
 
 
-
     
 #on passe à la duplication
 df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
 df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_train(data_train, duplication_rate=50, separation_rate=0)
+
 
 
 #we verify that the dataframe obtained with prepare_train as the good length
