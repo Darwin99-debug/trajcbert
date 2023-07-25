@@ -452,7 +452,26 @@ if len(df_full_dup1) != len(df_full) + len(list_row_to_dup1) + nb_lignes_sep1 - 
 df_dup = df_full_dup[df_full_dup['TRIP_ID'].isin([list_row_to_dup[i][0] for i in range(len(list_row_to_dup))])]
 #we print their cardinal
 print(len(df_dup))
-#we print the fisrt line that ;ust have ben duplicated in the original dataframe
-print(data_train[data_train['TRIP_ID']==list_row_to_dup[0][0]]) 
-#we print the lines corresponding to the fisrt line that must have been duplicated in the original dataframe but that time in the dataframe after duplication ie df_full_dup1
-print(df_full_dup1[df_full_dup1['TRIP_ID']==list_row_to_dup[0][0]])
+#we print the fisrt line that ;ust have ben duplicated in the original dataframe but only the tokenization_2 column
+print(df_dup[df_dup['TRIP_ID']==list_row_to_dup[0][0]]['Tokenization_2'])
+#we print the lines corresponding to the fisrt line that must have been duplicated in the original dataframe but that time in the dataframe after duplication ie df_full_dup1 but only the tokenization_2 column
+print(df_full_dup1[df_full_dup1['TRIP_ID']==list_row_to_dup[0][0]]['Tokenization_2'])
+
+
+#we want to verify if df_full_dup1 is equal to the original dataframe (permutation of the rows included)
+#we need to put the rows of df_full_dup1 in the same order as the original dataframe, for that we can sort the rows of df_full_dup1 by the TRIP_ID and idem for the original dataframe
+def comparison_equality_df(df_full_dup1, dataframe_origin):
+    #we sort the rows of df_full_dup1 by the TRIP_ID
+    df_full_dup1.sort_values(by=['TRIP_ID'], inplace=True)
+    #we sort the rows of the original dataframe by the TRIP_ID
+    dataframe_origin.sort_values(by=['TRIP_ID'], inplace=True)
+    #we reset the index of the two dataframes
+    df_full_dup1.reset_index(drop=True, inplace=True)
+    dataframe_origin.reset_index(drop=True, inplace=True)
+    #we compare the two dataframes
+    if df_full_dup1.equals(dataframe_origin):
+        return 'The two dataframes are equal'
+    else:
+        return 'The two dataframes are not equal'
+    
+comparison_equality_df(df_full_dup1, data_train)
