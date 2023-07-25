@@ -313,6 +313,7 @@ def verif_length(dataframe, list_row_to_sep, list_row_to_dup):
 
 
 if __name__ == "__main__":
+    if __name__ == "__main__":
     # Load the tokenizer
     tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/data/tokenizer_final')
 
@@ -330,6 +331,7 @@ if __name__ == "__main__":
     df_full = prepare_train_wo_duplicate(data_train)
 
     # Verify separation and concatenation
+    df_sep, list_row_to_sep = prepare_train(data_train, duplication_rate=0, separation_rate=50)
     verif_separation(df_sep, list_row_to_sep)
     verif_concatenation(df_full, df_sep)
 
