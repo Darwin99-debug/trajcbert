@@ -1,10 +1,13 @@
 import random
 import pandas as pd
 import numpy as np
-import torch
-import json
 from sklearn.model_selection import train_test_split
 from transformers import BertTokenizer, BertForSequenceClassification, get_linear_schedule_with_warmup
+import torch
+import json
+
+
+
 
 
 # Function to add spaces for concatenation
@@ -35,6 +38,9 @@ def prepare_data_format(json_loaded):
 def split_data(data_format, test_size=0.2):
     data_train, data_test = train_test_split(data_format, test_size=test_size, random_state=2023)
     return data_train, data_test
+
+
+
 
 
 def rows_attribution_cat(dataframe, nb_categories):
@@ -152,8 +158,7 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[]
     
     return pd.concat([df_dict[f'dataframe_category{i}'] for i in range(nb_categories)], ignore_index=True)
 
-#we call the function
-df_full = prepare_train_wo_duplicate(data_train)
+
 
 
 
@@ -271,9 +276,6 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
 
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
-#we call the function
-df_full2, df_sep, list_row_to_sep, unused = prepare_train(data_train, duplication_rate=0, separation_rate=50)
-
 
 
 
@@ -288,7 +290,7 @@ def verif_separation(dataframe, list_row_to_sep):
             raise ValueError('The rows are not well separated')
     return 'The rows are well separated'
 
-verif_separation(df_sep, list_row_to_sep)
+
 
 #part of the verification is to see wheter the concatenation of the trajectories is equal to the original trajectory
 #for that we use df_full and df_sep and see if the concatenation of Tokenization_2 of df_sep is equal to the Tokenization_2 of df_full
@@ -307,7 +309,7 @@ def verif_concatenation(df_full, df_sep):
     return 'The concatenation of the trajectories is equal to the original trajectory'
 
 
-verif_concatenation(df_full, df_sep)
+
 
 
 
@@ -315,9 +317,7 @@ verif_concatenation(df_full, df_sep)
 
 
     
-#on passe à la duplication
-df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
-df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_train(data_train, duplication_rate=50, separation_rate=0)
+
 
 
 #we verify that the dataframe obtained with prepare_train as the good length
@@ -327,5 +327,53 @@ def verif_length(dataframe, list_row_to_sep, list_row_to_dup):
         raise ValueError('The dataframe does not have the good length')
     return 'The dataframe has the good length'
 
-verif_length(df_full_dup, list_row_to_sep_dup, list_row_to_dup)
-verif_length(df_full_dup1, list_row_to_sep_dup1, list_row_to_dup1)
+
+
+
+
+if __name__ == '__main__':
+    #load the tokenizer from /home/daril_kw/data/tokenizer_final
+    tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/data/tokenizer_final')
+    #load the dataset from home/daril_kw/data/data_with_time_info_ok.json
+    with open('/home/daril_kw/data/data_with_time_info_ok.json', 'r') as openfile:
+        json_loaded = json.load(openfile)
+        
+
+    data_format = pd.DataFrame(data=json_loaded)
+
+    
+    def add_spaces_for_concat(data_format, column):
+            data_format[column]=data_format[column].apply(lambda x: ' '+x)
+            return data_format
+
+    data_format = add_spaces_for_concat(data_format, 'HOUR')
+    data_format = add_spaces_for_concat(data_format, 'WEEK')
+    data_format = add_spaces_for_concat(data_format, 'CALL_TYPE')
+    data_format = add_spaces_for_concat(data_format, 'TAXI_ID')
+    data_format = add_spaces_for_concat(data_format, 'DAY')
+
+
+
+    # la colonne CONTEXT_INPUT sera la concaténation du jour de la semaine, de l'heure et de la semaien de l'année pui de la colonne CALL_TYPE, de la colonne TAXI_ID, d'un espace et du dernier token de la colonne Tokenization
+    data_format['CONTEXT_INPUT'] =data_format['Tokenization_2'].apply(lambda x: x[-1]) + data_format['DAY'] + data_format['HOUR'] + data_format['WEEK'] + data_format['CALL_TYPE'] + data_format['TAXI_ID']
+    #on récupère le nombre d'informations dans la colonne CONTEXT_INPUT
+    #Comme cette colonne contiient les informations en string séparé par un espace, on récupère la liste correspondante puis on compte le nombre d'éléments de cette liste
+    len_context_info = len(data_format['CONTEXT_INPUT'][0].split(' '))
+
+    #we separate the dataframe into train and test 
+    data_train, data_test = train_test_split(data_format, test_size=0.2, random_state=2023)
+    #we call the function
+    df_full = prepare_train_wo_duplicate(data_train)
+    #we call the function
+    df_full2, df_sep, list_row_to_sep, unused = prepare_train(data_train, duplication_rate=0, separation_rate=50)
+    verif_separation(df_sep, list_row_to_sep)
+    verif_concatenation(df_full, df_sep)
+
+
+
+    #on passe à la duplication
+    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
+    df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_train(data_train, duplication_rate=50, separation_rate=0)
+
+    verif_length(df_full_dup, list_row_to_sep_dup, list_row_to_dup)
+    verif_length(df_full_dup1, list_row_to_sep_dup1, list_row_to_dup1)
