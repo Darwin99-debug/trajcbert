@@ -122,7 +122,7 @@ def prepare_train_wo_duplicate(dataframe, nb_categories=5, liste_to_duplicate=[]
     # Remove the useless rows and rows with trajectory length < 3
     dataframe['Tokenization_2'] = dataframe['Tokenization_2'].apply(lambda x: x if type(x) == list else [])
     for i in range(len(dataframe)):
-        dataframe.loc[[i], "LEN_TRAJ"] = len(dataframe.iloc[i]['Tokenization_2'])
+        dataframe.loc[[i], "LEN_TRAJ"] = len(dataframe.loc[i]['Tokenization_2'])
     dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
 
     # Convert liste_to_duplicate elements to tuples and create a set
