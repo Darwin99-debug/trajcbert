@@ -194,16 +194,16 @@ liste_to_duplicate is a list of TRIP_ID that we want to duplicate
     # Convert liste_to_duplicate elements to tuples and create a set
     liste_to_duplicate = [item[0] for item in liste_to_duplicate]
 
-    # Create a list to store duplicated rows
-    duplicated_rows = []
+    # Create a dataframe to store duplicated rows
+    duplicated_rows = pd.DataFrame()
 
 
     # Duplicate rows for each unique TRIP_ID value
     for trip_id in liste_to_duplicate:
         #we find the row that have the same TRIP_ID
         df = dataframe[dataframe['TRIP_ID'] == trip_id]
-        #we duplicate the row
-        duplicated_rows.append(df.copy())
+        #we add the row to the dataframe of duplicated rows
+        duplicated_rows = pd.concat([duplicated_rows, df], ignore_index=True)
         
 
     # Concatenate all duplicated DataFrames
