@@ -230,7 +230,7 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     # that is why we need to sort at each iteration
     #we create a dataframe that zill be the fisrt dataframe but sorted by the length of the trajectory and we keep the matching before sorting to ne able to find the rows in the original dataframe
     for i in range(len(dataframe)):
-        dataframe.loc[[i], "LEN_TRAJ"] = len(dataframe.iloc[i]['Tokenization_2'])
+        dataframe.loc[[i], "LEN_TRAJ"] = len(dataframe.loc[i]['Tokenization_2'])
     sorted_dataframe= dataframe.sort_values(by=['LEN_TRAJ'], ascending=False)
     #we will track he rows thaks to the TRIP_ID
     list_row_to_select = [ [] for i in range(nb_to_select)]
