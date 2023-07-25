@@ -205,11 +205,6 @@ liste_to_duplicate is a list of TRIP_ID that we want to duplicate
         #we add the row to the dataframe of duplicated rows
         duplicated_rows = pd.concat([duplicated_rows, df], ignore_index=True)
         
-
-    # Concatenate all duplicated DataFrames
-    if len(liste_to_duplicate) > 0:
-        print("on rentre")
-        duplicated_rows = pd.concat(duplicated_rows, ignore_index=True)
     
     #we add the duplicated rows to the dataframe
     dataframe = pd.concat([dataframe, duplicated_rows], ignore_index=True)
