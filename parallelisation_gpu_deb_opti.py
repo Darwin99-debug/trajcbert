@@ -44,39 +44,24 @@ def call_type_to_nb(df):
 
 
 def add_geo_and_context_tokens_tokenizer(tokenizer, data_format):
-    """Add the geo and contextual tokens to the tokenizer + return the tokenizer and the number of geographical tokens"""
-
-    liste_token_geo = []
-
-    for i in range(len(data_format)):
-        for j in range(len(data_format['Tokenization_2'][i])):
-            liste_token_geo.append(data_format['Tokenization_2'][i][j])
-
-    #on enlève les doublons
-    liste_token_geo = list(set(liste_token_geo))
-
-    #on garde le nombre de tokens géographiques pour la suite
+    # Add geo tokens to the tokenizer
+    liste_token_geo = {token for sublist in data_format['Tokenization_2'] for token in sublist}
     nb_token_geo = len(liste_token_geo)
+    tokenizer.add_tokens(list(liste_token_geo))  # Convert set to list and add to tokenizer
 
-    #On ajoute les tokens géographiques au tokenizer
-    tokenizer.add_tokens(liste_token_geo)
+    # Add contextual info tokens to the tokenizer
+    contextual_info_token = {str(data_format['CALL_TYPE'][i])
+                             for i in range(len(data_format))}
+    contextual_info_token.update(str(data_format['TAXI_ID'][i])
+                                 for i in range(len(data_format)))
+    contextual_info_token.update(data_format['DAY'][i]
+                                 for i in range(len(data_format)))
+    contextual_info_token.update(data_format['HOUR'][i]
+                                 for i in range(len(data_format)))
+    contextual_info_token.update(data_format['WEEK'][i]
+                                 for i in range(len(data_format)))
 
-
-    contextual_info_token = []
-    for i in range(len(data_format)):
-        contextual_info_token.append(data_format['CALL_TYPE'][i])
-        contextual_info_token.append(str(data_format['TAXI_ID'][i]))
-        contextual_info_token.append(data_format['DAY'][i])
-        contextual_info_token.append(data_format['HOUR'][i])
-        contextual_info_token.append(data_format['WEEK'][i])
-        
-
-    #we remove the duplicates
-    contextual_info_token = list(set(contextual_info_token))
-        
-
-    #we add the new tokens to the tokenizer 
-    tokenizer.add_tokens(contextual_info_token)
+    tokenizer.add_tokens(list(contextual_info_token))  # Convert set to list and add to tokenizer
 
     return tokenizer, nb_token_geo
 
@@ -92,12 +77,7 @@ def get_deb_traj(data_format, len_context_info):
     # we manage the length of the CONTEXT_INPUT column so that after the concatenation, it does not exceed 512 tokens
     # the -2 corresponds to the two special tokens [CLS] and [SEP]
     # for exemple here, if the trajectory input is too long, we keep the 512-6-2=504 last tokens
-    data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: x[-(512-len_context_info-2):] if len(x)>512-len_context_info-2 else x)
-
-    #we verify that the length of the trajectory input is not too long
-    for i in range(len(data_format)):
-        if len(data_format['DEB_TRAJ'][i])>512-len_context_info-2:
-            print("the trajectory input is too long for the row number "+str(i))    
+    data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: x[-(512-len_context_info-2):] if len(x)>512-len_context_info-2 else x)    
 
     #then we keep the column in form of a string with spaces between the tokens (the space replaces the comma)
     data_format['DEB_TRAJ']=data_format['DEB_TRAJ'].apply(lambda x: ' '.join(x))
@@ -191,9 +171,6 @@ def formatting_to_train(data_format, tokenizer):
         #the[101] token is the CLS token and the [102] token is the SEP token
         # TODO : test adding an additional SEP token between the context input and the trajectory input so that the format of the input_ids would be : [101] + encoded_c_input + [102] + encoded_traj_input + [102]
         
-        #we verify that the length of the trajectory input is not too long
-        if len(full_input.split(' '))>512:
-            print("the trajectory full input is too long for the row number "+str(i))
              
         encoded_full_input=tokenizer.encode(full_input, add_special_tokens=False)
 
