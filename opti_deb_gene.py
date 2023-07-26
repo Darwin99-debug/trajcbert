@@ -43,28 +43,25 @@ def call_type_to_nb(df):
     return df
 
 def add_geo_and_context_tokens_tokenizer(tokenizer, data_format):
-    """Add the geo and contextual tokens to the tokenizer + return the tokenizer and the number of geographical tokens"""
-
-    # get the geographical tokens
-    liste_token_geo = set()
-    for i in range(len(data_format)):
-        liste_token_geo.update(data_format['Tokenization_2'][i])
-
-    # add the geographical tokens to the tokenizer + get the number of geographical tokens
+    # Add geo tokens to the tokenizer
+    liste_token_geo = {token for sublist in data_format['Tokenization_2'] for token in sublist}
     nb_token_geo = len(liste_token_geo)
-    tokenizer.add_tokens(liste_token_geo)
+    tokenizer.add_tokens(list(liste_token_geo))  # Convert set to list and add to tokenizer
 
-    # get the contextual tokens
-    contextual_info_token = set()
-    for i in range(len(data_format)):
-        contextual_info_token.add(data_format['CALL_TYPE'][i])
-        contextual_info_token.add(str(data_format['TAXI_ID'][i]))
-        contextual_info_token.add(data_format['DAY'][i])
-        contextual_info_token.add(data_format['HOUR'][i])
-        contextual_info_token.add(data_format['WEEK'][i])
+    # Add contextual info tokens to the tokenizer
+    contextual_info_token = {str(data_format['CALL_TYPE'][i])
+                             for i in range(len(data_format))}
+    contextual_info_token.update(str(data_format['TAXI_ID'][i])
+                                 for i in range(len(data_format)))
+    contextual_info_token.update(data_format['DAY'][i]
+                                 for i in range(len(data_format)))
+    contextual_info_token.update(data_format['HOUR'][i]
+                                 for i in range(len(data_format)))
+    contextual_info_token.update(data_format['WEEK'][i]
+                                 for i in range(len(data_format)))
 
-    # add the contextual tokens to the tokenizer
-    tokenizer.add_tokens(contextual_info_token)
+    tokenizer.add_tokens(list(contextual_info_token))  # Convert set to list and add to tokenizer
+
     return tokenizer, nb_token_geo
 
 
