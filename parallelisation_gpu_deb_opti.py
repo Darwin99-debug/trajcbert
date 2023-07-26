@@ -170,8 +170,6 @@ def formatting_to_train(data_format, tokenizer):
         # the format of the input_ids would be : [101] + encoded_c_input + encoded_traj_input + [102]
         #the[101] token is the CLS token and the [102] token is the SEP token
         # TODO : test adding an additional SEP token between the context input and the trajectory input so that the format of the input_ids would be : [101] + encoded_c_input + [102] + encoded_traj_input + [102]
-        
-             
         encoded_full_input=tokenizer.encode(full_input, add_special_tokens=False)
 
         #we pad the input to the maximum length of 512
@@ -231,7 +229,6 @@ def main():
     #we add the geographical and contextual tokens to the model so that the size of the model`s embedding is adapted to our data
     model.resize_token_embeddings(len(tokenizer))
 
-
     #save the model, the tokenizer and the data in different files
     model.save_pretrained('/home/daril_kw/data/model_before_training_opti')
     data_format.to_json('/home/daril_kw/data/data_with_time_info_ok_opti2.json')
@@ -242,7 +239,6 @@ def main():
 
     #we get the input_ids, the attention_masks, the targets and the full_inputs
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(data_format, tokenizer)
-
     
     #save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
     with open('/home/daril_kw/data/input_ids_20_opti.pkl', 'wb') as fp:
