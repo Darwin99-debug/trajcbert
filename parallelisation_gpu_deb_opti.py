@@ -234,9 +234,9 @@ def main():
 
 
     #save the model, the tokenizer and the data in different files
-    model.save_pretrained('/home/daril_kw/data/model_before_training')
-    data_format.to_json('/home/daril_kw/data/data_with_time_info_ok_opti.json')
-    tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_final')
+    model.save_pretrained('/home/daril_kw/data/model_before_training_opti')
+    data_format.to_json('/home/daril_kw/data/data_with_time_info_ok_opti2.json')
+    tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_final_opti')
 
     #we get the DEB_TRAJ and TARGET columns well formatted but without the special tokens [CLS] and [SEP]
     data_format = get_deb_traj_and_target(data_format)
@@ -246,13 +246,13 @@ def main():
 
     
     #save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
-    with open('/home/daril_kw/data/input_ids_20.pkl', 'wb') as fp:
+    with open('/home/daril_kw/data/input_ids_20_opti.pkl', 'wb') as fp:
         pickle.dump(input_ids, fp)
-    with open('/home/daril_kw/data/attention_masks_20.pkl', 'wb') as fp:
+    with open('/home/daril_kw/data/attention_masks_20_opti.pkl', 'wb') as fp:
         pickle.dump(attention_masks, fp)
-    with open('/home/daril_kw/data/targets_20.pkl', 'wb') as fp:
+    with open('/home/daril_kw/data/targets_20_opti.pkl', 'wb') as fp:
         pickle.dump(targets, fp)
-    with open('/home/daril_kw/data/full_inputs_20.pkl', 'wb') as fp:
+    with open('/home/daril_kw/data/full_inputs_20_opti.pkl', 'wb') as fp:
         pickle.dump(full_inputs, fp)
 
 
