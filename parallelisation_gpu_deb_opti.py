@@ -189,7 +189,7 @@ def main():
 
     WORLD_S=2
     h3_config_size = 10
-    nb_rows = 20
+    nb_rows = 60
 
     #we load the data
     with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
@@ -230,9 +230,9 @@ def main():
     model.resize_token_embeddings(len(tokenizer))
 
     #save the model, the tokenizer and the data in different files
-    model.save_pretrained('/home/daril_kw/data/model_before_training_opti')
-    data_format.to_json('/home/daril_kw/data/data_with_time_info_ok_opti2.json')
-    tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_final_opti')
+    model.save_pretrained(f"/home/daril_kw/data/model_before_training_opti_{nb_rows}")
+    data_format.to_json(f"/home/daril_kw/data/data_with_time_info_ok_opti2_{nb_rows}.json")
+    tokenizer.save_pretrained(f"/home/daril_kw/data/tokenizer_final_opti_{nb_rows}")
 
     #we get the DEB_TRAJ and TARGET columns well formatted but without the special tokens [CLS] and [SEP]
     data_format = get_deb_traj_and_target(data_format)
@@ -241,13 +241,13 @@ def main():
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(data_format, tokenizer)
     
     #save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
-    with open('/home/daril_kw/data/input_ids_20_opti.pkl', 'wb') as fp:
+    with open(f"/home/daril_kw/data/input_ids_{nb_rows}_opti.pkl", 'wb') as fp:
         pickle.dump(input_ids, fp)
-    with open('/home/daril_kw/data/attention_masks_20_opti.pkl', 'wb') as fp:
+    with open(f"/home/daril_kw/data/attention_masks_{nb_rows}_opti.pkl", 'wb') as fp:
         pickle.dump(attention_masks, fp)
-    with open('/home/daril_kw/data/targets_20_opti.pkl', 'wb') as fp:
+    with open(f"/home/daril_kw/data/targets_{nb_rows}_opti.pkl", 'wb') as fp:
         pickle.dump(targets, fp)
-    with open('/home/daril_kw/data/full_inputs_20_opti.pkl', 'wb') as fp:
+    with open(f"/home/daril_kw/data/full_inputs_{nb_rows}_opti.pkl", 'wb') as fp:
         pickle.dump(full_inputs, fp)
 
 

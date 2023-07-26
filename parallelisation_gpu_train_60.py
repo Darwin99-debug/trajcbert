@@ -27,7 +27,9 @@ from torch.distributed import init_process_group, destroy_process_group
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-
+DIR_INPUTS_IDS = '/home/daril_kw/data/input_ids_60_opti.pkl'
+DIR_ATTENTION_MASKS = '/home/daril_kw/data/attention_masks_60_opti.pkl'
+DIR_TARGETS = '/home/daril_kw/data/targets_60_opti.pkl'
 
 # WORLD_S=2
 
@@ -73,13 +75,13 @@ def load_bert_model_and_tokenizer():
     Load the pretrained BERT model and the tokenizer
     """
     #load the tokenizer
-    tokenizer = BertTokenizer.from_pretrained('/home/daril/trajcbert/BERT_MODEL/tokenizer_augmented_full')
+    # tokenizer = BertTokenizer.from_pretrained('/home/daril/trajcbert/BERT_MODEL/tokenizer_augmented_full')
 
     #load the model
-    model = BertForSequenceClassification.from_pretrained('/home/daril/trajcbert/BERT_MODEL/model_bert_augmented_full')
+    model = BertForSequenceClassification.from_pretrained('/home/daril_kw/data/model_before_training_opti_60')
 
     optimizer = AdamW(model.parameters(),lr = 2e-5,eps = 1e-8)
-    return model, tokenizer, optimizer
+    return model, optimizer
 
 class Trainer:
 
@@ -208,39 +210,17 @@ class Trainer:
 def load_data(rank,batch_size):
      #load the lists saved in deb_train_gpu_parallel.py
     # the lists saved full_inputs, inputs_ids, attention_masks and the targets in different files /home/daril_kw/data/input_ids.pkl, /home/daril_kw/data/attention_masks.pkl, /home/daril_kw/data/targets.pkl
-    """
-    with open('/home/daril_kw/data/input_ids.pkl', 'rb') as f:
+
+
+    with open(DIR_INPUTS_IDS, 'rb') as f:
         input_ids = pickle.load(f)
 
-    with open('/home/daril_kw/data/attention_masks.pkl', 'rb') as f:
+    with open(DIR_ATTENTION_MASKS, 'rb') as f:
         attention_masks = pickle.load(f)
 
-    with open('/home/daril_kw/data/targets.pkl', 'rb') as f:
+    with open(DIR_TARGETS, 'rb') as f:
         targets = pickle.load(f)
 
-    with open('/home/daril_kw/data/full_inputs.pkl', 'rb') as f:
-        full_inputs = pickle.load(f)
-
-    print("gestion des targets")
-
-    targets_dict={}
-    for i in range(len(targets)):
-        if targets[i] not in targets_dict:
-            targets_dict[targets[i]]=len(targets_dict)
-
-    targets_input=[targets_dict[targets[i]] for i in range(len(targets))]"""
-
-    with open('/home/daril_kw/data/input_ids_20.pkl', 'rb') as f:
-        input_ids = pickle.load(f)
-
-    with open('/home/daril_kw/data/attention_masks_20.pkl', 'rb') as f:
-        attention_masks = pickle.load(f)
-
-    with open('/home/daril_kw/data/targets_20.pkl', 'rb') as f:
-        targets = pickle.load(f)
-
-    with open('/home/daril_kw/data/full_inputs_20.pkl', 'rb') as f:
-        full_inputs = pickle.load(f)
 
     targets_dict={}
     for i in range(len(targets)):
@@ -281,7 +261,7 @@ def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_s
     # we load the data
     train_dataloader, validation_dataloader = load_data(rank,batch_size)
     # we load the model
-    model, tokenizer, optimizer = load_bert_model_and_tokenizer()
+    model, optimizer = load_bert_model_and_tokenizer()
     # computing of the total number of steps
     total_steps = len(train_dataloader) * total_epochs
     # we load the scheduler
