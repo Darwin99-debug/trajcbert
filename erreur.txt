@@ -1,0 +1,162 @@
+gestion des targets
+From Rank: 0, ==> Initializing Process Group...
+process group ready!
+From Rank: 0, ==> Making model..
+imports done
+ parallélisation : passage gpu
+conversion des données (listes) en tenseurs
+
+======== Epoch 1 / 4 ========
+Training...
+
+  Average training loss: 6.09
+  Training epoch took: 0:00:01
+
+Running Validation...
+  Accuracy: 0.00
+  F1 score: 0.00
+  Validation took: 0:00:00
+
+======== Epoch 2 / 4 ========
+Training...
+
+  Average training loss: 6.01
+  Training epoch took: 0:00:00
+
+Running Validation...
+  Accuracy: 0.00
+  F1 score: 0.00
+  Validation took: 0:00:00
+
+======== Epoch 3 / 4 ========
+Training...
+
+  Average training loss: 5.89
+  Training epoch took: 0:00:00
+
+Running Validation...
+  Accuracy: 0.00
+  F1 score: 0.00
+  Validation took: 0:00:00
+
+======== Epoch 4 / 4 ========
+Training...
+
+  Average training loss: 5.73
+  Training epoch took: 0:00:00
+
+Running Validation...
+  Accuracy: 0.00
+  F1 score: 0.00
+  Validation took: 0:00:00
+
+Training complete!
+From Rank: 1, ==> Initializing Process Group...
+gestion des targets
+From Rank: 0, ==> Initializing Process Group...
+process group ready!
+From Rank: 0, ==> Making model..
+imports done
+ parallélisation : passage gpu
+conversion des données (listes) en tenseurs
+
+======== Epoch 1 / 4 ========
+Training...
+
+  Average training loss: 6.09
+  Training epoch took: 0:00:01
+
+Running Validation...
+  Accuracy: 0.00
+  F1 score: 0.00
+  Validation took: 0:00:00
+
+======== Epoch 2 / 4 ========
+Training...
+
+  Average training loss: 6.01
+  Training epoch took: 0:00:00
+
+Running Validation...
+  Accuracy: 0.00
+  F1 score: 0.00
+  Validation took: 0:00:00
+
+======== Epoch 3 / 4 ========
+Training...
+
+  Average training loss: 5.89
+  Training epoch took: 0:00:00
+
+Running Validation...
+  Accuracy: 0.00
+  F1 score: 0.00
+  Validation took: 0:00:00
+
+======== Epoch 4 / 4 ========
+Training...
+
+  Average training loss: 5.73
+  Training epoch took: 0:00:00
+
+Running Validation...
+  Accuracy: 0.00
+  F1 score: 0.00
+  Validation took: 0:00:00
+
+Training complete!
+From Rank: 1, ==> Initializing Process Group...
+gestion des targets
+From Rank: 0, ==> Initializing Process Group...
+process group ready!
+From Rank: 0, ==> Making model..
+imports done
+ parallélisation : passage gpu
+conversion des données (listes) en tenseurs
+
+======== Epoch 1 / 4 ========
+Training...
+
+  Average training loss: 6.09
+  Training epoch took: 0:00:01
+
+Running Validation...
+  Accuracy: 0.00
+  F1 score: 0.00
+  Validation took: 0:00:00
+
+======== Epoch 2 / 4 ========
+Training...
+
+  Average training loss: 6.01
+  Training epoch took: 0:00:00
+
+Running Validation...
+  Accuracy: 0.00
+  F1 score: 0.00
+  Validation took: 0:00:00
+
+======== Epoch 3 / 4 ========
+Training...
+
+  Average training loss: 5.89
+  Training epoch took: 0:00:00
+
+Running Validation...
+  Accuracy: 0.00
+  F1 score: 0.00
+  Validation took: 0:00:00
+
+======== Epoch 4 / 4 ========
+Training...
+
+  Average training loss: 5.73
+  Training epoch took: 0:00:00
+
+Running Validation...
+  Accuracy: 0.00
+  F1 score: 0.00
+  Validation took: 0:00:00
+
+Training complete!
+From Rank: 1, ==> Initializing Process Group...
