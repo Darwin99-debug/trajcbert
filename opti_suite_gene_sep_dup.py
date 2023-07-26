@@ -6,6 +6,14 @@ from transformers import BertTokenizer, BertForSequenceClassification, get_linea
 import torch
 import json
 
+#directories :
+#-------------
+
+#loading
+tokenizer_dir='/home/daril_kw/data/tokenizer_final'
+data_format_dir='/home/daril_kw/data/data_with_time_info_ok_opti.json'
+
+
 
 def add_spaces_for_concat(data_format, column):
     """Add spaces before and after the values of the column"""
@@ -341,9 +349,9 @@ what we call good length is :
 if __name__ == '__main__':
 
     #load the tokenizer from /home/daril_kw/data/tokenizer_final
-    tokenizer = BertTokenizer.from_pretrained('/home/daril_kw/data/tokenizer_final')
+    tokenizer = BertTokenizer.from_pretrained(tokenizer_dir)
     #load the dataset from home/daril_kw/data/data_with_time_info_ok.json
-    with open('/home/daril_kw/data/data_with_time_info_ok.json', 'r') as openfile:
+    with open(data_format_dir, 'r') as openfile:
         json_loaded = json.load(openfile)
     
 

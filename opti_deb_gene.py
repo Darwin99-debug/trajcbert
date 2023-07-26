@@ -14,6 +14,16 @@ from torch.utils.data import TensorDataset, DataLoader, RandomSampler, Sequentia
 from torch.optim import AdamW
 from torch.nn.parallel import DistributedDataParallel
 
+#directories :
+#-------------
+
+#loading
+data_dir = '/home/daril_kw/data/02.06.23/train_clean.json'
+#saving
+tokenizer_dir = '/home/daril_kw/data/tokenizer_final'
+data_format_dir = '/home/daril_kw/data/data_with_time_info_ok_opti.json'
+model_dir = '/home/daril_kw/data/model_trained'
+
 def truncation_rows(df, nb_rows):
     return df[:nb_rows]
 
@@ -69,7 +79,7 @@ def main():
 
     h3_config_size = 10
 
-    with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
+    with open(data_dir, 'r') as openfile:
         json_loaded = json.load(openfile)
 
     data_format = pd.DataFrame(data=json_loaded)
@@ -88,8 +98,10 @@ def main():
     model = BertForSequenceClassification.from_pretrained("bert-base-cased", num_labels=nb_labels)
     model.resize_token_embeddings(len(tokenizer))
 
-    data_format.to_json('/home/daril_kw/data/data_with_time_info_ok_opti.json')
-    tokenizer.save_pretrained('/home/daril_kw/data/tokenizer_final')
+    #saving the data, the tokenizer and the model
+    data_format.to_json(data_format_dir)
+    tokenizer.save_pretrained(tokenizer_dir)
+    model.save_pretrained(model_dir)
 
 if __name__ == "__main__":
     main()
