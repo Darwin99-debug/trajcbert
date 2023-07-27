@@ -65,7 +65,7 @@ def prepare_dataloader(dataset: Dataset,batch_size: int):
     return DataLoader(dataset, 
                       batch_size=batch_size, 
                       shuffle=False, # Must be False when using DistributedSampler beacause it is already shuffled
-                    #   pin_memory=True, # Automatically put the fetched data Tensors in pinned memory, and thus enables faster data transfer to CUDA-enabled GPUs.
+                      pin_memory=True, # Automatically put the fetched data Tensors in pinned memory, and thus enables faster data transfer to CUDA-enabled GPUs.
                       sampler = DistributedSampler(dataset) # Select a subset of the dataset (only works if shuffle=False)
       
                     )
@@ -153,8 +153,10 @@ class Trainer:
         average_loss = total_loss / len(self.train_data)
         print(f"[GPU{self.gpu_id}] Epoch {epoch} | Average loss: {average_loss}")
         return average_loss
-    def _accuracy(self, logits, labels):
-        _, predicted = torch.max(logits, 1)
+    def _accuracy(self, logits : np.ndarray, labels: np.ndarray) -> float:
+        predicted = np.argmax(logits, axis=1).flatten()
+        # predicted is of type np.ndarray
+    
         correct = (predicted == labels).sum().item()
         total = labels.size(0)
         accuracy = correct / total
@@ -174,9 +176,9 @@ class Trainer:
                 logits = outputs.logits
 
                 eval_loss += loss.item()
-                # logits = logits.cpu().numpy()
-                label_ids = b_labels.type(torch.LongTensor)
-                label_ids = label_ids.to(self.gpu_id)
+                logits = logits.detach().cpu().numpy() # logits is a tensor on the GPU, we need to move it to the CPU and then to the memory
+              
+                label_ids = b_labels.to('cpu').numpy() # same for the labels
                 tmp_eval_accuracy = self._accuracy(logits, b_labels)
                 tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
 
