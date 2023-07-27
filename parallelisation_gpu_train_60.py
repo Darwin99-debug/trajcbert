@@ -174,7 +174,7 @@ class Trainer:
                 logits = outputs.logits
 
                 eval_loss += loss.item()
-                logits = logits.detach().cpu().numpy()
+                logits = logits.cpu().numpy()
                 label_ids = b_labels.to('cpu').numpy()
                 tmp_eval_accuracy = self._accuracy(logits, b_labels)
                 tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
