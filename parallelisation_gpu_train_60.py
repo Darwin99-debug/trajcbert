@@ -153,6 +153,13 @@ class Trainer:
         average_loss = total_loss / len(self.train_data)
         print(f"[GPU{self.gpu_id}] Epoch {epoch} | Average loss: {average_loss}")
         return average_loss
+    
+    def _accuracy(self, logits, labels):
+        _, predicted = torch.max(logits, 1)
+        correct = (predicted == labels).sum().item()
+        total = labels.size(0)
+        accuracy = correct / total
+        return accuracy
         
     def _validate(self):
         self.model.eval()
