@@ -310,7 +310,7 @@ if __name__ == "__main__":
     #mp.spawn(main, args=(world_size, save_every, epochs, batch_size), nprocs=world_size, join=True)
     children = []
     for i in range(world_size):
-        subproc = mp.Process(target=main, args=(world_size, save_every, epochs, batch_size))
+        subproc = mp.Process(target=main, args=(i, world_size, save_every, epochs, batch_size))
         children.append(subproc)
         subproc.start()
 
