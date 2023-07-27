@@ -156,8 +156,9 @@ class Trainer:
     def _accuracy(self, logits : np.ndarray, labels: np.ndarray) -> float:
         predicted = np.argmax(logits, axis=1).flatten()
         # predicted is of type np.ndarray
-    
         correct = np.sum(predicted == labels)
+        print(f"type of predicted: {type(predicted)}type of labels: {type(labels)} type of correct: {type(correct)}\n")
+    
         total = labels.size
         accuracy = correct / total
         return accuracy
