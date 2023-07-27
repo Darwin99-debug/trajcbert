@@ -158,7 +158,9 @@ class Trainer:
     def _accuracy(self, logits : np.ndarray, labels: np.ndarray) -> float:
         predicted = np.argmax(logits, axis=1).flatten()
         labels = labels.cpu().numpy()  # Convert torch.Tensor to numpy array
-        correct = np.sum(predicted == labels)
+        correct = (predicted == labels)
+        print(f"correct type: {type(correct)}  predited type: {type(predicted)}  labels type: {type(labels)}")
+        correct = correct.sum()
         total = labels.size
         accuracy = correct / total
         return accuracy
@@ -217,7 +219,7 @@ class Trainer:
                 if validation_loss < best_loss:
                     best_loss = validation_loss
                     self._save_checkpoint(epoch)
-            torch.distributed.barrier() # wait for all processes to finish the epoch            
+            # torch.distributed.barrier() # wait for all processes to finish the epoch            
 
 
 def load_data(rank,batch_size):
@@ -262,7 +264,7 @@ def load_data(rank,batch_size):
     validation_labels = torch.tensor(validation_labels).to(rank)
     validation_masks = torch.tensor(validation_masks).to(rank)
     validation_data = TensorDataset(validation_inputs, validation_masks, validation_labels)
-    validation_sampler = SequentialSampler(validation_data)
+    validation_sampler = SequentialSampler(validation_data) # we don't use the DistributedSampler here because the validation is on a CPU
     validation_dataloader = DataLoader(validation_data,sampler=validation_sampler, batch_size=batch_size)
 
 
