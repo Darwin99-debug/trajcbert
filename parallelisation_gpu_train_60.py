@@ -142,9 +142,12 @@ class Trainer:
         self.train_data.sampler.set_epoch(epoch)
         total_loss = 0.0
         for batch in self.train_data:
-            input_ids = batch["input_ids"].to(self.gpu_id)
-            attention_mask = batch["attention_mask"].to(self.gpu_id)
-            labels = batch["labels"].to(self.gpu_id)
+            batch = tuple(t.to(self.gpu_id) for t in batch)
+            #unpack the batch
+            input_ids, attention_mask, labels = batch
+            # input_ids = input_ids.to(self.gpu_id)
+            # attention_mask = batch["attention_mask"].to(self.gpu_id)
+            # labels = batch["labels"].to(self.gpu_id)
             loss = self._run_batch(input_ids,attention_mask,labels)
             total_loss += loss
         average_loss = total_loss / len(self.train_data)
