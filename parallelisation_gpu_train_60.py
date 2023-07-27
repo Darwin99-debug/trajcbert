@@ -175,10 +175,10 @@ class Trainer:
                 logits = outputs.logits #outputs is a tuple containing the loss and the logits
 
                 eval_loss += loss.item()
-                logits = logits.detach().cpu().numpy() #these are the predictions
-                label_ids = b_labels.to('cpu').numpy() # this is the true label
-                tmp_eval_accuracy = self._accuracy(logits, label_ids)
-                tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
+                # logits = logits.detach().cpu().numpy() #these are the predictions
+                # label_ids = b_labels.to('cpu').numpy() # this is the true label
+                tmp_eval_accuracy = self._accuracy(logits, b_labels)
+                tmp_eval_f1 = f1_score(b_labels, np.argmax(logits, axis=1), average='macro')
 
                 eval_accuracy += tmp_eval_accuracy
                 eval_f1 += tmp_eval_f1
