@@ -114,6 +114,8 @@ class Trainer:
         self.optimizer = optimizer
         self.save_every = save_every
         self.scheduler = scheduler
+        self.model = DDP(model, device_ids=[gpu_id], )
+
 
     def _run_batch(self,  b_input_ids,b_input_mask,b_labels): 
         #we set the gradients to zero
