@@ -157,8 +157,10 @@ class Trainer:
         predicted = np.argmax(logits, axis=1).flatten()
         # predicted is of type np.ndarray
     
-        correct = (predicted == labels).sum().item()
-        total = labels.size(0)
+        correct = (predicted == labels)
+        # count the number of correct predictions
+        correct = correct.sum()
+        total = labels.size
         accuracy = correct / total
         return accuracy
 
