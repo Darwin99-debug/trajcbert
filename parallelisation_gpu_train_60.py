@@ -65,7 +65,7 @@ def prepare_dataloader(dataset: Dataset,batch_size: int):
     return DataLoader(dataset, 
                       batch_size=batch_size, 
                       shuffle=False, # Must be False when using DistributedSampler beacause it is already shuffled
-                      pin_memory=True, # Automatically put the fetched data Tensors in pinned memory, and thus enables faster data transfer to CUDA-enabled GPUs.
+                    #   pin_memory=True, # Automatically put the fetched data Tensors in pinned memory, and thus enables faster data transfer to CUDA-enabled GPUs.
                       sampler = DistributedSampler(dataset) # Select a subset of the dataset (only works if shuffle=False)
       
                     )
