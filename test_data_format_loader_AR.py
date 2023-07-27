@@ -53,9 +53,7 @@ def get_whole_inputs(dataframe):
 def prepare_data(input, tokenizer, targets_input):
     input_sequences = []
     
-    
     for idx, input_seq in enumerate(input):
-    
         # Encode the text.
         encoded_sequence = tokenizer.encode(input_seq, add_special_tokens=False, padding=False)
         input_sequences.append(encoded_sequence)
