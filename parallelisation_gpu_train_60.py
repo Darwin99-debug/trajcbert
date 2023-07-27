@@ -153,14 +153,13 @@ class Trainer:
         average_loss = total_loss / len(self.train_data)
         print(f"[GPU{self.gpu_id}] Epoch {epoch} | Average loss: {average_loss}")
         return average_loss
-    
     def _accuracy(self, logits, labels):
         _, predicted = torch.max(logits, 1)
         correct = (predicted == labels).sum().item()
         total = labels.size(0)
         accuracy = correct / total
         return accuracy
-        
+
     def _validate(self):
         self.model.eval()
         eval_loss, eval_accuracy, eval_f1 = 0, 0, 0
@@ -172,13 +171,13 @@ class Trainer:
                 b_input_ids, b_input_mask, b_labels = batch
                 outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
                 loss = outputs.loss
-                logits = outputs.logits #outputs is a tuple containing the loss and the logits
+                logits = outputs.logits
 
                 eval_loss += loss.item()
-                # logits = logits.detach().cpu().numpy() #these are the predictions
-                # label_ids = b_labels.to('cpu').numpy() # this is the true label
+                logits = logits.detach().cpu().numpy()
+                label_ids = b_labels.to('cpu').numpy()
                 tmp_eval_accuracy = self._accuracy(logits, b_labels)
-                tmp_eval_f1 = f1_score(b_labels, np.argmax(logits, axis=1), average='macro')
+                tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
 
                 eval_accuracy += tmp_eval_accuracy
                 eval_f1 += tmp_eval_f1
@@ -193,7 +192,7 @@ class Trainer:
         print("  Validation Loss: {0:.4f}".format(eval_loss))
         print("  Accuracy: {0:.4f}".format(eval_accuracy))
         print("  F1 score: {0:.4f}".format(eval_f1))
-        
+
         return eval_loss, eval_accuracy, eval_f1
 
 
