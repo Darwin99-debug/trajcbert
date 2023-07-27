@@ -286,7 +286,7 @@ if __name__ == "__main__":
         config = json.load(json_file)
 
     batch_size = config["batch_size"]
-    epochs = config["epochs"]
+    epochs = config["num_epochs"]
     save_every = config["save_every"]
     
 
