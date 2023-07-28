@@ -125,8 +125,8 @@ class Trainer:
         # the output is a tuple containing the loss and the logits (the output of the last layer)
         #we get the loss
         loss = outputs[0]
-        #we make the backward pass on the device to which the loss is sent
-        loss.to(self.gpu_id).backward()
+        #we make the backward pass
+        loss.backward()
         #we clip the gradient to avoid exploding gradient
         torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
         #we update the parameters
@@ -144,7 +144,6 @@ class Trainer:
         self.train_data.sampler.set_epoch(epoch)
         total_loss = 0.0
         for batch in self.train_data:
-            print(f"[GPU{self.gpu_id}] Epoch {epoch} | Batch {batch} before running")
             batch = tuple(t.to(self.gpu_id) for t in batch)
             #unpack the batch
             input_ids, attention_mask, labels = batch
@@ -152,7 +151,6 @@ class Trainer:
             # attention_mask = batch["attention_mask"].to(self.gpu_id)
             # labels = batch["labels"].to(self.gpu_id)
             loss = self._run_batch(input_ids,attention_mask,labels)
-            print(f"[GPU{self.gpu_id}] Epoch {epoch} | Batch {batch} before running")
             total_loss += loss
         average_loss = total_loss / len(self.train_data)
         print(f"[GPU{self.gpu_id}] Epoch {epoch} | Average loss: {average_loss}")
@@ -177,27 +175,25 @@ class Trainer:
                 batch = tuple(t.to(self.gpu_id) for t in batch)
                 b_input_ids, b_input_mask, b_labels = batch
                 outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
-                loss = outputs[0]
-                logits = outputs[1]
-                
-                #logits = outputs.logits
-                #eval_loss += loss
+                loss = outputs.loss
+                logits = outputs.logits
+
                 eval_loss += loss.item()
-                #logits = logits.detach().cpu().numpy() # logits is a tensor on the GPU, we need to move it to the CPU and then to the memory
+                logits = logits.detach().cpu().numpy() # logits is a tensor on the GPU, we need to move it to the CPU and then to the memory
               
                 label_ids = b_labels.to('cpu').numpy() # same for the labels
-                #tmp_eval_accuracy = self._accuracy(logits, b_labels)
-                #tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
+                tmp_eval_accuracy = self._accuracy(logits, b_labels)
+                tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
 
-                #eval_accuracy += tmp_eval_accuracy
-                #eval_f1 += tmp_eval_f1
-                #nb_eval_examples += b_input_ids.size(0)
+                eval_accuracy += tmp_eval_accuracy
+                eval_f1 += tmp_eval_f1
+                nb_eval_examples += b_input_ids.size(0)
                 nb_eval_steps += 1
 
         self.model.train()
         eval_loss = eval_loss / nb_eval_steps
-        #eval_accuracy = eval_accuracy / nb_eval_examples
-        #eval_f1 = eval_f1 / nb_eval_examples
+        eval_accuracy = eval_accuracy / nb_eval_examples
+        eval_f1 = eval_f1 / nb_eval_examples
 
         print("  Validation Loss: {0:.4f}".format(eval_loss))
         print("  Accuracy: {0:.4f}".format(eval_accuracy))
@@ -218,8 +214,8 @@ class Trainer:
         best_loss = float("inf")
         for epoch in range(max_epochs):
             self._run_epoch(epoch)
-            if self.gpu_id == 0 and epoch % self.save_every == 0:
-                validation_loss, _, _ = self._validate()
+            #if self.gpu_id == 0 and epoch % self.save_every == 0:
+                #validation_loss, _, _ = self._validate()
                 #if validation_loss < best_loss:
                 #    best_loss = validation_loss
             self._save_checkpoint(epoch)
@@ -310,7 +306,7 @@ if __name__ == "__main__":
     
 
     world_size = torch.cuda.device_count()
-    """
+    
     mp.spawn(main, args=(world_size, save_every, epochs, batch_size), nprocs=world_size, join=True)
     """
     children = []
@@ -321,7 +317,7 @@ if __name__ == "__main__":
 
     for i in range(world_size):
         children[i].join()
-    
+    """
         
 
      
