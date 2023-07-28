@@ -434,7 +434,7 @@ def formatting_to_train(data_format, tokenizer):
  
 if __name__ == '__main__':
 
-#load the tokenizer from /home/daril_kw/data/tokenizer_final
+    #load the tokenizer from /home/daril_kw/data/tokenizer_final
     tokenizer = BertTokenizer.from_pretrained(tokenizer_dir)
     #load the dataset from home/daril_kw/data/data_with_time_info_ok.json
     with open(data_format_dir, 'r') as openfile:
