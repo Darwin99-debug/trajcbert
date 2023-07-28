@@ -119,7 +119,8 @@ class Trainer:
 
     def _run_batch(self,  b_input_ids,b_input_mask,b_labels): 
         #we set the gradients to zero
-        self.model.zero_grad()
+        #self.model.zero_grad()
+        self.optimizer.zero_grad()
         #we make the forward pass
         outputs = self.model(b_input_ids,token_type_ids=None,attention_mask=b_input_mask,labels=b_labels)
         # the output is a tuple containing the loss and the logits (the output of the last layer)
@@ -144,7 +145,6 @@ class Trainer:
         self.train_data.sampler.set_epoch(epoch)
         total_loss = 0.0
         for batch in self.train_data:
-            print(f"[GPU{self.gpu_id}] Epoch {epoch} | Batch {batch} before running")
             batch = tuple(t.to(self.gpu_id) for t in batch)
             #unpack the batch
             input_ids, attention_mask, labels = batch
@@ -152,7 +152,6 @@ class Trainer:
             # attention_mask = batch["attention_mask"].to(self.gpu_id)
             # labels = batch["labels"].to(self.gpu_id)
             loss = self._run_batch(input_ids,attention_mask,labels)
-            print(f"[GPU{self.gpu_id}] Epoch {epoch} | Batch {batch} after running")
             total_loss += loss
         average_loss = total_loss / len(self.train_data)
         print(f"[GPU{self.gpu_id}] Epoch {epoch} | Average loss: {average_loss}")
@@ -218,8 +217,8 @@ class Trainer:
         best_loss = float("inf")
         for epoch in range(max_epochs):
             self._run_epoch(epoch)
-            if self.gpu_id == 0 and epoch % self.save_every == 0:
-                validation_loss, _, _ = self._validate()
+            #if self.gpu_id == 0 and epoch % self.save_every == 0:
+                #validation_loss, _, _ = self._validate()
                 #if validation_loss < best_loss:
                 #    best_loss = validation_loss
             self._save_checkpoint(epoch)
