@@ -150,7 +150,9 @@ class Trainer:
         return average_loss
         
     def _validate(self):
-        self.model.eval()
+        model = self.model.module
+        model.eval()
+        
         eval_loss, eval_accuracy, eval_f1 = 0, 0, 0
         nb_eval_steps, nb_eval_examples = 0, 0
 
@@ -158,7 +160,10 @@ class Trainer:
             for batch in self.validation_data:
                 batch = tuple(t.to(self.gpu_id) for t in batch)
                 b_input_ids, b_input_mask, b_labels = batch
-                outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
+                b_input_ids = b_input_ids.to(self.gpu_id)
+                b_input_mask = b_input_mask.to(self.gpu_id)
+                b_labels = b_labels.to(self.gpu_id)
+                outputs = model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
                 loss = outputs.loss
                 logits = outputs.logits #outputs is a tuple containing the loss and the logits
 

@@ -199,6 +199,11 @@ def main():
     #we keep only nb_rows rows
     # data_format = truncation_rows(data_format, nb_rows)
 
+    #we count the number of rows for which teh column NB_POINTS is equal to 0 : there are 0 rows
+    #>>>print("nombre de lignes pour lesquelles le nombre de points est inférieur à 3 : ", len(data_format[data_format['Nb_points']<3]))
+    #   nombre de lignes pour lesquelles le nombre de points est inférieur à 3 :  0
+
+
     #we add the tokenization column
     data_format = add_tokenization_column(data_format, h3_config_size)
 
