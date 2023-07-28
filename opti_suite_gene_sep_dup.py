@@ -489,19 +489,3 @@ if __name__ == '__main__':
     torch.save(full_inputs, list_inputs_test_dir)
     torch.save(targets_dict, targets_dict_dir)
     torch.save(targets_input, targets_input_dir)
-    """
-
-
-    with open(input_ids_dir, 'wb') as fp:
-        pickle.dump(input_ids, fp)
-    with open(attention_masks_dir, 'wb') as fp:
-        pickle.dump(attention_masks, fp)
-    with open(targets_dir, 'wb') as fp:
-        pickle.dump(targets, fp)
-    with open(list_inputs_test_dir, 'wb') as fp:
-        pickle.dump(full_inputs, fp)
-    with open(targets_dict_dir, 'wb') as fp:
-        pickle.dump(targets_dict, fp)
-    with open(targets_input_dir, 'wb') as fp:
-        pickle.dump(targets_input, fp)
-     """

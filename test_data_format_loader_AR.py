@@ -45,7 +45,9 @@ def get_whole_inputs(dataframe):
     dataframe = dataframe_original.copy()
     """We concatenate the CONTEXT_INPUT and the TRAJ columns and we add a space between them + we add the special tokens [CLS] and [SEP]"""
     for i in tqdm(range(len(dataframe))):
-        dataframe['WHOLE_INPUT'][i] = '[CLS] ' + dataframe['CONTEXT_INPUT'][i] + ' ' + dataframe['TRAJ'][i] + ' [SEP]'
+        #same with using iloc :
+        dataframe['WHOLE_INPUT'].iloc[i] = '[CLS] ' + dataframe['CONTEXT_INPUT'].iloc[i] + ' ' + dataframe['TRAJ'].iloc[i] + ' [SEP]'
+
 
     return dataframe
 
