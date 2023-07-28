@@ -225,8 +225,6 @@ class Trainer:
         for epoch in range(max_epochs):
             self._run_epoch(epoch)
             if self.gpu_id == 0 and epoch % self.save_every == 0:
-                inv_epoch = 1.0 / (epoch + 1)
-                #validation_loss = inv_epoch
                 validation_loss, _ , _ = self._validate()
                 if validation_loss < best_loss:
                     best_loss = validation_loss
@@ -303,7 +301,7 @@ def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_s
 
     #save the model
     model_to_save = model.module if hasattr(model, 'module') else model
-    model_to_save.save_pretrained('/home/daril_kw/data/model_saved_even_with_error')
+    model_to_save.save_pretrained('/home/daril_kw/data/model_saved_parallel_version')
 
 
 
