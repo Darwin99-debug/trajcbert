@@ -164,31 +164,37 @@ class Trainer:
         total = labels.size
         accuracy = correct / total
         return accuracy
-
+    
+    
     def _validate(self):
         self.model.eval()
         eval_loss, eval_accuracy, eval_f1 = 0, 0, 0
         nb_eval_steps, nb_eval_examples = 0, 0
 
-        with torch.no_grad():
-            for batch in self.validation_data:
-                batch = tuple(t.to(self.gpu_id) for t in batch)
-                b_input_ids, b_input_mask, b_labels = batch
-                outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
+        for batch in self.validation_data:
+            batch = tuple(t.to(self.gpu_id) for t in batch)
+            b_input_ids, b_input_mask, b_labels = batch
+            #we don't compute the gradient
+            with torch.no_grad():
+            #we make the forward pass
+                outputs = self.model(b_input_ids,token_type_ids=None,attention_mask=b_input_mask)
+            #we get the logits
+                logits = outputs[0]
+            #outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
                 loss = outputs.loss
-                logits = outputs.logits
+            #logits = outputs.logits
 
-                eval_loss += loss.item()
-                logits = logits.detach().cpu().numpy() # logits is a tensor on the GPU, we need to move it to the CPU and then to the memory
-              
-                label_ids = b_labels.to('cpu').numpy() # same for the labels
-                tmp_eval_accuracy = self._accuracy(logits, b_labels)
-                tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
+            eval_loss += loss.item()
+            logits = logits.detach().cpu().numpy() # logits is a tensor on the GPU, we need to move it to the CPU and then to the memory
+            
+            label_ids = b_labels.to('cpu').numpy() # same for the labels
+            tmp_eval_accuracy = self._accuracy(logits, b_labels)
+            tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
 
-                eval_accuracy += tmp_eval_accuracy
-                eval_f1 += tmp_eval_f1
-                nb_eval_examples += b_input_ids.size(0)
-                nb_eval_steps += 1
+            eval_accuracy += tmp_eval_accuracy
+            eval_f1 += tmp_eval_f1
+            nb_eval_examples += b_input_ids.size(0)
+            nb_eval_steps += 1
 
         self.model.train()
         eval_loss = eval_loss / nb_eval_steps
@@ -214,8 +220,8 @@ class Trainer:
         best_loss = float("inf")
         for epoch in range(max_epochs):
             self._run_epoch(epoch)
-            #if self.gpu_id == 0 and epoch % self.save_every == 0:
-                #validation_loss, _, _ = self._validate()
+            if self.gpu_id == 0 and epoch % self.save_every == 0:
+                validation_loss, _, _ = self._validate()
                 #if validation_loss < best_loss:
                 #    best_loss = validation_loss
             self._save_checkpoint(epoch)
