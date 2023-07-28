@@ -319,7 +319,7 @@ if __name__ == "__main__":
     
 
     world_size = torch.cuda.device_count()
-    """
+    
     mp.spawn(main, args=(world_size, save_every, epochs, batch_size), nprocs=world_size, join=True)
     """
     children = []
@@ -330,7 +330,7 @@ if __name__ == "__main__":
 
     for i in range(world_size):
         children[i].join()
-    
+    """
     
     
         
