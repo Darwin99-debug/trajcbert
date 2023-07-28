@@ -43,14 +43,15 @@ def get_traj(dataframe):
 def get_whole_inputs(dataframe):
     dataframe_original = dataframe
     dataframe = dataframe_original.copy()
-    list_whole_input = []
+    list_whole_inputs = []
     """We concatenate the CONTEXT_INPUT and the TRAJ columns and we add a space between them + we add the special tokens [CLS] and [SEP]"""
     for i in tqdm(range(len(dataframe))):
         #same with using a list 
-        list_whole_input.append('[CLS] ' + dataframe['CONTEXT_INPUT'][i] + ' ' + dataframe['TRAJ'][i] + ' [SEP]')
+        list_whole_inputs.append('[CLS] ' + dataframe['CONTEXT_INPUT'][i] + ' ' + dataframe['TRAJ'][i] + ' [SEP]')
 
-    dataframe['WHOLE_INPUT'] = list_whole_input
-    return dataframe
+    #dataframe['WHOLE_INPUT'] = list_whole_input
+    #return dataframe
+    return list_whole_inputs
 
 
 def prepare_data(input, tokenizer, targets_input):
@@ -88,11 +89,12 @@ def main():
     
     #we add the columns that we need
     data_test = get_traj(data_test)
-    data_test = get_whole_inputs(data_test)
+    #data_test = get_whole_inputs(data_test)
+    inputs = get_whole_inputs(data_test)
 
-    inputs = []
-    for i in tqdm(range(len(data_test))):
-        inputs.append(data_test['WHOLE_INPUT'][i].tolist())
+    #inputs = []
+    #for i in tqdm(range(len(data_test))):
+    #     inputs.append(data_test['WHOLE_INPUT'][i].tolist())
 
     #we remove the columns that we don't need anymore
     if 'Tokenization' in data_test.columns:
