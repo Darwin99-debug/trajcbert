@@ -5,6 +5,8 @@ from sklearn.model_selection import train_test_split
 from transformers import BertTokenizer, BertForSequenceClassification, get_linear_schedule_with_warmup
 import torch
 import json
+from tqdm import tqdm
+
 
 #directories :
 #-------------
@@ -261,6 +263,80 @@ def attribution_duplicate_or_separate(list_row_to_select, nb_to_duplicate, nb_to
 
     return list_index_to_duplicate, list_index_to_separate
 
+def formatting_to_train(data_format, tokenizer):
+    """
+    Format the data to train the model : 
+    ------------------------------------
+
+    1) format the input
+
+        a) get the full_inputs
+    - we concatenate the context input and the beginning of the trajectory which is the sequence we want to give to the model 
+    - at the beginning, we add the CLS token and the end of the input the SEP token
+
+        b) get the input_ids
+    - we use the tokenizer to get the ids of the tokens that will be the input_ids thatthe model will take as input
+    - we pad the input to the maximum length of 512
+
+    2) and we create the attention masks
+
+    - the attention mask is a list of 0 and 1, 0 for the padded tokens and 1 for the other tokens
+
+    """
+    
+    #we remove the useless columns
+    if 'Tokenization' in data_format.columns:
+        data_format.drop(['Tokenization'],axis=1,inplace=True)
+    if 'CALL_TYPE' in data_format.columns:
+        data_format.drop(['CALL_TYPE'],axis=1,inplace=True)
+    if 'TAXI_ID' in data_format.columns:
+        data_format.drop(['TAXI_ID'],axis=1,inplace=True)
+    if 'DAY' in data_format.columns:
+        data_format.drop(['DAY'],axis=1,inplace=True)
+    if 'HOUR' in data_format.columns:
+        data_format.drop(['HOUR'],axis=1,inplace=True)
+    if 'WEEK' in data_format.columns:
+        data_format.drop(['WEEK'],axis=1,inplace=True)
+    if 'Nb_points_token' in data_format.columns:
+        data_format.drop(['Nb_points_token'],axis=1,inplace=True)
+
+
+    #we get the columns CONTEXT_INPUT, DEB_TRAJ and TARGET
+    c_inputs=data_format.CONTEXT_INPUT.values
+    traj_inputs=data_format.DEB_TRAJ.values
+    targets=data_format.TARGET.values
+
+    print("concaténation des inputs, padding etc")
+
+    #we create the input_ids, the attention_masks and the full_inputs
+    input_ids = []
+    full_inputs = []
+    attention_masks = []
+    for i in tqdm(range(len(c_inputs))):
+        #no truncation is needed because we managed it before
+
+        #we concatenate the context input and the trajectory input adding manually the CLS token and the SEP token
+        full_input = '[CLS] ' + c_inputs[i] + ' ' + traj_inputs[i] + ' [SEP]'
+        full_inputs.append(full_input)
+
+        # we use the tokenizer to get the ids of the tokens that will be the input_ids that the model will take as input
+        # the format of the input_ids would be : [101] + encoded_c_input + encoded_traj_input + [102]
+        #the[101] token is the CLS token and the [102] token is the SEP token
+        # TODO : test adding an additional SEP token between the context input and the trajectory input so that the format of the input_ids would be : [101] + encoded_c_input + [102] + encoded_traj_input + [102]
+        encoded_full_input=tokenizer.encode(full_input, add_special_tokens=False)
+
+        #we pad the input to the maximum length of 512
+        encoded_full_input=encoded_full_input + [0]*(512-len(encoded_full_input))
+        #we add the input_ids to the list
+        input_ids.append(encoded_full_input)
+
+        #we create the attention mask
+        att_mask = [float(i>0) for i in encoded_full_input]
+        #we add the attention mask to the list
+        attention_masks.append(att_mask)
+
+    return input_ids, attention_masks, targets, full_inputs
+
 
 def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     """
@@ -382,9 +458,14 @@ if __name__ == '__main__':
     
     #on pase à la duplication
     df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
-    #on vérifie qu'on a bien une colonne DEB_TRAJ
-    if 'DEB_TRAJ' not in df_full_dup.columns:
-        raise ValueError('The dataframe does not have the column DEB_TRAJ')
+
+
+    
 
     verif_length(df_full_dup, list_row_to_sep_dup, list_row_to_dup)
+
+    print(f"Example of DEB_TRAJ column : {df_full_dup['DEB_TRAJ'][0]}")
+
+    #on formatte les données pour l'entrainement
+    #train_dataset_dup = formatting_to_train(df_full_dup, tokenizer)
     
