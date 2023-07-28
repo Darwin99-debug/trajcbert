@@ -197,8 +197,8 @@ class Trainer:
 
         self.model.train()
         eval_loss = eval_loss / nb_eval_steps
-        eval_accuracy = eval_accuracy / nb_eval_examples
-        eval_f1 = eval_f1 / nb_eval_examples
+        #eval_accuracy = eval_accuracy / nb_eval_examples
+        #eval_f1 = eval_f1 / nb_eval_examples
 
         print("  Validation Loss: {0:.4f}".format(eval_loss))
         print("  Accuracy: {0:.4f}".format(eval_accuracy))
