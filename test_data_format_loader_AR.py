@@ -43,12 +43,13 @@ def get_traj(dataframe):
 def get_whole_inputs(dataframe):
     dataframe_original = dataframe
     dataframe = dataframe_original.copy()
+    list_whole_input = []
     """We concatenate the CONTEXT_INPUT and the TRAJ columns and we add a space between them + we add the special tokens [CLS] and [SEP]"""
     for i in tqdm(range(len(dataframe))):
-        #same with using iloc :
-        dataframe['WHOLE_INPUT'].iloc[i] = '[CLS] ' + dataframe['CONTEXT_INPUT'].iloc[i] + ' ' + dataframe['TRAJ'].iloc[i] + ' [SEP]'
+        #same with using a list 
+        list_whole_input.append('[CLS] ' + dataframe['CONTEXT_INPUT'][i] + ' ' + dataframe['TRAJ'][i] + ' [SEP]')
 
-
+    dataframe['WHOLE_INPUT'] = list_whole_input
     return dataframe
 
 
