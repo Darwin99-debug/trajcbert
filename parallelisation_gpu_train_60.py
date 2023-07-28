@@ -216,8 +216,8 @@ class Trainer:
             self._run_epoch(epoch)
             if self.gpu_id == 0 and epoch % self.save_every == 0:
                 inv_epoch = 1.0 / (epoch + 1)
-                validation_loss = inv_epoch
-                #validation_loss, _ , _ = self._validate()
+                #validation_loss = inv_epoch
+                validation_loss, _ , _ = self._validate()
                 if validation_loss < best_loss:
                     best_loss = validation_loss
                     self._save_checkpoint(epoch)
