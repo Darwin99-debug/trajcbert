@@ -177,8 +177,12 @@ class Trainer:
                 outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
                 loss = outputs.loss
                 logits = outputs.logits
+                #the logits are on the GPU, we need to move them to the CPU
+                logits = logits.detach().cpu().numpy()
 
                 eval_loss += loss.item()
+    
+
                 #logits = logits.detach().cpu().numpy() # logits is a tensor on the GPU, we need to move it to the CPU and then to the memory
               
                 #label_ids = b_labels.to('cpu').numpy() # same for the labels
@@ -309,7 +313,7 @@ if __name__ == "__main__":
     
 
     world_size = torch.cuda.device_count()
-    """
+    
     mp.spawn(main, args=(world_size, save_every, epochs, batch_size), nprocs=world_size, join=True)
     """
     children = []
@@ -320,6 +324,7 @@ if __name__ == "__main__":
 
     for i in range(world_size):
         children[i].join()
+    """
     
     
         
