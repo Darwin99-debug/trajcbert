@@ -5,6 +5,9 @@ from sklearn.model_selection import train_test_split
 from transformers import BertTokenizer, BertForSequenceClassification, get_linear_schedule_with_warmup
 import torch
 import json
+import pickle
+from tqdm import tqdm
+
 
 #directories :
 #-------------
@@ -13,6 +16,15 @@ import json
 tokenizer_dir='/home/daril_kw/data/tokenizer_final'
 data_format_dir='/home/daril_kw/data/data_with_time_info_ok_opti.json'
 
+#saving
+data_test_dir='/home/daril_kw/data/data_test_gene_AR_to_format.pkl'
+
+input_ids_dir='/home/daril_kw/data/AR/input_ids_v_small_AR.pt'
+attention_masks_dir='/home/daril_kw/data/AR/attention_masks_v_small_AR.pt'
+targets_dir='/home/daril_kw/data/AR/targets_v_small_AR.pt'
+list_inputs_test_dir='/home/daril_kw/data/AR/list_inputs_test_v_small_AR.pt'
+targets_dict_dir='/home/daril_kw/data/AR/targets_dict_v_small_AR.pt'
+targets_input_dir= '/home/daril_kw/data/AR/targets_input_v_small_AR.pt'
 
 
 def add_spaces_for_concat(data_format, column):
@@ -106,10 +118,9 @@ def manage_duplication(dataframe, liste_to_duplicate):
 
 
 
-def attribution_deb_traj_and_target(dataframe, nb_categories=5, liste_to_duplicate=[], decal_gauche=False, decal_droite=False, uniforme=True):
+def attribution_deb_traj_and_target(dataframe, nb_categories=5, decal_gauche=False, decal_droite=False, uniforme=True):
 
     """Prepare the training data without duplicates
-    liste_to_duplicate is a list of TRIP_ID that we want to duplicate 
     we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
     tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
     for example, if ze have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
@@ -254,7 +265,7 @@ def attribution_duplicate_or_separate(list_row_to_select, nb_to_duplicate, nb_to
     return list_index_to_duplicate, list_index_to_separate
 
 
-def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
+def prepare_train(dataframe, duplication_rate=0, separation_rate=50, decal_gauche=False, decal_droite=False, uniforme=True):
     """
     This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
     The separation rate is the proportion of rows that will separated into two different trajectories. 
@@ -283,7 +294,7 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50):
     dataframe_sep_and_dup = manage_duplication(dataframe_separated, list_index_to_duplicate)
 
     #we attribute the target and the deb_traj to the rows
-    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup)
+    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup, decal_gauche=False, decal_droite=False, uniforme=True)
 
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
@@ -345,6 +356,81 @@ what we call good length is :
         raise ValueError('The dataframe does not have the good length')
     return 'The dataframe has the good length'
 
+
+def formatting_to_train(data_format, tokenizer):
+    """
+    Format the data to train the model : 
+    ------------------------------------
+
+    1) format the input
+
+        a) get the full_inputs
+    - we concatenate the context input and the beginning of the trajectory which is the sequence we want to give to the model 
+    - at the beginning, we add the CLS token and the end of the input the SEP token
+
+        b) get the input_ids
+    - we use the tokenizer to get the ids of the tokens that will be the input_ids thatthe model will take as input
+    - we pad the input to the maximum length of 512
+
+    2) and we create the attention masks
+
+    - the attention mask is a list of 0 and 1, 0 for the padded tokens and 1 for the other tokens
+
+    """
+    
+    #we remove the useless columns
+    if 'Tokenization' in data_format.columns:
+        data_format.drop(['Tokenization'],axis=1,inplace=True)
+    if 'CALL_TYPE' in data_format.columns:
+        data_format.drop(['CALL_TYPE'],axis=1,inplace=True)
+    if 'TAXI_ID' in data_format.columns:
+        data_format.drop(['TAXI_ID'],axis=1,inplace=True)
+    if 'DAY' in data_format.columns:
+        data_format.drop(['DAY'],axis=1,inplace=True)
+    if 'HOUR' in data_format.columns:
+        data_format.drop(['HOUR'],axis=1,inplace=True)
+    if 'WEEK' in data_format.columns:
+        data_format.drop(['WEEK'],axis=1,inplace=True)
+    if 'Nb_points_token' in data_format.columns:
+        data_format.drop(['Nb_points_token'],axis=1,inplace=True)
+
+
+    #we get the columns CONTEXT_INPUT, DEB_TRAJ and TARGET
+    c_inputs=data_format.CONTEXT_INPUT.values
+    traj_inputs=data_format.DEB_TRAJ.values
+    targets=data_format.TARGET.values
+
+    print("concaténation des inputs, padding etc")
+
+    #we create the input_ids, the attention_masks and the full_inputs
+    input_ids = []
+    full_inputs = []
+    attention_masks = []
+    for i in tqdm(range(len(c_inputs))):
+        #no truncation is needed because we managed it before
+
+        #we concatenate the context input and the trajectory input adding manually the CLS token and the SEP token
+        full_input = '[CLS] ' + c_inputs[i] + ' ' + traj_inputs[i] + ' [SEP]'
+        full_inputs.append(full_input)
+
+        # we use the tokenizer to get the ids of the tokens that will be the input_ids that the model will take as input
+        # the format of the input_ids would be : [101] + encoded_c_input + encoded_traj_input + [102]
+        #the[101] token is the CLS token and the [102] token is the SEP token
+        # TODO : test adding an additional SEP token between the context input and the trajectory input so that the format of the input_ids would be : [101] + encoded_c_input + [102] + encoded_traj_input + [102]
+        encoded_full_input=tokenizer.encode(full_input, add_special_tokens=False)
+
+        #we pad the input to the maximum length of 512
+        encoded_full_input=encoded_full_input + [0]*(512-len(encoded_full_input))
+        #we add the input_ids to the list
+        input_ids.append(encoded_full_input)
+
+        #we create the attention mask
+        att_mask = [float(i>0) for i in encoded_full_input]
+        #we add the attention mask to the list
+        attention_masks.append(att_mask)
+
+    return input_ids, attention_masks, targets, full_inputs
+
  
 if __name__ == '__main__':
 
@@ -370,15 +456,35 @@ if __name__ == '__main__':
 
     #we separate the dataframe into train and test 
     data_train, data_test = train_test_split(data_format, test_size=0.2, random_state=2023)
+    #save the list data_test in a pickle file
+    data_test.to_pickle(data_test_dir)
+
+    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50,decal_gauche=False, decal_droite=False, uniforme=True)
+    #df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, decal_gauche=False, decal_droite=False, uniforme=True)
+    
 
     #we call the function
-    df_full = attribution_deb_traj_and_target(data_train)
-    #we call the function
-    df_full2, df_sep, list_row_to_sep, unused = prepare_train(data_train, duplication_rate=0, separation_rate=50)
-    verif_separation(df_sep, list_row_to_sep)
-    verif_concatenation(df_full, df_sep)   
-    #on pase à la duplication
-    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
-    df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_train(data_train, duplication_rate=50, separation_rate=0)
-    verif_length(df_full_dup, list_row_to_sep_dup, list_row_to_dup)
-    verif_length(df_full_dup1, list_row_to_sep_dup1, list_row_to_dup1)
+    input_ids, attention_masks, targets, full_inputs = formatting_to_train(df_full_dup, tokenizer)
+    #input_ids_test, attention_masks_test, targets_test, full_inputs_test = formatting_to_train(df_test, tokenizer)
+
+    targets_dict={}
+    for i in range(len(targets)):
+        if targets[i] not in targets_dict:
+            targets_dict[targets[i]]=len(targets_dict)
+
+    targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
+
+    ##save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
+    with open(input_ids_dir, 'wb') as fp:
+        pickle.dump(input_ids, fp)
+    with open(attention_masks_dir, 'wb') as fp:
+        pickle.dump(attention_masks, fp)
+    with open(targets_dir, 'wb') as fp:
+        pickle.dump(targets, fp)
+    with open(list_inputs_test_dir, 'wb') as fp:
+        pickle.dump(full_inputs, fp)
+    with open(targets_dict_dir, 'wb') as fp:
+        pickle.dump(targets_dict, fp)
+    with open(targets_input_dir, 'wb') as fp:
+        pickle.dump(targets_input, fp)
+
