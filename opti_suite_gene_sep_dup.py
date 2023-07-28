@@ -481,7 +481,16 @@ if __name__ == '__main__':
 
     targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
 
-    ##save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
+    ##save the lists full_inputs, inputs_ids, attention_masks and the targets in different files with torch.save
+    """
+    torch.save(input_ids, input_ids_dir)
+    torch.save(attention_masks, attention_masks_dir)
+    torch.save(targets_input, targets_dir)
+    torch.save(full_inputs, list_inputs_test_dir)
+    torch.save(targets_dict, targets_dict_dir)
+    torch.save(targets_input, targets_input_dir)"""
+
+
     with open(input_ids_dir, 'wb') as fp:
         pickle.dump(input_ids, fp)
     with open(attention_masks_dir, 'wb') as fp:
@@ -492,6 +501,6 @@ if __name__ == '__main__':
         pickle.dump(full_inputs, fp)
     with open(targets_dict_dir, 'wb') as fp:
         pickle.dump(targets_dict, fp)
-        with open(targets_input_dir, 'wb') as fp:
-            pickle.dump(targets_input, fp)
+    with open(targets_input_dir, 'wb') as fp:
+        pickle.dump(targets_input, fp)
     
