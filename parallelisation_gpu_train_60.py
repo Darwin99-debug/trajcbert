@@ -179,25 +179,25 @@ class Trainer:
                 logits = outputs.logits
 
                 eval_loss += loss.item()
-                logits = logits.detach().cpu().numpy() # logits is a tensor on the GPU, we need to move it to the CPU and then to the memory
+                #logits = logits.detach().cpu().numpy() # logits is a tensor on the GPU, we need to move it to the CPU and then to the memory
               
-                label_ids = b_labels.to('cpu').numpy() # same for the labels
-                tmp_eval_accuracy = self._accuracy(logits, b_labels)
-                tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
+                #label_ids = b_labels.to('cpu').numpy() # same for the labels
+                #tmp_eval_accuracy = self._accuracy(logits, b_labels)
+                #tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
 
-                eval_accuracy += tmp_eval_accuracy
-                eval_f1 += tmp_eval_f1
-                nb_eval_examples += b_input_ids.size(0)
+                #eval_accuracy += tmp_eval_accuracy
+                #eval_f1 += tmp_eval_f1
+                #nb_eval_examples += b_input_ids.size(0)
                 nb_eval_steps += 1
 
         self.model.train()
         eval_loss = eval_loss / nb_eval_steps
-        eval_accuracy = eval_accuracy / nb_eval_examples
-        eval_f1 = eval_f1 / nb_eval_examples
+        #eval_accuracy = eval_accuracy / nb_eval_examples
+        #eval_f1 = eval_f1 / nb_eval_examples
 
         print("  Validation Loss: {0:.4f}".format(eval_loss))
-        print("  Accuracy: {0:.4f}".format(eval_accuracy))
-        print("  F1 score: {0:.4f}".format(eval_f1))
+        #print("  Accuracy: {0:.4f}".format(eval_accuracy))
+        #print("  F1 score: {0:.4f}".format(eval_f1))
 
         return eval_loss, eval_accuracy, eval_f1
 
