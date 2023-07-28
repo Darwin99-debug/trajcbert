@@ -164,18 +164,23 @@ class Trainer:
                 b_input_mask = b_input_mask.to(self.gpu_id)
                 b_labels = b_labels.to(self.gpu_id)
                 outputs = model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
+                #outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
                 loss = outputs.loss
-                logits = outputs.logits #outputs is a tuple containing the loss and the logits
+            
+                
 
                 eval_loss += loss.item()
-                logits = logits.detach().cpu().numpy() #these are the predictions
-                label_ids = b_labels.to('cpu').numpy() # this is the true label
-                tmp_eval_accuracy = self._accuracy(logits, label_ids)
-                tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
+    
 
-                eval_accuracy += tmp_eval_accuracy
-                eval_f1 += tmp_eval_f1
-                nb_eval_examples += b_input_ids.size(0)
+                #logits = logits.detach().cpu().numpy() # logits is a tensor on the GPU, we need to move it to the CPU and then to the memory
+              
+                #label_ids = b_labels.to('cpu').numpy() # same for the labels
+                #tmp_eval_accuracy = self._accuracy(logits, b_labels)
+                #tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
+
+                #eval_accuracy += tmp_eval_accuracy
+                #eval_f1 += tmp_eval_f1
+                #nb_eval_examples += b_input_ids.size(0)
                 nb_eval_steps += 1
 
         self.model.train()
@@ -207,6 +212,7 @@ class Trainer:
                 if validation_loss < best_loss:
                     best_loss = validation_loss
                     self._save_checkpoint(epoch)
+                    print(f"Epoch {epoch} | Best validation loss: {best_loss}")
             torch.distributed.barrier() # wait for all processes to finish the epoch            
 
 
