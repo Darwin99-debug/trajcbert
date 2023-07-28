@@ -382,6 +382,9 @@ if __name__ == '__main__':
     
     #on pase à la duplication
     df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
+    #on vérifie qu'on a bien une colonne DEB_TRAJ
+    if 'DEB_TRAJ' not in df_full_dup.columns:
+        raise ValueError('The dataframe does not have the column DEB_TRAJ')
 
     verif_length(df_full_dup, list_row_to_sep_dup, list_row_to_dup)
     
