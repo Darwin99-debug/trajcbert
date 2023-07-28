@@ -464,8 +464,12 @@ if __name__ == '__main__':
 
     verif_length(df_full_dup, list_row_to_sep_dup, list_row_to_dup)
 
-    print(f"Example of DEB_TRAJ column : {df_full_dup['DEB_TRAJ'][0]}")
+    #print(f"Example of DEB_TRAJ column : {df_full_dup['DEB_TRAJ'][0]}")
+
+    #we change every list in the DEB_TRAJ column into str with a space between each element
+    df_full_dup['DEB_TRAJ'] = df_full_dup['DEB_TRAJ'].apply(lambda x: ' '.join(x))
+
 
     #on formatte les données pour l'entrainement
-    #train_dataset_dup = formatting_to_train(df_full_dup, tokenizer)
+    train_dataset_dup = formatting_to_train(df_full_dup, tokenizer)
     
