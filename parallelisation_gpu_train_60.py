@@ -221,6 +221,7 @@ class Trainer:
                 if validation_loss < best_loss:
                     best_loss = validation_loss
                     self._save_checkpoint(epoch)
+                    print(f"Epoch {epoch} | Best validation loss: {best_loss}")
             #torch.distributed.barrier() # wait for all processes to finish the epoch            
 
 
