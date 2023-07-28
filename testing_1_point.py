@@ -3,7 +3,7 @@
 from sklearn.metrics import matthews_corrcoef
 from transformers import BertForSequenceClassification
 import torch
-import numpy as np
+import numpy as np 
 
 device = torch.device("cpu")
 
