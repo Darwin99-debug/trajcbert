@@ -18,7 +18,11 @@ def truncation_rows(df, nb_rows):
     return df[:nb_rows]
 
 def add_tokenization_column(df, config):
-    """Add a column with the tokenization of the POLYLINE column"""
+    """Add a column with the tokenization of the POLYLINE column
+    /!\ in that case, for the json file, the trajectories are in the form given by the kaggle dataset /!\ 
+    /!\ ie longitude, latitude instead of latitude, longitude.                                        /!\ 
+    /!\ This is why we have to reverse the order of the coordinates for the tokenization              /!\ """
+    
     df['Tokenization_2'] = df['POLYLINE'].apply(lambda x: [h3.geo_to_h3(x[i][1], x[i][0], config) for i in range(len(x))])
     return df
 
