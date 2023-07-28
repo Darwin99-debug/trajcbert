@@ -174,9 +174,9 @@ class Trainer:
             for batch in self.validation_data:
                 batch = tuple(t.to(self.gpu_id) for t in batch)
                 b_input_ids, b_input_mask, b_labels = batch
-                b_input_ids = b_input_ids.to(self.gpu_id)
-                b_input_mask = b_input_mask.to(self.gpu_id)
-                b_labels = b_labels.to(self.gpu_id)
+                #b_input_ids = b_input_ids.to(self.gpu_id)
+                #b_input_mask = b_input_mask.to(self.gpu_id)
+                #b_labels = b_labels.to(self.gpu_id)
 
 
                 outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
@@ -224,8 +224,8 @@ class Trainer:
             self._run_epoch(epoch)
             if self.gpu_id == 0 and epoch % self.save_every == 0:
                 inv_epoch = 1.0 / (epoch + 1)
-                #validation_loss = inv_epoch
-                validation_loss, _ , _ = self._validate()
+                validation_loss = inv_epoch
+                #validation_loss, _ , _ = self._validate()
                 if validation_loss < best_loss:
                     best_loss = validation_loss
                     self._save_checkpoint(epoch)
