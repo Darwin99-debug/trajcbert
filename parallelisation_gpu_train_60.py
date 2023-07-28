@@ -125,8 +125,8 @@ class Trainer:
         # the output is a tuple containing the loss and the logits (the output of the last layer)
         #we get the loss
         loss = outputs[0]
-        #we make the backward pass
-        loss.backward()
+        #we make the backward pass on the device to which the loss is sent
+        loss.to(self.gpu_id).backward()
         #we clip the gradient to avoid exploding gradient
         torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
         #we update the parameters
