@@ -215,10 +215,11 @@ class Trainer:
         for epoch in range(max_epochs):
             self._run_epoch(epoch)
             if self.gpu_id == 0 and epoch % self.save_every == 0:
-                validation_loss = 1 
+                inv_epoch = 1.0 / (epoch + 1)
+                validation_loss = inv_epoch
                 if validation_loss < best_loss:
                     best_loss = validation_loss
-            self._save_checkpoint(epoch)
+                    self._save_checkpoint(epoch)
             #torch.distributed.barrier() # wait for all processes to finish the epoch            
 
 
