@@ -13,7 +13,15 @@ import json
 tokenizer_dir='/home/daril_kw/data/tokenizer_final'
 data_format_dir='/home/daril_kw/data/data_with_time_info_ok_opti.json'
 
+#saving
+data_test_dir='/home/daril_kw/data/data_test_gene_AR_to_format.pkl'
 
+input_ids_dir='/home/daril_kw/data/AR/input_ids_v_small_AR.pt'
+attention_masks_dir='/home/daril_kw/data/AR/attention_masks_v_small_AR.pt'
+targets_dir='/home/daril_kw/data/AR/targets_v_small_AR.pt'
+list_inputs_test_dir='/home/daril_kw/data/AR/list_inputs_test_v_small_AR.pt'
+targets_dict_dir='/home/daril_kw/data/AR/targets_dict_v_small_AR.pt'
+targets_input_dir= '/home/daril_kw/data/AR/targets_input_v_small_AR.pt'
 
 def add_spaces_for_concat(data_format, column):
     """Add spaces before and after the values of the column"""
@@ -370,15 +378,10 @@ if __name__ == '__main__':
 
     #we separate the dataframe into train and test 
     data_train, data_test = train_test_split(data_format, test_size=0.2, random_state=2023)
-
-    #we call the function
-    df_full = attribution_deb_traj_and_target(data_train)
-    #we call the function
-    df_full2, df_sep, list_row_to_sep, unused = prepare_train(data_train, duplication_rate=0, separation_rate=50)
-    verif_separation(df_sep, list_row_to_sep)
-    verif_concatenation(df_full, df_sep)   
+    data_test.to_pickle(data_test_dir)
+    
     #on pase à la duplication
     df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50)
-    df_full_dup1, df_sep_dup1, list_row_to_sep_dup1, list_row_to_dup1 = prepare_train(data_train, duplication_rate=50, separation_rate=0)
+
     verif_length(df_full_dup, list_row_to_sep_dup, list_row_to_dup)
-    verif_length(df_full_dup1, list_row_to_sep_dup1, list_row_to_dup1)
+    
