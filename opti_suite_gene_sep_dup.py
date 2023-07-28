@@ -485,6 +485,5 @@ if __name__ == '__main__':
         pickle.dump(full_inputs, fp)
     with open(targets_dict_dir, 'wb') as fp:
         pickle.dump(targets_dict, fp)
-    with open(targets_input_dir, 'wb') as fp:
-        pickle.dump(targets_input, fp)
-
+        with open(targets_input_dir, 'wb') as fp:
+            pickle.dump(targets_input, fp)
