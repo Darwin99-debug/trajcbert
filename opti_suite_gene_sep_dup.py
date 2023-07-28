@@ -6,6 +6,7 @@ from transformers import BertTokenizer, BertForSequenceClassification, get_linea
 import torch
 import json
 from tqdm import tqdm
+import pickle
 
 
 #directories :
@@ -471,5 +472,26 @@ if __name__ == '__main__':
 
 
     #on formatte les données pour l'entrainement
-    train_dataset_dup = formatting_to_train(df_full_dup, tokenizer)
+    input_ids, attention_masks, targets, full_inputs = formatting_to_train(df_full_dup, tokenizer)
+
+    targets_dict={}
+    for i in range(len(targets)):
+        if targets[i] not in targets_dict:
+            targets_dict[targets[i]]=len(targets_dict)
+
+    targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
+
+    ##save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
+    with open(input_ids_dir, 'wb') as fp:
+        pickle.dump(input_ids, fp)
+    with open(attention_masks_dir, 'wb') as fp:
+        pickle.dump(attention_masks, fp)
+    with open(targets_dir, 'wb') as fp:
+        pickle.dump(targets, fp)
+    with open(list_inputs_test_dir, 'wb') as fp:
+        pickle.dump(full_inputs, fp)
+    with open(targets_dict_dir, 'wb') as fp:
+        pickle.dump(targets_dict, fp)
+        with open(targets_input_dir, 'wb') as fp:
+            pickle.dump(targets_input, fp)
     
