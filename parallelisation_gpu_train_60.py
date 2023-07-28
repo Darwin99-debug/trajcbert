@@ -176,14 +176,11 @@ class Trainer:
             b_input_ids, b_input_mask, b_labels = batch
             #we don't compute the gradient
             with torch.no_grad():
-            #we make the forward pass
-                outputs = self.model(b_input_ids,token_type_ids=None,attention_mask=b_input_mask)
-            #we get the logits
-                logits = outputs[0]
-            #outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
+                outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
                 loss = outputs.loss
-            #logits = outputs.logits
-
+                logits = outputs.logits
+            print(f"loss type: {type(loss)}  ")
+            print(f"size of loss: {loss.size()}")
             eval_loss += loss.item()
             logits = logits.detach().cpu().numpy() # logits is a tensor on the GPU, we need to move it to the CPU and then to the memory
             
