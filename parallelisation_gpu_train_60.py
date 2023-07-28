@@ -118,6 +118,8 @@ class Trainer:
 
 
     def _run_batch(self,  b_input_ids,b_input_mask,b_labels): 
+        #we set the gradients to zero
+        self.model.zero_grad()
         #we make the forward pass
         outputs = self.model(b_input_ids,token_type_ids=None,attention_mask=b_input_mask,labels=b_labels)
         # the output is a tuple containing the loss and the logits (the output of the last layer)
@@ -148,7 +150,6 @@ class Trainer:
             # input_ids = input_ids.to(self.gpu_id)
             # attention_mask = batch["attention_mask"].to(self.gpu_id)
             # labels = batch["labels"].to(self.gpu_id)
-            self.model.zero_grad()
             loss = self._run_batch(input_ids,attention_mask,labels)
             total_loss += loss
         average_loss = total_loss / len(self.train_data)
@@ -163,7 +164,7 @@ class Trainer:
         total = labels.size
         accuracy = correct / total
         return accuracy
-    
+
     def _validate(self):
         self.model.eval()
         eval_loss, eval_accuracy, eval_f1 = 0, 0, 0
@@ -173,15 +174,19 @@ class Trainer:
             for batch in self.validation_data:
                 batch = tuple(t.to(self.gpu_id) for t in batch)
                 b_input_ids, b_input_mask, b_labels = batch
-                
-                loss = self._run_batch(b_input_ids,b_input_mask,b_labels)
-                eval_loss += loss
-                
 
+                outputs = self.model(b_input_ids,token_type_ids=None,attention_mask=b_input_mask,labels=b_labels)
+        # the output is a tuple containing the loss and the logits (the output of the last layer)
+        #we get the loss
+        
+                outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
+                loss = outputs[0]
+                #logits = outputs.logits
+                eval_loss += loss
                 #eval_loss += loss.item()
                 #logits = logits.detach().cpu().numpy() # logits is a tensor on the GPU, we need to move it to the CPU and then to the memory
               
-                #label_ids = b_labels.to('cpu').numpy() # same for the labels
+                label_ids = b_labels.to('cpu').numpy() # same for the labels
                 #tmp_eval_accuracy = self._accuracy(logits, b_labels)
                 #tmp_eval_f1 = f1_score(label_ids, np.argmax(logits, axis=1), average='macro')
 
@@ -192,8 +197,8 @@ class Trainer:
 
         self.model.train()
         eval_loss = eval_loss / nb_eval_steps
-        #eval_accuracy = eval_accuracy / nb_eval_examples
-        #eval_f1 = eval_f1 / nb_eval_examples
+        eval_accuracy = eval_accuracy / nb_eval_examples
+        eval_f1 = eval_f1 / nb_eval_examples
 
         print("  Validation Loss: {0:.4f}".format(eval_loss))
         print("  Accuracy: {0:.4f}".format(eval_accuracy))
