@@ -166,8 +166,9 @@ class Trainer:
         return accuracy
 
     def _validate(self):
-        model = model.module
-        self.model.eval()
+        model = self.model.module
+        model.eval()
+        #self.model.eval()
         eval_loss, eval_accuracy, eval_f1 = 0, 0, 0
         nb_eval_steps, nb_eval_examples = 0, 0
 
@@ -179,8 +180,8 @@ class Trainer:
                 b_input_mask = b_input_mask.to(self.gpu_id)
                 b_labels = b_labels.to(self.gpu_id)
 
-
-                outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
+                outputs = model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
+                #outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
                 loss = outputs.loss
             
                 
