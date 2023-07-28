@@ -174,16 +174,13 @@ class Trainer:
             for batch in self.validation_data:
                 batch = tuple(t.to(self.gpu_id) for t in batch)
                 b_input_ids, b_input_mask, b_labels = batch
-
-                outputs = self.model(b_input_ids,token_type_ids=None,attention_mask=b_input_mask,labels=b_labels)
-        # the output is a tuple containing the loss and the logits (the output of the last layer)
-        #we get the loss
-        
                 outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
                 loss = outputs[0]
+                logits = outputs[1]
+                
                 #logits = outputs.logits
-                eval_loss += loss
-                #eval_loss += loss.item()
+                #eval_loss += loss
+                eval_loss += loss.item()
                 #logits = logits.detach().cpu().numpy() # logits is a tensor on the GPU, we need to move it to the CPU and then to the memory
               
                 label_ids = b_labels.to('cpu').numpy() # same for the labels
