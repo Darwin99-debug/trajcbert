@@ -22,7 +22,7 @@ data_dir = '/home/daril_kw/data/02.06.23/train_clean.json'
 #saving
 tokenizer_dir = '/home/daril_kw/data/tokenizer_final'
 data_format_dir = '/home/daril_kw/data/data_with_time_info_ok_opti.json'
-model_dir = '/home/daril_kw/data/model_trained'
+model_dir = '/home/daril_kw/data/model_resized_embeddings'
 
 def truncation_rows(df, nb_rows):
     return df[:nb_rows]

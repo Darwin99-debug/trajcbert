@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 #directories :
 #-------------
-
+ 
 #loading
 tokenizer_dir='/home/daril_kw/data/tokenizer_final'
 data_format_dir='/home/daril_kw/data/data_with_time_info_ok_opti.json'
@@ -400,6 +400,9 @@ def formatting_to_train(data_format, tokenizer):
     traj_inputs=data_format.DEB_TRAJ.values
     targets=data_format.TARGET.values
 
+    print(f"type de c_inputs : {type(c_inputs)}")
+    print(f"type de traj_inputs : {type(traj_inputs)}")
+
     print("concaténation des inputs, padding etc")
 
     #we create the input_ids, the attention_masks and the full_inputs
@@ -485,6 +488,6 @@ if __name__ == '__main__':
         pickle.dump(full_inputs, fp)
     with open(targets_dict_dir, 'wb') as fp:
         pickle.dump(targets_dict, fp)
-        with open(targets_input_dir, 'wb') as fp:
-            pickle.dump(targets_input, fp)
+    with open(targets_input_dir, 'wb') as fp:
+        pickle.dump(targets_input, fp)
 
