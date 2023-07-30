@@ -246,6 +246,7 @@ def main():
     tokenizer.save_pretrained(f"/home/daril_kw/data/savings_for_parallel/tokenizer_final_opti_full_for_para_1")
 
     #we get the DEB_TRAJ and TARGET columns well formatted but without the special tokens [CLS] and [SEP]
+    #this is because we will add them later
     data_format = get_deb_traj_and_target(data_format)
 
     #we get the input_ids, the attention_masks, the targets and the full_inputs

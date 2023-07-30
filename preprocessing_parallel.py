@@ -86,6 +86,82 @@ def add_geo_and_context_tokens_tokenizer(tokenizer, data_format):
     return tokenizer, nb_token_geo
 
 
+
+def formatting_to_train(data_format, tokenizer):
+    """
+    Format the data to train the model : 
+    ------------------------------------
+
+    1) format the input
+
+        a) get the full_inputs
+    - we concatenate the context input and the beginning of the trajectory which is the sequence we want to give to the model 
+    - at the beginning, we add the CLS token and the end of the input the SEP token
+
+        b) get the input_ids
+    - we use the tokenizer to get the ids of the tokens that will be the input_ids thatthe model will take as input
+    - we pad the input to the maximum length of 512
+
+    2) and we create the attention masks
+
+    - the attention mask is a list of 0 and 1, 0 for the padded tokens and 1 for the other tokens
+
+    """
+    
+    #we remove the useless columns
+    if 'Tokenization' in data_format.columns:
+        data_format.drop(['Tokenization'],axis=1,inplace=True)
+    if 'CALL_TYPE' in data_format.columns:
+        data_format.drop(['CALL_TYPE'],axis=1,inplace=True)
+    if 'TAXI_ID' in data_format.columns:
+        data_format.drop(['TAXI_ID'],axis=1,inplace=True)
+    if 'DAY' in data_format.columns:
+        data_format.drop(['DAY'],axis=1,inplace=True)
+    if 'HOUR' in data_format.columns:
+        data_format.drop(['HOUR'],axis=1,inplace=True)
+    if 'WEEK' in data_format.columns:
+        data_format.drop(['WEEK'],axis=1,inplace=True)
+    if 'Nb_points_token' in data_format.columns:
+        data_format.drop(['Nb_points_token'],axis=1,inplace=True)
+
+
+    #we get the columns CONTEXT_INPUT, DEB_TRAJ and TARGET
+    c_inputs=data_format.CONTEXT_INPUT.values
+    traj_inputs=data_format.DEB_TRAJ.values
+    targets=data_format.TARGET.values
+
+    print("concaténation des inputs, padding etc")
+
+    #we create the input_ids, the attention_masks and the full_inputs
+    input_ids = []
+    full_inputs = []
+    attention_masks = []
+    for i in tqdm(range(len(c_inputs))):
+        #no truncation is needed because we managed it before
+
+        #we concatenate the context input and the trajectory input adding manually the CLS token and the SEP token
+        full_input = '[CLS] ' + c_inputs[i] + ' ' + traj_inputs[i] + ' [SEP]'
+        full_inputs.append(full_input)
+
+        # we use the tokenizer to get the ids of the tokens that will be the input_ids that the model will take as input
+        # the format of the input_ids would be : [101] + encoded_c_input + encoded_traj_input + [102]
+        #the[101] token is the CLS token and the [102] token is the SEP token
+        # TODO : test adding an additional SEP token between the context input and the trajectory input so that the format of the input_ids would be : [101] + encoded_c_input + [102] + encoded_traj_input + [102]
+        encoded_full_input=tokenizer.encode(full_input, add_special_tokens=False)
+
+        #we pad the input to the maximum length of 512
+        encoded_full_input=encoded_full_input + [0]*(512-len(encoded_full_input))
+        #we add the input_ids to the list
+        input_ids.append(encoded_full_input)
+
+        #we create the attention mask
+        att_mask = [float(i>0) for i in encoded_full_input]
+        #we add the attention mask to the list
+        attention_masks.append(att_mask)
+
+    return input_ids, attention_masks, targets, full_inputs
+
+
 # Rest of the code remains the same until the `main()` function
 
 def process_row(row, tokenizer, h3_config_size):
@@ -149,9 +225,9 @@ def main():
     model.resize_token_embeddings(len(tokenizer))
 
     # Save the model, the tokenizer, and the data in different files
-    model.save_pretrained(f"/home/daril_kw/data/model_before_training_opti_full")
-    data_format.to_json(f"/home/daril_kw/data/data_with_time_info_ok_opti2_full.json")
-    tokenizer.save_pretrained(f"/home/daril_kw/data/tokenizer_final_opti_full")
+    model.save_pretrained(f"/home/daril_kw/data/savings_for_parallel_computing/model_before_training_opti_full")
+    data_format.to_json(f"/home/daril_kw/data/savings_for_parallel_computing/data_with_time_info_ok_opti2_full.json")
+    tokenizer.save_pretrained(f"/home/daril_kw/data/savings_for_parallel_computing/tokenizer_final_opti_full")
 
     # Get the DEB_TRAJ and TARGET columns well formatted but without the special tokens [CLS] and [SEP]
     data_format = get_deb_traj_and_target(data_format)
@@ -160,13 +236,13 @@ def main():
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(data_format, tokenizer)
     
     # Save the lists full_inputs, inputs_ids, attention_masks, and the targets in different files
-    with open(f"/home/daril_kw/data/input_ids_full_opti.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_computing/input_ids_full_opti.pkl", 'wb') as fp:
         pickle.dump(input_ids, fp)
-    with open(f"/home/daril_kw/data/attention_masks_full_opti.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_computing/attention_masks_full_opti.pkl", 'wb') as fp:
         pickle.dump(attention_masks, fp)
-    with open(f"/home/daril_kw/data/targets_full_opti.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_computing/targets_full_opti.pkl", 'wb') as fp:
         pickle.dump(targets, fp)
-    with open(f"/home/daril_kw/data/full_inputs_full_opti.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_computing/full_inputs_full_opti.pkl", 'wb') as fp:
         pickle.dump(full_inputs, fp)
 
 if __name__ == "__main__":
