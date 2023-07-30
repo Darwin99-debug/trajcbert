@@ -126,7 +126,7 @@ def main():
     # Use ThreadPoolExecutor for parallel processing
     with ThreadPoolExecutor() as executor:
         # Process each row concurrently
-        processed_rows = list(tqdm(executor.map(lambda row: process_row(row, tokenizer, h3_config_size), data_format.iterrows(), chunksize=10), total=len(data_format)))
+        processed_rows = list(tqdm(executor.map(lambda row: process_row(row, tokenizer, h3_config_size), data_format.iterrows(), chunksize=45), total=len(data_format)))
         # the chunksize parameter is used to specify how many rows to process at a time 
         # it depends on the number of cores of your machine
 
