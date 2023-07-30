@@ -164,7 +164,7 @@ def formatting_to_train(data_format, tokenizer):
 
 # Rest of the code remains the same until the `main()` function
 
-def process_row(row, tokenizer, h3_config_size):
+def process_row(row, h3_config_size):
     # Add tokenization column
     row['Tokenization_2'] = [h3.geo_to_h3(coord[1], coord[0], h3_config_size) for coord in row['POLYLINE']]
 
@@ -202,7 +202,7 @@ def main():
     # Use ThreadPoolExecutor for parallel processing
     with ThreadPoolExecutor() as executor:
         # Process each row concurrently
-        processed_rows = list(tqdm(executor.map(lambda row: process_row(row[1], tokenizer, h3_config_size), data_format.iterrows(), chunksize=45), total=len(data_format)))
+        processed_rows = list(tqdm(executor.map(lambda row: process_row(row[1], h3_config_size), data_format.iterrows(), chunksize=45), total=len(data_format)))
         # the chunksize parameter is used to specify how many rows to process at a time 
         # it depends on the number of cores of your machine
         # we use row[1] because the iterrows() method returns a tuple for each row containing the index of the row and the content of the row
