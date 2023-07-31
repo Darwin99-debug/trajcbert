@@ -4,3 +4,5 @@ data/train_clean_small.json
 computing_code/venv
 venv
 BERT_MODEL
+savings_for_parallel_computing/
+models
