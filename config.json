@@ -2,10 +2,6 @@
     "batch_size": 32,
     "optimizer": "Adam",
     "learning_rate": 2e-5,
-<<<<<<< HEAD
-    "num_epochs": 2,
+    "num_epochs": 10,
     "save_every": 1
-=======
-    "num_epochs": 2
->>>>>>> feature/run_small_job
 }
