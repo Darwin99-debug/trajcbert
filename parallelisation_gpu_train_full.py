@@ -266,7 +266,6 @@ def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_s
 
 
 if __name__ == "__main__":
-    import json
     # import the config file
     with open("config.json") as json_file:
         config = json.load(json_file)
