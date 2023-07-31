@@ -18,7 +18,7 @@ def add_spaces_for_concat(data_format, column):
     """Add spaces before and after the values of the column""" 
 
     #We add space before and after the values of the column because we want to separate the tokens (words) with spaces like that : [CLS] 0 1 2 3 4 5 6 7 8 9 10 [SEP]
-    data_format[column]=data_format[column].apply(lambda x: ' '+x)
+    data_format[column]=data_format[column].apply(lambda x: ' '+str(x))
     return data_format
 
 def get_deb_traj(data_format, len_context_info):
