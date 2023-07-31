@@ -18,6 +18,7 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 DIR_INPUTS_IDS = '/home/daril/trajcbert/savings_for_parallel_computing/input_ids_full_opti.pkl'
 DIR_ATTENTION_MASKS = '/home/daril/trajcbert/savings_for_parallel_computing/attention_masks_full_opti.pkl'
 DIR_TARGETS = '/home/daril/trajcbert/savings_for_parallel_computing/targets_full_opti.pkl'
+PRETRAINED_MODEL_NAME = '/home/daril/trajcbert/BERT_MODEL/model_bert_augmented_full'
 
 # WORLD_S=2
 
