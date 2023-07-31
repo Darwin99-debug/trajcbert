@@ -17,7 +17,6 @@ from transformers import get_linear_schedule_with_warmup
 from torch.optim import AdamW
 from torch.nn.parallel import DistributedDataParallel
 import torch.distributed as dist
-import h3
 from sklearn.metrics import f1_score
 
 WORLD_S=2
@@ -26,7 +25,7 @@ WORLD_S=2
 with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
 
     # Reading from json file
-    json_loaded = json.load(openfile)
+    json_loaded = json.load(openfile)   
 
 print("We put the data in a dataset.")
  

@@ -14,6 +14,14 @@ dist.init_process_group("nccl", world_size=world_size)
 
 # Create the DataLoader for our training set, one for validation set and one for test set
 
+def prepare(rank, world_size, batch_size=batch_size, pin_memory=False, num_workers=0):
+    dataset = TensorDataset(train_inputs, train_masks, train_labels)
+    sampler = DistributedSampler(dataset, num_replicas=world_size, rank=rank, shuffle=False, drop_last=False)
+    
+    dataloader = DataLoader(dataset, batch_size=batch_size, pin_memory=pin_memory, num_workers=num_workers, drop_last=False, shuffle=False, sampler=sampler)
+    
+    return dataloader
+
 
 validation_data = TensorDataset(validation_inputs, validation_masks, validation_labels)
 validation_sampler = SequentialSampler(validation_data)

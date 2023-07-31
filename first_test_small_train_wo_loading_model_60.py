@@ -16,96 +16,53 @@ from torch.utils.data import TensorDataset, DataLoader, RandomSampler, Sequentia
 from transformers import get_linear_schedule_with_warmup
 from torch.optim import AdamW
 from torch.nn.parallel import DistributedDataParallel
-import h3
+import gc
 
 
-with open('/home/daril/scratch/data/trajcbert/train_clean_small.json', 'r') as openfile:
+
+# ################################## LOADING THE CONFIG FILE ##########################################
+
+def load_config(config_file):
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+    return config
+
+config_file = 'config.json'
+config = load_config(config_file)
+
+# ################################## LOADING THE CONFIG FILE  END ##########################################
+
+
+
+# ################################## LOADING THE CONFIGs ##########################################
+
+batch_size = config["batch_size"]
+learning_rate = config["learning_rate"]
+epochs = config["num_epochs"]
+
+
+
+
+# ################################## LOADING THE CONFIGs END ##########################################
+
+
+
+with open('/home/daril/scratch/data/trajcbert/data_first_test_small_train_60_lines.json', 'r') as openfile:
 
     # Reading from json file
     json_loaded = json.load(openfile)
 
-print("We put the data in a dataset.")
+print("We put the data in a dataset.") 
  
 #we put them in a dataframe
 data_format = pd.DataFrame(data=json_loaded)
 
-#we keep only 60 rows
-data_format = data_format[:60]
+#load the tokenizer
+tokenizer = BertTokenizer.from_pretrained('/home/daril/trajcbert/BERT_MODEL/tokenizer_augmented_60')
 
-#we create the correct tokenization column
-data_format['Tokenization_2'] = data_format['POLYLINE'].apply(lambda x: [h3.geo_to_h3(x[i][0], x[i][1], 10) for i in range(len(x))])
+#load the model
+model = BertForSequenceClassification.from_pretrained('/home/daril/trajcbert/BERT_MODEL/model_bert_augmented_60')
 
-#on récupère la date à partir du timestamp
-data_format['DATE'] = data_format['TIMESTAMP'].apply(lambda x: datetime.datetime.fromtimestamp(x).strftime('%Y-%m-%d %H:%M:%S'))
-
-#a partir de cela on récupère le jour de la semaine sous forme d'un nombre entre 1 et 7 pour lundi à dimanche
-data_format['DAY'] = data_format['DATE'].apply(lambda x: str(datetime.datetime.strptime(x.split(' ')[0],'%Y-%m-%d').isocalendar()[2]))
-
-#ensuite, on récupère l'heure sous forme d'un nombre entre 0 et 23
-data_format['HOUR'] = data_format['DATE'].apply(lambda x: x.split(' ')[1].split(':')[0])
-
-#enfin on recupère le numéro de la semaine dans l'année
-data_format['WEEK'] = data_format['DATE'].apply(lambda x: str(datetime.datetime.strptime(x.split(' ')[0],'%Y-%m-%d').isocalendar()[1]))
-
-
-
-#we remove the useless columns
-data_format.drop(['MISSING_DATA','DATE','ORIGIN_CALL','TRIP_ID', 'DAY_TYPE', 'ORIGIN_CALL', 'ORIGIN_STAND', 'Nb_points', 'TIMESTAMP' ],axis=1,inplace=True)
-
-
-
-#we put the data in a str format
-print("we put in the right format")
-data_format['CALL_TYPE'] = data_format['CALL_TYPE'].apply(lambda x: str(1) if x=='A' else str(2) if x=='B' else str(3))
-if type(data_format['TAXI_ID'][0])!=str:
-    data_format['TAXI_ID']=data_format['TAXI_ID'].apply(lambda x: str(x))
-#idem pour le call_type
-if type(data_format['CALL_TYPE'][0])!=str:
-    data_format['CALL_TYPE']=data_format['CALL_TYPE'].apply(lambda x: str(x))
-
-print("gestion du tokenizer commencée")
-tokenizer = BertTokenizer.from_pretrained("bert-base-cased")
-
-
-liste_token_geo = []
-
-for i in range(len(data_format)):
-    for j in range(len(data_format['Tokenization_2'][i])):
-        liste_token_geo.append(data_format['Tokenization_2'][i][j])
-
-#on enlève les doublons
-liste_token_geo = list(set(liste_token_geo))
-
-#on garde le nombre de tokens géographiques pour la suite
-nb_token_geo = len(liste_token_geo)
-
-
-#On ajoute les tokens géographiques au tokenizer
-tokenizer.add_tokens(liste_token_geo)
-
-contextual_info_token = []
-for i in range(len(data_format)):
-    contextual_info_token.append(data_format['CALL_TYPE'][i])
-    contextual_info_token.append(str(data_format['TAXI_ID'][i]))
-    contextual_info_token.append(data_format['DAY'][i])
-    contextual_info_token.append(data_format['HOUR'][i])
-    contextual_info_token.append(data_format['WEEK'][i])
-      
-
-#we remove the duplicates
-contextual_info_token = list(set(contextual_info_token))
-    
-tokenizer.add_tokens(contextual_info_token)
-
-print("On a le tokenizer final")
-
-#On a besoin du nombre de labels, celui-ci correspond au nombre de tokens géographiques + 1 (pour le token [SEQ] indiquant la fin de la séquence)
-
-nb_labels = nb_token_geo + 1
-
-model=BertForSequenceClassification.from_pretrained("bert-base-cased",num_labels=nb_labels)
-#on adapte la taille de l'embedding pour qu'elle corresponde au nombre de tokens géographiques + 1
-model.resize_token_embeddings(len(tokenizer))
 
 
 print("gestion du format de l'input commencée")
@@ -216,7 +173,7 @@ validation_masks = torch.tensor(validation_masks)
 test_masks = torch.tensor(test_masks)
 
 
-batch_size = 32
+# batch_size = 16
 
 # Create the DataLoader for our training set, one for validation set and one for test set
 
@@ -233,18 +190,19 @@ prediction_sampler = SequentialSampler(prediction_data)
 prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, batch_size=batch_size)
 
 
+
+################################# CONFIGURATION OF THE MODEL ##########################################
+
 #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-#we go on the cpu
-device = torch.device("cpu")
+#we go on the gpu
+device = torch.device("cuda")
 
 #model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_final",num_labels=nb_labels)
 model.to(device)
 #model = DistributedDataParallel(model)
 
-optimizer = torch.optim.AdamW(model.parameters(),lr = 2e-5,eps = 1e-8)
+optimizer = torch.optim.AdamW(model.parameters(),lr = learning_rate,eps = 1e-8) 
 
-# Number of training epochs. The BERT authors recommend between 2 and 4.
-epochs = 2
 
 # Total number of training steps is number of batches * number of epochs.
 total_steps = len(train_dataloader) * epochs
@@ -281,13 +239,19 @@ seed_val = 2023
 random.seed(seed_val)
 np.random.seed(seed_val)
 torch.manual_seed(seed_val)
-torch.cuda.manual_seed_all(seed_val)
+#torch.cuda.manual_seed_all(seed_val)
 
 
 #we store the loss and accuracy of each epoch
 loss_values = []
 accuracy_values = []
 f1_values = []
+################################# CONFIGURATION OF THE MODEL END ##########################################
+
+
+
+
+################################# TRAINING THE MODEL ##########################################
 
 # For each epoch...
 for epoch_i in range(0, epochs):
@@ -399,9 +363,17 @@ for epoch_i in range(0, epochs):
     accuracy_values.append(eval_accuracy)
     #we store the f1 score
     f1_values.append(eval_f1)
+
+    # free up the cuda memory
+    torch.cuda.empty_cache()
+
+    # free the garbage collector
+    gc.collect()
 print("")
 print("Training complete!")
 
+
+################################# TRAINING THE MODEL END ##########################################
 
 
 """
@@ -423,7 +395,7 @@ np.save(output_dir+'accuracy_values.npy',accuracy_values)"""
 # the hasattr function checks if the model has the attribute module or not
 #  the attribute module is used when we use the DataParallel function
 
-model.save_pretrained('models/model_trained_cpu_version')
+model.save_pretrained('models/model_trained_gpu_version')
 
 #np.save('/home/daril_kw/data/loss.npy',loss_values)
 #np.save('/home/daril_kw/data/acc.npy' ,accuracy_values)
@@ -432,4 +404,4 @@ model.save_pretrained('models/model_trained_cpu_version')
 #torch.save(validation_dataloader,'/home/daril_kw/data/validation_dataloader_v_small.pt')
 
 #save the prediction dataloader
-torch.save(prediction_dataloader,'models/pred_dataloader_v_small.pt')
+torch.save(prediction_dataloader,'models/pred_dataloader_v_small_60.pt')

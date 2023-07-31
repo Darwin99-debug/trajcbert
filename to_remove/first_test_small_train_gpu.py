@@ -17,9 +17,35 @@ from transformers import get_linear_schedule_with_warmup
 from torch.optim import AdamW
 from torch.nn.parallel import DistributedDataParallel
 import h3
-from sklearn.metrics import f1_score
 
-with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
+
+# ################################## LOADING THE CONFIG FILE ##########################################
+
+def load_config(config_file):
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+    return config
+
+config_file = 'config.json'
+config = load_config(config_file)
+
+# ################################## LOADING THE CONFIG FILE  END ##########################################
+
+
+
+# ################################## LOADING THE CONFIGs ##########################################
+
+batch_size = config["batch_size"]
+learning_rate = config["learning_rate"]
+epochs = config["num_epochs"]
+
+
+
+
+# ################################## LOADING THE CONFIGs END ##########################################
+
+
+with open('/home/daril/scratch/data/trajcbert/train_clean_small.json', 'r') as openfile:
 
     # Reading from json file
     json_loaded = json.load(openfile)
@@ -63,8 +89,8 @@ if type(data_format['TAXI_ID'][0])!=str:
 if type(data_format['CALL_TYPE'][0])!=str:
     data_format['CALL_TYPE']=data_format['CALL_TYPE'].apply(lambda x: str(x))
 
-print("gestion du tokenizer commencée")
-tokenizer = BertTokenizer.from_pretrained("bert-base-cased")
+print("Staring the tokenization...\n")
+tokenizer = BertTokenizer.from_pretrained("BERT_MODEL/tokenizer/bert-base-cased")
 
 
 liste_token_geo = []
@@ -81,6 +107,7 @@ nb_token_geo = len(liste_token_geo)
 
 #On ajoute les tokens géographiques au tokenizer
 tokenizer.add_tokens(liste_token_geo)
+<<<<<<< HEAD:to_remove/first_test_small_train_gpu.py
 
 contextual_info_token = []
 for i in range(len(data_format)):
@@ -100,14 +127,21 @@ tokenizer.add_tokens(contextual_info_token)
 
 
 print("On a le tokenizer final")
+=======
+print("Tokenization done\n")
+>>>>>>> feature/run_small_job:first_test_small_train_gpu.py
 
 #On a besoin du nombre de labels, celui-ci correspond au nombre de tokens géographiques + 1 (pour le token [SEQ] indiquant la fin de la séquence)
 
 nb_labels = nb_token_geo + 1
+print(f"nb_labels = {nb_labels}\n")
+print("Starting the model...\n")
 
-model=BertForSequenceClassification.from_pretrained("bert-base-cased",num_labels=nb_labels)
-#on adapte la taille de l'embedding pour qu'elle corresponde au nombre de tokens géographiques + 1
-model.resize_token_embeddings(len(tokenizer))
+
+model=BertForSequenceClassification.from_pretrained("BERT_MODEL/trajcbert_small_base_cased",num_labels=nb_labels)
+
+
+#  the len(tokenizer) is the number of tokens in the tokenizer
 
 
 print("gestion du format de l'input commencée")
@@ -218,7 +252,7 @@ validation_masks = torch.tensor(validation_masks)
 test_masks = torch.tensor(test_masks)
 
 
-batch_size = 32
+# batch_size = 32
 
 # Create the DataLoader for our training set, one for validation set and one for test set
 
@@ -239,14 +273,14 @@ prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, b
 #we go on the cpu
 device = torch.device("cuda")
 
-#model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/model_final",num_labels=nb_labels)
+#model = BertForSequenceClassification.from_pretrained("models/model_final",num_labels=nb_labels)
 model.to(device)
 #model = DistributedDataParallel(model)
 
-optimizer = torch.optim.AdamW(model.parameters(),lr = 2e-5,eps = 1e-8)
+optimizer = torch.optim.AdamW(model.parameters(),lr = learning_rate,eps = 1e-8)
 
 # Number of training epochs. The BERT authors recommend between 2 and 4.
-epochs = 4
+# epochs = 4
 
 # Total number of training steps is number of batches * number of epochs.
 total_steps = len(train_dataloader) * epochs
@@ -402,7 +436,7 @@ np.save(output_dir+'accuracy_values.npy',accuracy_values)"""
 
 
 model_to_save = model.module if hasattr(model, 'module') else model
-model_to_save.save_pretrained('/home/daril_kw/data/model_trained_gpu')
+model_to_save.save_pretrained('models/model_trained_gpu')
 
-np.save('/home/daril_kw/data/model_trained_gpu/loss_values.npy',loss_values)
-np.save('/home/daril_kw/data/model_trained_gpu/accuracy_values.npy',accuracy_values)
+np.save('models/model_trained_gpu/loss_values.npy',loss_values)
+np.save('models/model_trained_gpu/accuracy_values.npy',accuracy_values)

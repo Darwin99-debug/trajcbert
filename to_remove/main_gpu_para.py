@@ -135,6 +135,6 @@ def training_loop(rank, world_size):
 
 def main():
     world_size = 2
-    (training_loop,args=(world_size,),nprocs=world_size,join=True)
+    torch.distributed.launch(training_loop,args=(world_size,),nprocs=world_size,join=True)
 
 
