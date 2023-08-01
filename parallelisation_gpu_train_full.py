@@ -247,7 +247,7 @@ def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_s
     # we load the data
     train_dataloader, validation_dataloader = load_data(rank,batch_size)
     # we load the model
-    model, tokenizer, optimizer = load_bert_model_and_tokenizer()
+    model, optimizer = load_bert_model_and_tokenizer()
     # computing of the total number of steps
     total_steps = len(train_dataloader) * total_epochs
     # we load the scheduler

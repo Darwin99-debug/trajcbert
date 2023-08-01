@@ -1,7 +1,6 @@
 #!/bin/bash
 #SBATCH --account=def-nkambou
 #SBATCH --gres=gpu:4
-#SBATCH --mem=128G
 #SBATCH --time=4-0:00
 #SBATCH --job-name=trajcbert_on_gpu_full_batch_size_32_4_DAYS_1_5_dataset
 #SBATCH --output=outputs/%x-%j.out
