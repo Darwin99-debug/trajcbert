@@ -20,7 +20,7 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 DIR_INPUTS_IDS = '/home/daril/trajcbert/savings_for_parrallel_1_2/input_ids_f_833383.pkl'
 DIR_ATTENTION_MASKS = '/home/daril/trajcbert/savings_for_parrallel_1_2/attention_masks_833383_opti.pkl'
 DIR_TARGETS = '/home/daril/trajcbert/savings_for_parrallel_1_2/targets_833383_opti.pkl'
-PRETRAINED_MODEL_NAME = '/home/daril/trajcbert/savings_for_parrallel_1_2/tokenizer_final_opti_833383'
+PRETRAINED_MODEL_NAME = '/home/daril/trajcbert/savings_for_parrallel_1_2/model_before_training_opti_833383'
 
  
 def ddp_setup(rank, world_size):
