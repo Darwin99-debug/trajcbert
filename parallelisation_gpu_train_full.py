@@ -38,7 +38,8 @@ def prepare_dataloader(dataset: Dataset,batch_size: int):
     return DataLoader(dataset, 
                       batch_size=batch_size, 
                       shuffle=False, # Must be False when using DistributedSampler beacause it is already shuffled
-                      pin_memory=True # Automatically put the fetched data Tensors in pinned memory, and thus enables faster data transfer to CUDA-enabled GPUs.
+                    #   pin_memory=True # Automatically put the fetched data Tensors in pinned memory, and thus enables faster data transfer to CUDA-enabled GPUs.
+                      sampler = DistributedSampler(dataset) # Select a subset of the dataset (only works if shuffle=False)
       
       
                     )
@@ -88,6 +89,9 @@ class Trainer:
         self.optimizer = optimizer
         self.save_every = save_every
         self.scheduler = scheduler
+        self.model = DDP(model, device_ids=[gpu_id], )
+
+
 
     def _run_batch(self,  b_input_ids,b_input_mask,b_labels): 
         #we set the gradients to zero
@@ -109,6 +113,7 @@ class Trainer:
         return loss.item()
        
 
+    
     def _run_epoch(self, epoch):
         # we recover the batch size
         b_sz = len(next(iter(self.train_data))[0]) # batch size
@@ -116,19 +121,32 @@ class Trainer:
         self.train_data.sampler.set_epoch(epoch)
         total_loss = 0.0
         for batch in self.train_data:
-            input_ids = batch["input_ids"].to(self.gpu_id)
-            attention_mask = batch["attention_mask"].to(self.gpu_id)
-            labels = batch["labels"].to(self.gpu_id)
+            batch = tuple(t.to(self.gpu_id) for t in batch)
+            #unpack the batch
+            input_ids, attention_mask, labels = batch
+            # input_ids = input_ids.to(self.gpu_id)
+            # attention_mask = batch["attention_mask"].to(self.gpu_id)
+            # labels = batch["labels"].to(self.gpu_id)
             loss = self._run_batch(input_ids,attention_mask,labels)
             total_loss += loss
         average_loss = total_loss / len(self.train_data)
         print(f"[GPU{self.gpu_id}] Epoch {epoch} | Average loss: {average_loss}")
         return average_loss
+    
+    def _accuracy(self, logits : np.ndarray, labels: np.ndarray) -> float:
+        predicted = np.argmax(logits, axis=1).flatten()
+        labels = labels.cpu().numpy()  # Convert torch.Tensor to numpy array
+        correct = (predicted == labels)
+        print(f"correct type: {type(correct)}  predited type: {type(predicted)}  labels type: {type(labels)}")
+        correct = correct.sum()
+        total = labels.size
+        accuracy = correct / total
+        return accuracy
         
-    def _validate(self):
+     def _validate(self):
         model = self.model.module
         model.eval()
-        
+        #self.model.eval()
         eval_loss, eval_accuracy, eval_f1 = 0, 0, 0
         nb_eval_steps, nb_eval_examples = 0, 0
 
@@ -139,6 +157,7 @@ class Trainer:
                 b_input_ids = b_input_ids.to(self.gpu_id)
                 b_input_mask = b_input_mask.to(self.gpu_id)
                 b_labels = b_labels.to(self.gpu_id)
+
                 outputs = model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
                 #outputs = self.model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask, labels=b_labels)
                 loss = outputs.loss
@@ -161,14 +180,15 @@ class Trainer:
 
         self.model.train()
         eval_loss = eval_loss / nb_eval_steps
-        eval_accuracy = eval_accuracy / nb_eval_examples
-        eval_f1 = eval_f1 / nb_eval_examples
+        #eval_accuracy = eval_accuracy / nb_eval_examples
+        #eval_f1 = eval_f1 / nb_eval_examples
 
         print("  Validation Loss: {0:.4f}".format(eval_loss))
-        print("  Accuracy: {0:.4f}".format(eval_accuracy))
-        print("  F1 score: {0:.4f}".format(eval_f1))
-        
+        #print("  Accuracy: {0:.4f}".format(eval_accuracy))
+        #print("  F1 score: {0:.4f}".format(eval_f1))
+
         return eval_loss, eval_accuracy, eval_f1
+
 
 
 
