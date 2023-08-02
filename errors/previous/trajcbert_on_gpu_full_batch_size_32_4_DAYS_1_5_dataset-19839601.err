@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/home/daril/trajcbert/parallelisation_gpu_train_full.py", line 280, in <module>
+    mp.spawn(main, args=(world_size, save_every, epochs, batch_size), nprocs=world_size, join=True)
+  File "/localscratch/daril.19839601.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 239, in spawn
+    return start_processes(fn, args, nprocs, join, daemon, start_method='spawn')
+  File "/localscratch/daril.19839601.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 197, in start_processes
+    while not context.join():
+  File "/localscratch/daril.19839601.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 140, in join
+    raise ProcessExitedException(
+torch.multiprocessing.spawn.ProcessExitedException: process 1 terminated with signal SIGKILL
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=19839601.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.
