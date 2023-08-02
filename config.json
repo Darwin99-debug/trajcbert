@@ -1,5 +1,5 @@
 {
-    "batch_size": 32,
+    "batch_size": 16,
     "optimizer": "Adam",
     "learning_rate": 2e-5,
     "num_epochs": 1,

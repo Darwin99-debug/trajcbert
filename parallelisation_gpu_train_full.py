@@ -17,10 +17,10 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 
 
 
-DIR_INPUTS_IDS = '/home/daril/trajcbert/savings_for_parallel_computing/input_ids_full_opti.pkl'
-DIR_ATTENTION_MASKS = '/home/daril/trajcbert/savings_for_parallel_computing/attention_masks_full_opti.pkl'
-DIR_TARGETS = '/home/daril/trajcbert/savings_for_parallel_computing/targets_full_opti.pkl'
-PRETRAINED_MODEL_NAME = '/home/daril/trajcbert/BERT_MODEL/model_bert_augmented_full'
+DIR_INPUTS_IDS = '/home/daril/trajcbert/savings_for_parrallel_1_2/input_ids_f_833383.pkl'
+DIR_ATTENTION_MASKS = '/home/daril/trajcbert/savings_for_parrallel_1_2/attention_masks_833383_opti.pkl'
+DIR_TARGETS = '/home/daril/trajcbert/savings_for_parrallel_1_2/targets_833383_opti.pkl'
+PRETRAINED_MODEL_NAME = '/home/daril/trajcbert/savings_for_parrallel_1_2/tokenizer_final_opti_833383'
 
  
 def ddp_setup(rank, world_size):
