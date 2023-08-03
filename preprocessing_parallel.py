@@ -189,7 +189,7 @@ def process_row(row, h3_config_size):
 def main():
     WORLD_S = 2
     h3_config_size = 10
-    nb_rows = 833383
+    nb_rows = 300000
 
     # Load the data
     with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
