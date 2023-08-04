@@ -189,7 +189,7 @@ def process_row(row, h3_config_size):
 def main():
     WORLD_S = 2
     h3_config_size = 10
-    nb_rows = 300000
+    nb_rows = 166676
 
     # Load the data
     with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
@@ -226,9 +226,9 @@ def main():
     model.resize_token_embeddings(len(tokenizer))
 
     # Save the model, the tokenizer, and the data in different files
-    model.save_pretrained(f"/home/daril_kw/data/savings_for_parallel_computing/model_before_training_opti_{nb_rows}")
-    data_format.to_json(f"/home/daril_kw/data/savings_for_parallel_computing/data_with_time_info_ok_opti2_{nb_rows}.json")
-    tokenizer.save_pretrained(f"/home/daril_kw/data/savings_for_parallel_computing/tokenizer_final_opti_{nb_rows}")
+    model.save_pretrained(f"/home/daril_kw/data/savings_for_parallel_computing_1_10/model_before_training_opti_{nb_rows}")
+    data_format.to_json(f"/home/daril_kw/data/savings_for_parallel_computing_1_10/data_with_time_info_ok_opti2_{nb_rows}.json")
+    tokenizer.save_pretrained(f"/home/daril_kw/data/savings_for_parallel_computing_1_10/tokenizer_final_opti_{nb_rows}")
 
     # Get the DEB_TRAJ and TARGET columns well formatted but without the special tokens [CLS] and [SEP]
     data_format = get_deb_traj_and_target(data_format)
@@ -237,13 +237,13 @@ def main():
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(data_format, tokenizer)
     
     # Save the lists full_inputs, inputs_ids, attention_masks, and the targets in different files
-    with open(f"/home/daril_kw/data/savings_for_parallel_computing/input_ids_f_{nb_rows}.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_computing_1_10/input_ids_f_{nb_rows}.pkl", 'wb') as fp:
         pickle.dump(input_ids, fp)
-    with open(f"/home/daril_kw/data/savings_for_parallel_computing/attention_masks_{nb_rows}_opti.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_computing_1_10/attention_masks_{nb_rows}_opti.pkl", 'wb') as fp:
         pickle.dump(attention_masks, fp)
-    with open(f"/home/daril_kw/data/savings_for_parallel_computing/targets_{nb_rows}_opti.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_computing_1_10/targets_{nb_rows}_opti.pkl", 'wb') as fp:
         pickle.dump(targets, fp)
-    with open(f"/home/daril_kw/data/savings_for_parallel_computing/full_inputs_{nb_rows}_opti.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_computing_1_10/full_inputs_{nb_rows}_opti.pkl", 'wb') as fp:
         pickle.dump(full_inputs, fp)
 
 if __name__ == "__main__":
