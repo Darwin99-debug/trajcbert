@@ -2,7 +2,7 @@
 #SBATCH --account=def-nkambou
 #SBATCH --gres=gpu:4
 #SBATCH --time=4-0:00
-#SBATCH --job-name=trajcbert_on_gpu_full_batch_size_16_4_DAYS_1_5_dataset
+#SBATCH --job-name=trajcbert_on_gpu_1_5_batch_size_16_4_DAYS_300000_dataset
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
 #SBATCH --cpus-per-task=16 # number of cores
@@ -21,6 +21,6 @@ source $VENV_DIR/bin/activate
 pip install -r requirements.txt --no-index
 pip list
 
-python parallelisation_gpu_train_full.py
+python parallelisation_gpu_train_300000.py
 
 

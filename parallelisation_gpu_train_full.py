@@ -15,10 +15,10 @@ from torch.distributed import init_process_group, destroy_process_group
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-DIR_INPUTS_IDS = '/home/daril/trajcbert/savings_300000/input_ids_f_300000.pkl'
-DIR_ATTENTION_MASKS = '/home/daril/trajcbert/savings_300000/attention_masks_300000_opti.pkl'
-DIR_TARGETS = '/home/daril/trajcbert/savings_300000/targets_300000_opti.pkl'
-PRETRAINED_MODEL_NAME = '/home/daril/trajcbert/savings_300000/model_before_training_opti_300000'
+DIR_INPUTS_IDS = '/home/daril/trajcbert/savings_for_parallel_computing_full/input_ids_full_opti.pkl'
+DIR_ATTENTION_MASKS = '/home/daril/trajcbert/savings_for_parallel_computing_full/attention_masks_full_opti.pkl'
+DIR_TARGETS = '/home/daril/trajcbert/savings_for_parallel_computing_full/targets_full_opti.pkl'
+PRETRAINED_MODEL_NAME = '/home/daril/trajcbert/savings_for_parallel_computing_full/model_before_training_opti_full'
 
 # WORLD_S=2
 
@@ -204,7 +204,7 @@ class Trainer:
 
     def _save_checkpoint(self, epoch):
         ckp = self.model.module.state_dict()
-        PATH = f"checkpoint_epoch_{epoch}.pt"
+        PATH = f"models/model_saved_parallel_version_full/checkpoints/checkpoint_epoch_{epoch}.pt"
         torch.save(ckp, PATH)
         print(f"Epoch {epoch} | Training checkpoint saved at {PATH}")
 
@@ -290,14 +290,14 @@ def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_s
 
     #save the model
     model_to_save = model.module if hasattr(model, 'module') else model
-    model_to_save.save_pretrained('models/model_saved_parallel_version')
+    model_to_save.save_pretrained('models/model_saved_parallel_version_full')
 
 
 
 if __name__ == "__main__":
     import json
     # import the config file
-    with open("config.json") as json_file:
+    with open("config_full.json") as json_file:
         config = json.load(json_file)
 
     batch_size = config["batch_size"]
