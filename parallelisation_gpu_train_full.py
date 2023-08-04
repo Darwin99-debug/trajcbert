@@ -15,10 +15,10 @@ from torch.distributed import init_process_group, destroy_process_group
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-DIR_INPUTS_IDS = '/home/daril/trajcbert/savings_for_parallel_computing/input_ids_full_opti.pkl'
-DIR_ATTENTION_MASKS = '/home/daril/trajcbert/savings_for_parallel_computing/attention_masks_full_opti.pkl'
-DIR_TARGETS = '/home/daril/trajcbert/savings_for_parallel_computing/targets_full_opti.pkl'
-PRETRAINED_MODEL_NAME = '/home/daril/trajcbert/savings_for_parallel_computing/model_before_training_opti_full'
+DIR_INPUTS_IDS = '/home/daril_kw/data/input_ids_60_opti.pkl'
+DIR_ATTENTION_MASKS = '/home/daril_kw/data/attention_masks_60_opti.pkl'
+DIR_TARGETS = '/home/daril_kw/data/targets_60_opti.pkl'
+PRETRAINED_MODEL_NAME = '/home/daril_kw/data/model_before_training_opti_60'
 
 # WORLD_S=2
 
