@@ -175,3 +175,121 @@ websocket_client                   1.5.1+computecanada
 wheel                              0.37.1
 widgetsnbextension                 4.0.5+computecanada
 zipp                               3.14.0+computecanada
+Data conversion to tensors...
+
+[GPU3] Epoch 0 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 0 | Average loss: 6.548533314212238
+[GPU3] Epoch 1 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 1 | Average loss: 3.8539128371324582
+[GPU3] Epoch 2 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 2 | Average loss: 2.7466820029992065
+[GPU3] Epoch 3 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 3 | Average loss: 2.0956637929612993
+[GPU3] Epoch 4 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 4 | Average loss: 1.6865014011013846
+[GPU3] Epoch 5 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 5 | Average loss: 1.4269039417436056
+[GPU3] Epoch 6 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 6 | Average loss: 1.2590000571427047
+[GPU3] Epoch 7 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 7 | Average loss: 1.1359276768720545
+[GPU3] Epoch 8 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 8 | Average loss: 1.0502221158471718
+[GPU3] Epoch 9 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 9 | Average loss: 0.9897423584226042
+Data conversion to tensors...
+
+[GPU0] Epoch 0 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 0 | Average loss: 6.536766654366001
+  Validation Loss: 4.7784
+Epoch 0 | Training checkpoint saved at models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_0.pt
+Epoch 0 | Best validation loss: 4.778435759226481
+[GPU0] Epoch 1 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 1 | Average loss: 4.476042759503233
+  Validation Loss: 3.3216
+Epoch 1 | Training checkpoint saved at models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_1.pt
+Epoch 1 | Best validation loss: 3.3215655530293784
+[GPU0] Epoch 2 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 2 | Average loss: 3.2576344211660855
+  Validation Loss: 2.5530
+Epoch 2 | Training checkpoint saved at models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_2.pt
+Epoch 2 | Best validation loss: 2.552966025193532
+[GPU0] Epoch 3 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 3 | Average loss: 2.5656322419502158
+  Validation Loss: 2.1270
+Epoch 3 | Training checkpoint saved at models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_3.pt
+Epoch 3 | Best validation loss: 2.127018808444341
+[GPU0] Epoch 4 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 4 | Average loss: 2.155198971489312
+  Validation Loss: 1.8822
+Epoch 4 | Training checkpoint saved at models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_4.pt
+Epoch 4 | Best validation loss: 1.8822069046497345
+[GPU0] Epoch 5 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 5 | Average loss: 1.9147964181705108
+  Validation Loss: 1.7251
+Epoch 5 | Training checkpoint saved at models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_5.pt
+Epoch 5 | Best validation loss: 1.725142194588979
+[GPU0] Epoch 6 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 6 | Average loss: 1.7208705858737936
+  Validation Loss: 1.6297
+Epoch 6 | Training checkpoint saved at models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_6.pt
+Epoch 6 | Best validation loss: 1.6296517746448518
+[GPU0] Epoch 7 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 7 | Average loss: 1.5871946271420656
+  Validation Loss: 1.5731
+Epoch 7 | Training checkpoint saved at models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_7.pt
+Epoch 7 | Best validation loss: 1.5731439143021901
+[GPU0] Epoch 8 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 8 | Average loss: 1.5115283000419772
+  Validation Loss: 1.5420
+Epoch 8 | Training checkpoint saved at models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_8.pt
+Epoch 8 | Best validation loss: 1.5419861749013264
+[GPU0] Epoch 9 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 9 | Average loss: 1.481141726040586
+  Validation Loss: 1.5332
+Epoch 9 | Training checkpoint saved at models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_9.pt
+Epoch 9 | Best validation loss: 1.533240605354309
+Data conversion to tensors...
+
+[GPU1] Epoch 0 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 0 | Average loss: 6.5449703465705795
+[GPU1] Epoch 1 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 1 | Average loss: 3.878967031765888
+[GPU1] Epoch 2 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 2 | Average loss: 2.7235361024101765
+[GPU1] Epoch 3 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 3 | Average loss: 2.089059723673556
+[GPU1] Epoch 4 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 4 | Average loss: 1.7036410717390724
+[GPU1] Epoch 5 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 5 | Average loss: 1.4300057539336772
+[GPU1] Epoch 6 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 6 | Average loss: 1.2621455933916343
+[GPU1] Epoch 7 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 7 | Average loss: 1.1357569842736162
+[GPU1] Epoch 8 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 8 | Average loss: 1.0541949788046674
+[GPU1] Epoch 9 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 9 | Average loss: 1.0002962804324396
+Data conversion to tensors...
+
+[GPU2] Epoch 0 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 0 | Average loss: 6.5382614662579455
+[GPU2] Epoch 1 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 1 | Average loss: 3.8832956390075775
+[GPU2] Epoch 2 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 2 | Average loss: 2.724883264274959
+[GPU2] Epoch 3 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 3 | Average loss: 2.0936327323105663
+[GPU2] Epoch 4 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 4 | Average loss: 1.7120724620553553
+[GPU2] Epoch 5 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 5 | Average loss: 1.4394124055996325
+[GPU2] Epoch 6 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 6 | Average loss: 1.2560801045589538
+[GPU2] Epoch 7 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 7 | Average loss: 1.1367399924880521
+[GPU2] Epoch 8 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 8 | Average loss: 1.0480544942638603
+[GPU2] Epoch 9 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 9 | Average loss: 1.0023041803972417
