@@ -27,7 +27,7 @@ targets_dict_dir='/home/daril_kw/data/AR/targets_dict_v_small_AR.pt'
 targets_input_dir= '/home/daril_kw/data/AR/targets_input_v_small_AR.pt'
 
 # constants
-VERSION_TEST = 1 # 1 for the first version of the test data, 2 for the second version
+VERSION_TEST = 2 # 1 for the first version of the test data, 2 for the second version
 
 def add_spaces_for_concat(data_format, column):
     """Add spaces before and after the values of the column"""
