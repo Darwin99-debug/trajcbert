@@ -5,9 +5,9 @@
 #SBATCH --job-name=trajcbert_on_gpu_1_2_batch_size_32_4_DAYS_20_epochs
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
-#SBATCH --cpus-per-task=48 # number of cores for each task
+#SBATCH --cpus-per-task=32 # number of cores for each task
 #SBATCH --nodes=3 
-#SBATCH --mem=0 # this means reserving all available memory on the node
+#SBATCH --mem=498G
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=kengne_wambo.daril_raoul@courrier.uqam.ca
 
