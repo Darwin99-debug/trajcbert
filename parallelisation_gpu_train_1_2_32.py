@@ -238,6 +238,7 @@ def load_data(rank,batch_size):
 
 
     targets_dict={}
+    # create a dictionary to convert the targets to numbers
     for i in range(len(targets)):
         if targets[i] not in targets_dict:
             targets_dict[targets[i]]=len(targets_dict)
