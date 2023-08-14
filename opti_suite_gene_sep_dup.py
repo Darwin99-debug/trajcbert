@@ -32,15 +32,20 @@ def add_spaces_for_concat(data_format, column):
     data_format[column]=data_format[column].apply(lambda x: ' '+x)
     return data_format
 
-def rows_attribution_cat(dataframe, nb_categories):
+def rows_attribution_cat(dataframe, nb_categories, uniform, list_rate_per_cat):
     """Distribute the rows of the dataframe among categories"""
-    nb_rows_per_cat = len(dataframe) // nb_categories
-    nb_rows_dict = {f'nb_rows_category{i}': nb_rows_per_cat for i in range(nb_categories)}
-    remainder = len(dataframe) % nb_categories
+    if uniform :
+        nb_rows_per_cat = len(dataframe) // nb_categories
+        nb_rows_dict = {f'nb_rows_category{i}': nb_rows_per_cat for i in range(nb_categories)}
+        remainder = len(dataframe) % nb_categories
     
-    # Distribute the remaining rows randomly among categories
-    for i in random.sample(range(nb_categories), remainder):
-        nb_rows_dict[f'nb_rows_category{i}'] += 1
+        # Distribute the remaining rows randomly among categories
+        for i in random.sample(range(nb_categories), remainder):
+            nb_rows_dict[f'nb_rows_category{i}'] += 1
+
+    else:
+        #we use the rates given in list_rate_per_cat
+        nb_rows_dict = {f'nb_rows_category{i}': int(list_rate_per_cat[i] * len(dataframe)) for i in range(nb_categories)}
     
     return nb_rows_dict
 
@@ -118,7 +123,7 @@ def manage_duplication(dataframe, liste_to_duplicate):
 
 
 
-def attribution_deb_traj_and_target(dataframe, nb_categories=5):
+def attribution_deb_traj_and_target(dataframe, uniform, list_rate_per_cat, nb_categories):
 
     """Prepare the training data without duplicates
     we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
@@ -143,7 +148,7 @@ def attribution_deb_traj_and_target(dataframe, nb_categories=5):
     # Create a seed to be able to reproduce the results
     random.seed(2023)
     # Create a dictionary of the number of rows per category
-    nb_rows_dict = rows_attribution_cat(dataframe, nb_categories)
+    nb_rows_dict = rows_attribution_cat(dataframe, nb_categories, uniform, list_rate_per_cat)
     # Create a dictionary of lists of indexes of rows per category
     list_index_dict = {f'list_index_category{i}': np.array(random.sample(range(len(dataframe)), nb_rows_dict[f'nb_rows_category{i}'])) for i in range(nb_categories)}
 
@@ -265,7 +270,7 @@ def attribution_duplicate_or_separate(list_row_to_select, nb_to_duplicate, nb_to
     return list_index_to_duplicate, list_index_to_separate
 
 
-def prepare_train(dataframe, duplication_rate=0, separation_rate=50, decal_gauche=False, decal_droite=False, uniforme=True):
+def prepare_train(dataframe, duplication_rate=0, separation_rate=50, uniforme_bool=True, list_rate_per_cat=None):
     """
     This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
     The separation rate is the proportion of rows that will separated into two different trajectories. 
@@ -294,7 +299,7 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50, decal_gauch
     dataframe_sep_and_dup = manage_duplication(dataframe_separated, list_index_to_duplicate)
 
     #we attribute the target and the deb_traj to the rows
-    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup)
+    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup, uniforme_bool, list_rate_per_cat, nb_categories=5)
 
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
@@ -464,7 +469,7 @@ if __name__ == '__main__':
     #save the list data_test in a pickle file
     data_test.to_pickle(data_test_dir)
 
-    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50,decal_gauche=False, decal_droite=False, uniforme=True)
+    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50, uniforme_bool=True,list_rate_per_cat=None)
     #df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, decal_gauche=False, decal_droite=False, uniforme=True)
     
 
