@@ -452,8 +452,8 @@ def formatting_to_train(data_format, tokenizer):
 if __name__ == '__main__':
     
     # Management of the parameters
-    dup_rate = 0.5
-    sep_rate = 0.5
+    dup_rate = 50
+    sep_rate = 50
     uniform = True
     nb_cat = 5
     percentage_per_cat = [0.3,0.2,0.3,0.1,0.1]
