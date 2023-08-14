@@ -270,7 +270,7 @@ def attribution_duplicate_or_separate(list_row_to_select, nb_to_duplicate, nb_to
     return list_index_to_duplicate, list_index_to_separate
 
 
-def prepare_train(dataframe, duplication_rate=0, separation_rate=50, uniforme_bool=True, list_rate_per_cat=None):
+def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, nb_categories, list_rate_per_cat=None):
     """
     This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
     The separation rate is the proportion of rows that will separated into two different trajectories. 
@@ -299,7 +299,7 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50, uniforme_bo
     dataframe_sep_and_dup = manage_duplication(dataframe_separated, list_index_to_duplicate)
 
     #we attribute the target and the deb_traj to the rows
-    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup, uniforme_bool, list_rate_per_cat, nb_categories=5)
+    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup, uniforme_bool, list_rate_per_cat, nb_categories)
 
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
@@ -469,7 +469,7 @@ if __name__ == '__main__':
     #save the list data_test in a pickle file
     data_test.to_pickle(data_test_dir)
 
-    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50, uniforme_bool=True,list_rate_per_cat=None)
+    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50, uniforme_bool=True,nb_categories=5,list_rate_per_cat=None)
     #df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, decal_gauche=False, decal_droite=False, uniforme=True)
     
 
