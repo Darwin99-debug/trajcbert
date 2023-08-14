@@ -5,7 +5,7 @@
 #SBATCH --job-name=trajcbert_on_gpu_1_2_batch_size_32_4_DAYS_20_epochs
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
-#SBATCH --cpus-per-task=32 # number of cores for each task
+#SBATCH --cpus-per-task=16 # number of cores for each task
 #SBATCH --nodes=3 
 #SBATCH --mem=498G
 #SBATCH --mail-type=ALL
