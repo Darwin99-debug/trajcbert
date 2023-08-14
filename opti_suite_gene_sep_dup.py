@@ -474,7 +474,7 @@ if __name__ == '__main__':
     #save the list data_test in a pickle file
     data_test.to_pickle(data_test_dir)
 
-    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50, uniforme_bool=False,nb_categories=5,list_rate_per_cat=[0.3,0.2,0.3,0.1,0.1])
+    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50, uniforme_bool=False,nb_categories=5,list_rate_per_cat=[0.3,0.2,0.3,0.1,0.5])
     #df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, decal_gauche=False, decal_droite=False, uniforme=True)
     
 
