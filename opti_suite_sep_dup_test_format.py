@@ -481,32 +481,52 @@ if __name__ == '__main__':
 
     #we separate the dataframe into train and test 
     data_train, data_test = train_test_split(data_format, test_size=0.2, random_state=2023)
-    #save the list data_test in a pickle file
-    data_test.to_pickle(data_test_dir)
 
+#   WE MANAGE THE TRAIN AND VALIDATION DATA
+#   -----------------------------------------
     #we prepare the train data
     df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=dup_rate, separation_rate=sep_rate, uniforme_bool=uniform,nb_categories=nb_cat,list_rate_per_cat=percentage_per_cat)
-    
     #we call the function to get the input_ids, the attention_masks and the targets
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(df_full_dup, tokenizer)
 
-    #same for the test data
+    #we get the targets in the right format
+    targets_dict={}
+    for i in range(len(targets)):
+        if targets[i] not in targets_dict:
+            targets_dict[targets[i]]=len(targets_dict)
+
+    targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
+
+#WE MANAGE THE TEST DATA
+#------------------------
+    #We begin by the first version of the test data
     if VERSION_TEST == 1:
+        #we prepare the test data in the same way as the train data
         df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, decal_gauche=False, decal_droite=False, uniforme=True)
         input_ids_test, attention_masks_test, targets_test, full_inputs_test = formatting_to_train(df_test, tokenizer)
 
+        #we get the targets in the right format
+        targets_dict_test={}
+        for i in range(len(targets_test)):
+            if targets_test[i] not in targets_dict_test:
+                targets_dict_test[targets_test[i]]=len(targets_dict_test)
+
+        targets_input_test=[targets_dict_test[targets_test[i]] for i in range(len(targets_test))]
+
     elif VERSION_TEST == 2:
+    #this version of the test data is the one we will use for the final test in an autoregressive way
+    #this means we do not have the targets nor the attention masks yet
+
+        dataframe=data_test
+
         def get_traj(dataframe):
             len_context_info = len(dataframe['CONTEXT_INPUT'][0].split(' '))
-
             """the TRAJ column will be the tokenization column truncated"""
             dataframe['TRAJ']=dataframe['Tokenization_2']
-
             # we manage the length of the CONTEXT_INPUT column so that after the concatenation, it does not exceed 512 tokens
             # the -2 corresponds to the two special tokens [CLS] and [SEP]
             # for exemple here, if the trajectory input is too long, we keep the 512-6-2=504 last tokens
             dataframe['TRAJ']=dataframe['TRAJ'].apply(lambda x: x[-(512-len_context_info-2):] if len(x)>512-len_context_info-2 else x)    
-
             #then we keep the column in form of a string with spaces between the tokens (the space replaces the comma)
             dataframe['TRAJ']=dataframe['TRAJ'].apply(lambda x: ' '.join(x))
             return dataframe
@@ -518,62 +538,30 @@ if __name__ == '__main__':
             """We concatenate the CONTEXT_INPUT and the TRAJ columns and we add a space between them + we add the special tokens [CLS] and [SEP]"""
             for i in tqdm(range(len(dataframe))):
                 dataframe['WHOLE_INPUT'][i] = '[CLS] ' + dataframe['CONTEXT_INPUT'][i] + ' ' + dataframe['TRAJ'][i] + ' [SEP]'
-
             return dataframe
 
 
-        def prepare_data_test(input, tokenizer, targets_input):
+        def prepare_data_test(input, tokenizer):
             input_sequences = []
-            
             for idx, input_seq in enumerate(input):
-                # Encode the text.
+                # Encode the text
                 encoded_sequence = tokenizer.encode(input_seq, add_special_tokens=False, padding=False)
                 input_sequences.append(encoded_sequence)
-
-            # Convert to tensors.
-            inputs = torch.tensor(input_sequences)
-            return inputs
-        
-        def prep_test(dataframe, tokenizer, targets_input):
-        
-            #we prepare the data for the model
-            inputs_ids = prepare_data_test(inputs, tokenizer, targets_input)
-
-            #we create the dataloader
-            prediction_data = TensorDataset(inputs_ids)
-            prediction_sampler = SequentialSampler(prediction_data)
-            prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, batch_size=batch_size)
-
-            return prediction_dataloader, data_test, targets_dict, targets_input
-        
-
-        
+            return input_sequences
+                
         #we add the columns that we need
         data_test = get_traj(data_test)
         data_test = get_whole_inputs(data_test)
+        input_ids_test = prepare_data_test(data_test['WHOLE_INPUT'], tokenizer)
 
-        inputs = []
-        for i in tqdm(range(len(data_test))):
-            inputs.append(data_test['WHOLE_INPUT'][i].tolist())
 
-    targets_dict={}
-    for i in range(len(targets)):
-        if targets[i] not in targets_dict:
-            targets_dict[targets[i]]=len(targets_dict)
+    ##save the lists inputs_ids, attention_masks, same for the test data and the targets : we use the save function from torch
+    torch.save(input_ids, '/home/daril_kw/data/input_ids.pt')
+    torch.save(attention_masks, '/home/daril_kw/data/attention_masks.pt')
+    torch.save(targets_input, '/home/daril_kw/data/targets_inp.pt')
+    torch.save(input_ids_test, '/home/daril_kw/data/input_ids_test.pt')
+    if VERSION_TEST == 1 :
+        torch.save(attention_masks_test, '/home/daril_kw/data/attention_masks_test.pt')
+        torch.save(targets_input_test, '/home/daril_kw/data/targets_inp_test.pt')
 
-    targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
-
-    ##save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
-    with open(input_ids_dir, 'wb') as fp:
-        pickle.dump(input_ids, fp)
-    with open(attention_masks_dir, 'wb') as fp:
-        pickle.dump(attention_masks, fp)
-    with open(targets_dir, 'wb') as fp:
-        pickle.dump(targets, fp)
-    with open(list_inputs_test_dir, 'wb') as fp:
-        pickle.dump(full_inputs, fp)
-    with open(targets_dict_dir, 'wb') as fp:
-        pickle.dump(targets_dict, fp)
-    with open(targets_input_dir, 'wb') as fp:
-        pickle.dump(targets_input, fp)
 
