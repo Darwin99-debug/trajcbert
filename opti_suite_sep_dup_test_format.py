@@ -502,7 +502,7 @@ if __name__ == '__main__':
     #We begin by the first version of the test data
     if VERSION_TEST == 1:
         #we prepare the test data in the same way as the train data
-        df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, decal_gauche=False, decal_droite=False, uniforme=True)
+        df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, uniforme_bool=uniform,nb_categories=nb_cat,list_rate_per_cat=percentage_per_cat)
         input_ids_test, attention_masks_test, targets_test, full_inputs_test = formatting_to_train(df_test, tokenizer)
 
         #we get the targets in the right format
