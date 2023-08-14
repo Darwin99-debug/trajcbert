@@ -277,6 +277,11 @@ def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, n
     The duplication rate is the proportion of rows that will be duplicated, ie that will occur in two different trajectories with different targets.
     """
 
+
+    #verify that the sum of the element of list_rate_per_cat is equal to 1
+    if not uniforme_bool:
+        assert sum(list_rate_per_cat)==1, "The sum of the elements of list_rate_per_cat must be equal to 1"
+
     #we copy to avoid caveat
     dataframe_original = dataframe
     dataframe = dataframe_original.copy()
@@ -469,7 +474,7 @@ if __name__ == '__main__':
     #save the list data_test in a pickle file
     data_test.to_pickle(data_test_dir)
 
-    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50, uniforme_bool=True,nb_categories=5,list_rate_per_cat=None)
+    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50, uniforme_bool=True,nb_categories=5,list_rate_per_cat=[0.3,0.2,0.3,0.1,0.1])
     #df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, decal_gauche=False, decal_droite=False, uniforme=True)
     
 
