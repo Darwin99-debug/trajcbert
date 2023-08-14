@@ -118,12 +118,12 @@ def manage_duplication(dataframe, liste_to_duplicate):
 
 
 
-def attribution_deb_traj_and_target(dataframe, nb_categories=5, decal_gauche=False, decal_droite=False, uniforme=True):
+def attribution_deb_traj_and_target(dataframe, nb_categories=5):
 
     """Prepare the training data without duplicates
     we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
     tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
-    for example, if ze have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
+    for example, if we have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
     that means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
     we create a list of threshold"""
 
@@ -294,7 +294,7 @@ def prepare_train(dataframe, duplication_rate=0, separation_rate=50, decal_gauch
     dataframe_sep_and_dup = manage_duplication(dataframe_separated, list_index_to_duplicate)
 
     #we attribute the target and the deb_traj to the rows
-    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup, decal_gauche=False, decal_droite=False, uniforme=True)
+    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup)
 
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
