@@ -395,25 +395,15 @@ def formatting_to_train(data_format, tokenizer):
         data_format.drop(['Nb_points_token'],axis=1,inplace=True)
 
     
-    #we put the column that contains lists in string format
-
-    if type(data_format.CONTEXT_INPUT[0])!=str:
-        data_format.CONTEXT_INPUT=data_format.CONTEXT_INPUT.apply(lambda x : str(x))
-        print("type of CONTEXT_INPUT : converted to string")
-
-    if type(data_format.DEB_TRAJ[0])!=str:
-        data_format.DEB_TRAJ=data_format.DEB_TRAJ.apply(lambda x : str(x))
-        print("type of DEB_TRAJ : converted to string")
-
+    #we put the column DEB_TRAJ that contains lists in string format
+    data_format.DEB_TRAJ=data_format.DEB_TRAJ.apply(lambda x : str(x))
+    
 
 
     #we get the columns CONTEXT_INPUT, DEB_TRAJ and TARGET
     c_inputs=data_format.CONTEXT_INPUT.values
     traj_inputs=data_format.DEB_TRAJ.values
     targets=data_format.TARGET.values
-
-    print(f"type de c_inputs : {type(c_inputs)}")
-    print(f"type de traj_inputs : {type(traj_inputs)}")
 
     print("concaténation des inputs, padding etc")
 
