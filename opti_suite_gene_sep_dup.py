@@ -102,6 +102,7 @@ def fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, li
 
     return target_dict, list_deb_traj_dict
 
+
 def manage_duplication(dataframe, liste_to_duplicate):
     # Convert liste_to_duplicate elements to tuples and create a set
     liste_to_duplicate_trip_id = [item[0] for item in liste_to_duplicate]
@@ -115,8 +116,7 @@ def manage_duplication(dataframe, liste_to_duplicate):
         df = dataframe[dataframe['TRIP_ID'] == trip_id]
         #we add the row to the dataframe of duplicated rows
         for i in range(liste_to_duplicate[liste_to_duplicate_trip_id.index(trip_id)][1]-1):
-            duplicated_rows = pd.concat([duplicated_rows, df], ignore_index=True)
-        
+            duplicated_rows = pd.concat([duplicated_rows, df], ignore_index=True)  
     
     #we add the duplicated rows to the dataframe
     return pd.concat([dataframe, duplicated_rows], ignore_index=True)
@@ -313,7 +313,7 @@ def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, n
 
 def verif_separation(dataframe, list_row_to_sep):
     """
-    we verify that the rows that we separated are well separated
+    We verify that the rows that we separated are well separated
     the idea is to verify that the number of rows that we separated is equal to the number of sub-trajectories 
     that we created from the original trajectory
     """
@@ -327,8 +327,8 @@ def verif_separation(dataframe, list_row_to_sep):
 
 def verif_concatenation(df_full, df_sep):
     """
-part of the verification is to see whether the concatenation of the subtrajectories is equal to the original trajectory
-for that, we count whether the number of points of the concatenation is equal to the number of points of the original trajectory (column Tokenization_2 of df_full)
+    part of the verification is to see whether the concatenation of the subtrajectories is equal to the original trajectory
+    for that, we count whether the number of points of the concatenation is equal to the number of points of the original trajectory (column Tokenization_2 of df_full)
     """
     for i in range(len(df_full)):
         #we get the rows that have the same TRIP_ID in df_sep as the row i of df_full
@@ -356,13 +356,13 @@ for that, we count whether the number of points of the concatenation is equal to
 
 def verif_length(dataframe, list_row_to_sep, list_row_to_dup):
     """
-we verify that the dataframe obtained with prepare_train as the good length
-what we call good length is :
-   its original length
- + the number of rows that we duplicated * (the number of duplication) 
- - the number of rows that we duplicated 
- + the number of rows that we separated * the number of sub-trajectories that we created from the original trajectory
- - the number of rows that we separated
+    We verify that the dataframe obtained with prepare_train as the good length
+    what we call good length is :
+    its original length
+    + the number of rows that we duplicated * (the number of duplication) 
+    - the number of rows that we duplicated 
+    + the number of rows that we separated * the number of sub-trajectories that we created from the original trajectory
+    - the number of rows that we separated
     """
     if len(dataframe) != len(data_train) + sum([list_row_to_sep[i][1] for i in range(len(list_row_to_sep))]) - len(list_row_to_sep) + sum([list_row_to_dup[i][1] for i in range(len(list_row_to_dup))]) - len(list_row_to_dup):
         raise ValueError('The dataframe does not have the good length')
@@ -409,8 +409,6 @@ def formatting_to_train(data_format, tokenizer):
     
     #we put the column DEB_TRAJ that contains lists in string format
     data_format.DEB_TRAJ=data_format.DEB_TRAJ.apply(lambda x : str(x))
-    
-
 
     #we get the columns CONTEXT_INPUT, DEB_TRAJ and TARGET
     c_inputs=data_format.CONTEXT_INPUT.values
@@ -450,7 +448,6 @@ def formatting_to_train(data_format, tokenizer):
 
  
 if __name__ == '__main__':
-
     
     # Management of the parameters
     dup_rate = 0.5
