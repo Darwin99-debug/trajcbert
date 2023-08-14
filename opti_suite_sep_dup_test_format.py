@@ -1,0 +1,579 @@
+import random
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from transformers import BertTokenizer, BertForSequenceClassification, get_linear_schedule_with_warmup
+import torch
+import json
+import pickle
+from tqdm import tqdm
+
+
+#directories :
+#-------------
+ 
+#loading
+tokenizer_dir='/home/daril_kw/data/tokenizer_final'
+data_format_dir='/home/daril_kw/data/data_with_time_info_ok_opti.json'
+
+#saving
+data_test_dir='/home/daril_kw/data/data_test_gene_AR_to_format.pkl'
+
+input_ids_dir='/home/daril_kw/data/AR/input_ids_v_small_AR.pt'
+attention_masks_dir='/home/daril_kw/data/AR/attention_masks_v_small_AR.pt'
+targets_dir='/home/daril_kw/data/AR/targets_v_small_AR.pt'
+list_inputs_test_dir='/home/daril_kw/data/AR/list_inputs_test_v_small_AR.pt'
+targets_dict_dir='/home/daril_kw/data/AR/targets_dict_v_small_AR.pt'
+targets_input_dir= '/home/daril_kw/data/AR/targets_input_v_small_AR.pt'
+
+# constants
+VERSION_TEST = 1 # 1 for the first version of the test data, 2 for the second version
+
+def add_spaces_for_concat(data_format, column):
+    """Add spaces before and after the values of the column"""
+    data_format[column]=data_format[column].apply(lambda x: ' '+x)
+    return data_format
+
+def rows_attribution_cat(dataframe, nb_categories, uniform, list_rate_per_cat):
+    """Distribute the rows of the dataframe among categories"""
+    if uniform :
+        nb_rows_per_cat = len(dataframe) // nb_categories
+        nb_rows_dict = {f'nb_rows_category{i}': nb_rows_per_cat for i in range(nb_categories)}
+        remainder = len(dataframe) % nb_categories
+    
+        # Distribute the remaining rows randomly among categories
+        for i in random.sample(range(nb_categories), remainder):
+            nb_rows_dict[f'nb_rows_category{i}'] += 1
+
+    else:
+        #we use the rates given in list_rate_per_cat
+        nb_rows_dict = {f'nb_rows_category{i}': int(list_rate_per_cat[i] * len(dataframe)) for i in range(nb_categories)}
+    
+    return nb_rows_dict
+
+def create_df_cat(dataframe, nb_categories, nb_rows_dict, list_index_dict):
+    """Create a dictionary of dataframes, each dataframe corresponding to a category"""
+    df_dict = {f'dataframe_category{i}': dataframe.iloc[list_index_dict[f'list_index_category{i}']].copy() for i in range(nb_categories)}
+    for i in range(nb_categories):
+        df_dict[f'dataframe_category{i}'] = df_dict[f'dataframe_category{i}'].reindex(columns=dataframe.columns)
+    return df_dict
+
+def create_target_deb_traj(nb_categories, df_dict):
+    """Create a dictionary of lists of targets and a dictionary of lists of deb_traj"""
+    target_dict = {f'list_target_category{i}': np.empty(len(df_dict[f'dataframe_category{i}']), dtype=object) for i in range(nb_categories)}
+    list_deb_traj_dict = {f'list_deb_traj_category{i}': [[] for _ in range(len(df_dict[f'dataframe_category{i}']))] for i in range(nb_categories)}
+    return target_dict, list_deb_traj_dict
+
+def fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, list_deb_traj_dict):
+    """Fill the target and deb_traj lists"""
+
+    #Manage the first categories
+    for i in range(nb_categories-2):
+        df = df_dict[f'dataframe_category{i}']
+        for j in range(len(df)):
+            tokenization_2 = df.iloc[j]['Tokenization_2']
+            start_idx = int(list_threshold[i] * len(tokenization_2))
+            end_idx = int(list_threshold[i+1] * len(tokenization_2))
+            tokenization_2 = tokenization_2[start_idx:end_idx]
+            
+            # in case the trajectory is too short to be split, we take the last token of the trajectory
+            if len(tokenization_2) != 0:
+                index = random.randint(0, len(tokenization_2)-1)
+            else:
+                index = -1
+            
+            token = tokenization_2[index]
+            target_dict[f'list_target_category{i}'][j] = token
+            list_deb_traj_dict[f'list_deb_traj_category{i}'][j].extend(df.iloc[j]['Tokenization_2'][:start_idx])
+            list_deb_traj_dict[f'list_deb_traj_category{i}'][j].extend(tokenization_2[:index])
+
+    #Manage the last two categories
+    i = nb_categories - 2
+    df = df_dict[f'dataframe_category{i}']
+    for j in range(len(df)):
+        tokenization_2 = df.iloc[j]['Tokenization_2']
+        token = tokenization_2[-1]
+        target_dict[f'list_target_category{i}'][j] = token
+        list_deb_traj_dict[f'list_deb_traj_category{i}'][j] = df.iloc[j]['Tokenization_2'][:-1]
+
+    i = nb_categories - 1
+    df = df_dict[f'dataframe_category{i}']
+    for j in range(len(df)):
+        target_dict[f'list_target_category{i}'][j] = '[SEP]'
+        list_deb_traj_dict[f'list_deb_traj_category{i}'][j] = df.iloc[j]['Tokenization_2']
+
+    return target_dict, list_deb_traj_dict
+
+
+def manage_duplication(dataframe, liste_to_duplicate):
+    # Convert liste_to_duplicate elements to tuples and create a set
+    liste_to_duplicate_trip_id = [item[0] for item in liste_to_duplicate]
+
+    # Create a dataframe to store duplicated rows
+    duplicated_rows = pd.DataFrame()
+
+    # Duplicate rows for each unique TRIP_ID value. we use the 2nd argument of each sublist of liste_to_duplicate to know how many times we duplicate the row
+    for trip_id in liste_to_duplicate_trip_id:
+        #we find the row that have the same TRIP_ID
+        df = dataframe[dataframe['TRIP_ID'] == trip_id]
+        #we add the row to the dataframe of duplicated rows
+        for i in range(liste_to_duplicate[liste_to_duplicate_trip_id.index(trip_id)][1]-1):
+            duplicated_rows = pd.concat([duplicated_rows, df], ignore_index=True)  
+    
+    #we add the duplicated rows to the dataframe
+    return pd.concat([dataframe, duplicated_rows], ignore_index=True)
+
+
+
+def attribution_deb_traj_and_target(dataframe, uniform, list_rate_per_cat, nb_categories):
+
+    """Prepare the training data without duplicates
+    we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
+    tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
+    for example, if we have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
+    that means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
+    we create a list of threshold"""
+
+    dataframe_original = dataframe
+    dataframe = dataframe_original.copy()
+
+    # Create the threshold for each category
+    list_threshold = [0.3 + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
+
+    # Remove the useless rows and rows with trajectory length < 3
+    dataframe.loc[:, 'Tokenization_2'] = dataframe['Tokenization_2'].apply(lambda x: x if type(x) == list else [])
+    dataframe.loc[:, "LEN_TRAJ"] = dataframe['Tokenization_2'].apply(lambda x: len(x))
+    dataframe = dataframe[dataframe['LEN_TRAJ'] >= 3]
+
+    
+
+    # Create a seed to be able to reproduce the results
+    random.seed(2023)
+    # Create a dictionary of the number of rows per category
+    nb_rows_dict = rows_attribution_cat(dataframe, nb_categories, uniform, list_rate_per_cat)
+    # Create a dictionary of lists of indexes of rows per category
+    list_index_dict = {f'list_index_category{i}': np.array(random.sample(range(len(dataframe)), nb_rows_dict[f'nb_rows_category{i}'])) for i in range(nb_categories)}
+
+    # Create a dictionary of dataframes, each dataframe corresponding to a category
+    df_dict = create_df_cat(dataframe, nb_categories, nb_rows_dict, list_index_dict)
+
+    # Create a dictionary of lists of targets and a dictionary of lists of deb_traj
+    target_dict, list_deb_traj_dict = create_target_deb_traj(nb_categories, df_dict)
+    target_dict, list_deb_traj_dict = fill_target_deb_traj(df_dict, nb_categories, list_threshold, target_dict, list_deb_traj_dict)
+
+    # Add the target and deb_traj columns to each dataframe
+    for i in range(nb_categories):
+        df_dict[f'dataframe_category{i}']['TARGET'] = target_dict[f'list_target_category{i}']
+        df_dict[f'dataframe_category{i}']['DEB_TRAJ'] = list_deb_traj_dict[f'list_deb_traj_category{i}']
+    
+    # Concatenate the dataframes and return the result
+    return pd.concat([df_dict[f'dataframe_category{i}'] for i in range(nb_categories)], ignore_index=True)
+
+
+def manage_separation(dataframe, list_index_to_separate):
+    """
+    This function separates the rows of the dataframe according to the list of rows to separate
+    """
+    dataframe_separated = dataframe.copy()
+    dataframe_separated.reset_index(drop=True, inplace=True)
+
+    # Create a dictionary to map TRIP_ID to its index in list_index_to_separate
+    trip_id_to_index = {trip_id: i for i, (trip_id, _) in enumerate(list_index_to_separate)}
+
+    # Sort list_index based on the order of TRIP_ID in list_index_to_separate
+    list_index = sorted(dataframe_separated.index, key=lambda idx: trip_id_to_index.get(dataframe_separated.loc[idx, 'TRIP_ID'], float('inf')))
+
+    modified_rows = []
+
+    for i in range(len(list_index_to_separate)):
+        row = dataframe_separated.loc[list_index[i]].copy()
+        dataframe_separated = dataframe_separated.drop(list_index[i]) 
+
+        # Separate the trajectory into nb_traj sub-trajectories
+        list_traj = []
+        tokenization_2 = row['Tokenization_2']
+        len_traj = len(tokenization_2)
+        nb_traj = list_index_to_separate[i][1]
+        len_each_traj = len_traj // nb_traj
+        # Create nb_traj sub-trajectories of equal length if possible
+        for j in range(nb_traj):
+            traj = tokenization_2[j * len_each_traj:(j + 1) * len_each_traj]
+            list_traj.append(traj)
+        rest = len_traj % nb_traj
+        # Add the remaining points to the last sub-trajectory (if any, which is the case if len_traj is not a multiple of nb_traj)
+        if rest != 0:
+            for point in tokenization_2[-rest:]:
+                list_traj[-1].append(point)
+
+        # Create a new row for each sub-trajectory
+        for j in range(nb_traj):
+            new_row = row.copy()
+            new_row['Tokenization_2'] = list_traj[j]
+            modified_rows.append(new_row)
+
+    # Remove the rows that we separated
+    for i in range(len(list_index_to_separate)):
+        idx_to_remove = [idx for idx in dataframe_separated.index if dataframe_separated.loc[idx, 'TRIP_ID'] == list_index_to_separate[i][0]]
+        dataframe_separated = dataframe_separated.drop(idx_to_remove)  # Use .loc[] here
+
+    # Add the new rows
+    for row in modified_rows:
+        dataframe_separated = pd.concat([dataframe_separated, row.to_frame().T])
+
+    dataframe_separated.reset_index(drop=True, inplace=True)
+
+    return dataframe_separated
+
+def row_selection(dataframe, nb_to_select):
+    """
+    This function selects the rows that we will separate or duplicate without makimg any distinction
+    between the two treatments for now
+    """
+    #we create a seed to be able to reproduce the results
+    random.seed(2023)
+
+    #we select the rows we are going to separate or duplicate according to their length : we select the rows with the longest trajectories
+    #for that, we sort the dataframe by the length of the trajectory
+    #the thing is, the two part of a trajectory can be longer than the following longest trajectory
+    #that means we can have the longest trajectory of length 512 for example, wich means the two resulting trajectories will be of length 256
+    #but the 2nd longest trajectory is of length 255, so the two resulting trajectories will be longer than the 2nd longest trajectory
+    # that is why we need to sort at each iteration
+    #we create a dataframe that zill be the fisrt dataframe but sorted by the length of the trajectory and we keep the matching before sorting to ne able to find the rows in the original dataframe
+    dataframe.loc[:, "LEN_TRAJ"] = dataframe['Tokenization_2'].apply(lambda x: len(x))
+    sorted_dataframe= dataframe.sort_values(by=['LEN_TRAJ'], ascending=False)
+    #we will track he rows thaks to the TRIP_ID
+    list_row_to_select = [ [] for i in range(nb_to_select)]
+    for i in range(nb_to_select):
+        j=2
+        while len(sorted_dataframe.iloc[i]['Tokenization_2'])//j>len(sorted_dataframe.iloc[i+1]['Tokenization_2']):
+            j+=1
+        #j represents the number of trajectories that we will create from the trajectory i, we put it in a list
+        list_row_to_select[i].append(sorted_dataframe.iloc[i]['TRIP_ID'])
+        list_row_to_select[i].append(j)
+    
+    return list_row_to_select
+
+
+def attribution_duplicate_or_separate(list_row_to_select, nb_to_duplicate, nb_to_separate):
+    """
+    This function attributes the rows that we will separate and the rows that we will duplicate
+    knowing the number of rows that we will separate and the number of rows that we will duplicate
+    and the list of rows that we will separate or duplicate
+    """
+    #we create a list of index of the rows that we will separate
+    list_index_to_separate = []
+    #we create a list of index of the rows that we will duplicate
+    list_index_to_duplicate = []
+    #we choose randomly the rows that we will separate and the rows that we will duplicate
+    list_index_to_separate = random.sample(list_row_to_select, nb_to_separate)
+    #we take the rows that we did not select for separation
+    list_index_to_duplicate = [i for i in list_row_to_select if i not in list_index_to_separate]
+
+    return list_index_to_duplicate, list_index_to_separate
+
+
+def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, nb_categories, list_rate_per_cat=None):
+    """
+    This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
+    The separation rate is the proportion of rows that will separated into two different trajectories. 
+    The duplication rate is the proportion of rows that will be duplicated, ie that will occur in two different trajectories with different targets.
+    """
+
+
+    #verify that the sum of the element of list_rate_per_cat is equal to 1 and the number of elements is equal to nb_categories
+    if not uniforme_bool:
+        assert sum(list_rate_per_cat)==1, "The sum of the elements of list_rate_per_cat must be equal to 1"
+        assert len(list_rate_per_cat)==nb_categories, "The number of elements of list_rate_per_cat must be equal to nb_categories"
+
+
+    #we copy to avoid caveat
+    dataframe_original = dataframe
+    dataframe = dataframe_original.copy()
+
+    #we calculate the number of rows that we will separate and the number of rows that we will duplicate
+    nb_to_separate = int(len(dataframe)*separation_rate/100)
+    nb_to_duplicate = int(len(dataframe)*duplication_rate/100)
+    nb_to_select=nb_to_separate+nb_to_duplicate
+
+    #we select the rows we are going to separate or duplicate with the number of times we will duplicate them or separate them
+    list_row_to_select = row_selection(dataframe, nb_to_select)
+
+    #we attribute the rows that we will separate and the rows that we will duplicate among the rows that we selected
+    list_index_to_duplicate, list_index_to_separate = attribution_duplicate_or_separate(list_row_to_select, nb_to_duplicate, nb_to_separate)
+
+    #we separate the rows that were chosen to be separated
+    dataframe_separated=manage_separation(dataframe, list_index_to_separate)
+
+    #we duplicate the rows that were chosen to be duplicated
+    dataframe_sep_and_dup = manage_duplication(dataframe_separated, list_index_to_duplicate)
+
+    #we attribute the target and the deb_traj to the rows
+    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup, uniforme_bool, list_rate_per_cat, nb_categories)
+
+    return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
+
+
+def verif_separation(dataframe, list_row_to_sep):
+    """
+    We verify that the rows that we separated are well separated
+    the idea is to verify that the number of rows that we separated is equal to the number of sub-trajectories 
+    that we created from the original trajectory
+    """
+    for j in range(len(list_row_to_sep)):
+        if len(dataframe[dataframe['TRIP_ID']==list_row_to_sep[j][0]])!=list_row_to_sep[j][1]:
+            raise ValueError('The rows are not well separated')
+    return 'The rows are well separated'
+
+
+
+
+def verif_concatenation(df_full, df_sep):
+    """
+    part of the verification is to see whether the concatenation of the subtrajectories is equal to the original trajectory
+    for that, we count whether the number of points of the concatenation is equal to the number of points of the original trajectory (column Tokenization_2 of df_full)
+    """
+    for i in range(len(df_full)):
+        #we get the rows that have the same TRIP_ID in df_sep as the row i of df_full
+        df = df_sep[df_sep['TRIP_ID']==df_full['TRIP_ID'][i]]
+        #we get the sum of the length of the trajectories of df
+        sum_len_traj = sum([len(df.iloc[j]['Tokenization_2']) for j in range(len(df))])
+        #we get the length of the original trajectory
+        len_traj = len(df_full['Tokenization_2'][i])
+        #we verify that the sum of the length of the trajectories of df is equal to the length of the original trajectory
+        if sum_len_traj != len_traj:
+            raise ValueError('The concatenation of the trajectories is not equal to the original trajectory') 
+        #we concatenate the tokenization_2 of the rows of df_sep for a trip_id and compare it to the tokenization_2 of the row of df_full for the same trip_id
+        #we cannot use the join function because the tokenization_2 are lists
+        concatenation = []
+        for j in range(len(df)):
+            concatenation.extend(df.iloc[j]['Tokenization_2'])
+        if concatenation != df_full['Tokenization_2'][i]:
+            print('concatenation : ', concatenation)
+            print('______________________________________________')
+            print('df_full : ', df_full['Tokenization_2'][i])
+            raise ValueError('The concatenation of the trajectories is not equal to the original trajectory')
+    return 'The nb of points resuting from the concatenation of the trajectories is equal to the nb of points in the original trajectory'
+
+
+
+def verif_length(dataframe, list_row_to_sep, list_row_to_dup):
+    """
+    We verify that the dataframe obtained with prepare_train as the good length
+    what we call good length is :
+    its original length
+    + the number of rows that we duplicated * (the number of duplication) 
+    - the number of rows that we duplicated 
+    + the number of rows that we separated * the number of sub-trajectories that we created from the original trajectory
+    - the number of rows that we separated
+    """
+    if len(dataframe) != len(data_train) + sum([list_row_to_sep[i][1] for i in range(len(list_row_to_sep))]) - len(list_row_to_sep) + sum([list_row_to_dup[i][1] for i in range(len(list_row_to_dup))]) - len(list_row_to_dup):
+        raise ValueError('The dataframe does not have the good length')
+    return 'The dataframe has the good length'
+
+
+def formatting_to_train(data_format, tokenizer):
+    """
+    Format the data to train the model : 
+    ------------------------------------
+
+    1) format the input
+
+        a) get the full_inputs
+    - we concatenate the context input and the beginning of the trajectory which is the sequence we want to give to the model 
+    - at the beginning, we add the CLS token and the end of the input the SEP token
+
+        b) get the input_ids
+    - we use the tokenizer to get the ids of the tokens that will be the input_ids thatthe model will take as input
+    - we pad the input to the maximum length of 512
+
+    2) and we create the attention masks
+
+    - the attention mask is a list of 0 and 1, 0 for the padded tokens and 1 for the other tokens
+
+    """
+    
+    #we remove the useless columns
+    if 'Tokenization' in data_format.columns:
+        data_format.drop(['Tokenization'],axis=1,inplace=True)
+    if 'CALL_TYPE' in data_format.columns:
+        data_format.drop(['CALL_TYPE'],axis=1,inplace=True)
+    if 'TAXI_ID' in data_format.columns:
+        data_format.drop(['TAXI_ID'],axis=1,inplace=True)
+    if 'DAY' in data_format.columns:
+        data_format.drop(['DAY'],axis=1,inplace=True)
+    if 'HOUR' in data_format.columns:
+        data_format.drop(['HOUR'],axis=1,inplace=True)
+    if 'WEEK' in data_format.columns:
+        data_format.drop(['WEEK'],axis=1,inplace=True)
+    if 'Nb_points_token' in data_format.columns:
+        data_format.drop(['Nb_points_token'],axis=1,inplace=True)
+
+    
+    #we put the column DEB_TRAJ that contains lists in string format
+    data_format.DEB_TRAJ=data_format.DEB_TRAJ.apply(lambda x : str(x))
+
+    #we get the columns CONTEXT_INPUT, DEB_TRAJ and TARGET
+    c_inputs=data_format.CONTEXT_INPUT.values
+    traj_inputs=data_format.DEB_TRAJ.values
+    targets=data_format.TARGET.values
+
+    print("concaténation des inputs, padding etc")
+
+    #we create the input_ids, the attention_masks and the full_inputs
+    input_ids = []
+    full_inputs = []
+    attention_masks = []
+    for i in tqdm(range(len(c_inputs))):
+        #no truncation is needed because we managed it before
+
+        #we concatenate the context input and the trajectory input adding manually the CLS token and the SEP token
+        full_input = '[CLS] ' + c_inputs[i] + ' ' + traj_inputs[i] + ' [SEP]'
+        full_inputs.append(full_input)
+
+        # we use the tokenizer to get the ids of the tokens that will be the input_ids that the model will take as input
+        # the format of the input_ids would be : [101] + encoded_c_input + encoded_traj_input + [102]
+        #the[101] token is the CLS token and the [102] token is the SEP token
+        # TODO : test adding an additional SEP token between the context input and the trajectory input so that the format of the input_ids would be : [101] + encoded_c_input + [102] + encoded_traj_input + [102]
+        encoded_full_input=tokenizer.encode(full_input, add_special_tokens=False)
+
+        #we pad the input to the maximum length of 512
+        encoded_full_input=encoded_full_input + [0]*(512-len(encoded_full_input))
+        #we add the input_ids to the list
+        input_ids.append(encoded_full_input)
+
+        #we create the attention mask
+        att_mask = [float(i>0) for i in encoded_full_input]
+        #we add the attention mask to the list
+        attention_masks.append(att_mask)
+
+    return input_ids, attention_masks, targets, full_inputs
+
+ 
+if __name__ == '__main__':
+    
+    # Management of the parameters
+    dup_rate = 0.5
+    sep_rate = 0.5
+    uniform = True
+    nb_cat = 5
+    percentage_per_cat = [0.3,0.2,0.3,0.1,0.1]
+
+
+    #load the tokenizer from /home/daril_kw/data/tokenizer_final
+    tokenizer = BertTokenizer.from_pretrained(tokenizer_dir)
+    #load the dataset from home/daril_kw/data/data_with_time_info_ok.json
+    with open(data_format_dir, 'r') as openfile:
+        json_loaded = json.load(openfile)
+    
+
+    data_format = pd.DataFrame(data=json_loaded)
+    data_format = add_spaces_for_concat(data_format, 'HOUR')
+    data_format = add_spaces_for_concat(data_format, 'WEEK')
+    data_format = add_spaces_for_concat(data_format, 'CALL_TYPE')
+    data_format = add_spaces_for_concat(data_format, 'TAXI_ID')
+    data_format = add_spaces_for_concat(data_format, 'DAY')
+
+    # la colonne CONTEXT_INPUT sera la concaténation du jour de la semaine, de l'heure et de la semaien de l'année pui de la colonne CALL_TYPE, de la colonne TAXI_ID, d'un espace et du dernier token de la colonne Tokenization
+    data_format['CONTEXT_INPUT'] =data_format['Tokenization_2'].apply(lambda x: x[-1]) + data_format['DAY'] + data_format['HOUR'] + data_format['WEEK'] + data_format['CALL_TYPE'] + data_format['TAXI_ID']
+    #on récupère le nombre d'informations dans la colonne CONTEXT_INPUT
+    #Comme cette colonne contiient les informations en string séparé par un espace, on récupère la liste correspondante puis on compte le nombre d'éléments de cette liste
+    len_context_info = len(data_format['CONTEXT_INPUT'][0].split(' '))
+
+    #we separate the dataframe into train and test 
+    data_train, data_test = train_test_split(data_format, test_size=0.2, random_state=2023)
+    #save the list data_test in a pickle file
+    data_test.to_pickle(data_test_dir)
+
+    #we prepare the train data
+    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=dup_rate, separation_rate=sep_rate, uniforme_bool=uniform,nb_categories=nb_cat,list_rate_per_cat=percentage_per_cat)
+    
+    #we call the function to get the input_ids, the attention_masks and the targets
+    input_ids, attention_masks, targets, full_inputs = formatting_to_train(df_full_dup, tokenizer)
+
+    #same for the test data
+    if VERSION_TEST == 1:
+        df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, decal_gauche=False, decal_droite=False, uniforme=True)
+        input_ids_test, attention_masks_test, targets_test, full_inputs_test = formatting_to_train(df_test, tokenizer)
+
+    elif VERSION_TEST == 2:
+        def get_traj(dataframe):
+            len_context_info = len(dataframe['CONTEXT_INPUT'][0].split(' '))
+
+            """the TRAJ column will be the tokenization column truncated"""
+            dataframe['TRAJ']=dataframe['Tokenization_2']
+
+            # we manage the length of the CONTEXT_INPUT column so that after the concatenation, it does not exceed 512 tokens
+            # the -2 corresponds to the two special tokens [CLS] and [SEP]
+            # for exemple here, if the trajectory input is too long, we keep the 512-6-2=504 last tokens
+            dataframe['TRAJ']=dataframe['TRAJ'].apply(lambda x: x[-(512-len_context_info-2):] if len(x)>512-len_context_info-2 else x)    
+
+            #then we keep the column in form of a string with spaces between the tokens (the space replaces the comma)
+            dataframe['TRAJ']=dataframe['TRAJ'].apply(lambda x: ' '.join(x))
+            return dataframe
+
+
+        def get_whole_inputs(dataframe):
+            dataframe_original = dataframe
+            dataframe = dataframe_original.copy()
+            """We concatenate the CONTEXT_INPUT and the TRAJ columns and we add a space between them + we add the special tokens [CLS] and [SEP]"""
+            for i in tqdm(range(len(dataframe))):
+                dataframe['WHOLE_INPUT'][i] = '[CLS] ' + dataframe['CONTEXT_INPUT'][i] + ' ' + dataframe['TRAJ'][i] + ' [SEP]'
+
+            return dataframe
+
+
+        def prepare_data_test(input, tokenizer, targets_input):
+            input_sequences = []
+            
+            for idx, input_seq in enumerate(input):
+                # Encode the text.
+                encoded_sequence = tokenizer.encode(input_seq, add_special_tokens=False, padding=False)
+                input_sequences.append(encoded_sequence)
+
+            # Convert to tensors.
+            inputs = torch.tensor(input_sequences)
+            return inputs
+        
+        def prep_test(dataframe, tokenizer, targets_input):
+        
+            #we prepare the data for the model
+            inputs_ids = prepare_data_test(inputs, tokenizer, targets_input)
+
+            #we create the dataloader
+            prediction_data = TensorDataset(inputs_ids)
+            prediction_sampler = SequentialSampler(prediction_data)
+            prediction_dataloader = DataLoader(prediction_data,sampler=prediction_sampler, batch_size=batch_size)
+
+            return prediction_dataloader, data_test, targets_dict, targets_input
+        
+
+        
+        #we add the columns that we need
+        data_test = get_traj(data_test)
+        data_test = get_whole_inputs(data_test)
+
+        inputs = []
+        for i in tqdm(range(len(data_test))):
+            inputs.append(data_test['WHOLE_INPUT'][i].tolist())
+
+    targets_dict={}
+    for i in range(len(targets)):
+        if targets[i] not in targets_dict:
+            targets_dict[targets[i]]=len(targets_dict)
+
+    targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
+
+    ##save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
+    with open(input_ids_dir, 'wb') as fp:
+        pickle.dump(input_ids, fp)
+    with open(attention_masks_dir, 'wb') as fp:
+        pickle.dump(attention_masks, fp)
+    with open(targets_dir, 'wb') as fp:
+        pickle.dump(targets, fp)
+    with open(list_inputs_test_dir, 'wb') as fp:
+        pickle.dump(full_inputs, fp)
+    with open(targets_dict_dir, 'wb') as fp:
+        pickle.dump(targets_dict, fp)
+    with open(targets_input_dir, 'wb') as fp:
+        pickle.dump(targets_input, fp)
+
