@@ -278,9 +278,11 @@ def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, n
     """
 
 
-    #verify that the sum of the element of list_rate_per_cat is equal to 1
+    #verify that the sum of the element of list_rate_per_cat is equal to 1 and the number of elements is equal to nb_categories
     if not uniforme_bool:
         assert sum(list_rate_per_cat)==1, "The sum of the elements of list_rate_per_cat must be equal to 1"
+        assert len(list_rate_per_cat)==nb_categories, "The number of elements of list_rate_per_cat must be equal to nb_categories"
+
 
     #we copy to avoid caveat
     dataframe_original = dataframe
@@ -449,6 +451,15 @@ def formatting_to_train(data_format, tokenizer):
  
 if __name__ == '__main__':
 
+    
+    # Management of the parameters
+    dup_rate = 0.5
+    sep_rate = 0.5
+    uniform = True
+    nb_cat = 5
+    percentage_per_cat = [0.3,0.2,0.3,0.1,0.1]
+
+
     #load the tokenizer from /home/daril_kw/data/tokenizer_final
     tokenizer = BertTokenizer.from_pretrained(tokenizer_dir)
     #load the dataset from home/daril_kw/data/data_with_time_info_ok.json
@@ -474,7 +485,8 @@ if __name__ == '__main__':
     #save the list data_test in a pickle file
     data_test.to_pickle(data_test_dir)
 
-    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=30, separation_rate=50, uniforme_bool=False,nb_categories=5,list_rate_per_cat=[0.3,0.2,0.3,0.1,0.5])
+
+    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=dup_rate, separation_rate=sep_rate, uniforme_bool=uniform,nb_categories=nb_cat,list_rate_per_cat=percentage_per_cat)
     #df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, decal_gauche=False, decal_droite=False, uniforme=True)
     
 
