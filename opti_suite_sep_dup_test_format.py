@@ -536,10 +536,15 @@ if __name__ == '__main__':
             dataframe_original = dataframe
             dataframe = dataframe_original.copy()
             """We concatenate the CONTEXT_INPUT and the TRAJ columns and we add a space between them + we add the special tokens [CLS] and [SEP]"""
-            #we add the column WHOLE_INPUT
-            dataframe['WHOLE_INPUT'] = dataframe['CONTEXT_INPUT']
+
+            list_whole_input = []
             for i in tqdm(range(len(dataframe))):
-                dataframe['WHOLE_INPUT'][i] = '[CLS] ' + dataframe['CONTEXT_INPUT'][i] + ' ' + dataframe['TRAJ'][i] + ' [SEP]'
+                list_whole_input.append('[CLS] ' + dataframe['CONTEXT_INPUT'][i] + ' ' + dataframe['TRAJ'][i] + ' [SEP]')
+
+
+            #we add the column WHOLE_INPUT and fill it with the list list_whole_input
+            
+            dataframe['WHOLE_INPUT'] = list_whole_input
             return dataframe
 
 
