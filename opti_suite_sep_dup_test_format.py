@@ -5,7 +5,6 @@ from sklearn.model_selection import train_test_split
 from transformers import BertTokenizer, BertForSequenceClassification, get_linear_schedule_with_warmup
 import torch
 import json
-import pickle
 from tqdm import tqdm
 
 
@@ -454,7 +453,15 @@ if __name__ == '__main__':
     with open("/home/daril_kw/trajcbert/trajcbert/config_test_gene.json") as json_file:
         config = json.load(json_file)
 
-    dup_rate = config["dup_rate"]
+    #we verify that the dictionary config contains all the keys we need
+    print("sep_rate" in config.keys())
+    print("uniform" in config.keys())
+    print("nb_cat" in config.keys())
+    print("percentage_per_cat" in config.keys())
+    print("VERSION_TEST" in config.keys())
+    print("dup_rate" in config.keys())
+
+    dup_rate = 20
     sep_rate = config["sep_rate"]
     uniform =  config["uniform"]
     nb_cat = config["nb_cat"]
