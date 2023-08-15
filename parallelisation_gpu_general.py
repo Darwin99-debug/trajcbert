@@ -206,8 +206,10 @@ class Trainer:
     def _save_checkpoint(self, epoch):
         ckp = self.model.module.state_dict()
         #PATH = f"models/model_saved_parallel_version_1_2_32/checkpoints/checkpoint_epoch_{epoch}.pt"
-        PATH = f"/home/daril_kw/data/test/temp_file/checkpoint_epoch_{epoch}.pt"
-        torch.save(ckp, PATH)
+        #PATH = f"/home/daril_kw/data/test/temp_file/checkpoint_epoch_{epoch}.pt"
+        #torch.save(ckp, PATH)
+        #PATH = f"/home/daril_kw/data/test/temp_file/whole_model_epoch_{epoch}.pt"
+        torch.save(self.model, PATH)
         print(f"Epoch {epoch} | Training checkpoint saved at {PATH}")
 
 
