@@ -552,7 +552,7 @@ if __name__ == '__main__':
             input_sequences = []
             for idx, input_seq in enumerate(input):
                 # Encode the text
-                encoded_sequence = tokenizer.encode(input_seq, add_special_tokens=False, padding=False)
+                encoded_sequence = tokenizer.encode(input_seq, add_special_tokens=False, padding=True)
                 input_sequences.append(encoded_sequence)
             return input_sequences
                 
