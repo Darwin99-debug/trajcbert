@@ -11,7 +11,7 @@ device = torch.device("cpu")
 
 #load the prediction_dataloader
 #prediction_dataloader = torch.load('/home/daril_kw/data/pred_dataloader_v_small.pt')
-prediction_dataloader = torch.load('/home/daril_kw/data/test_dataloader_parallel_gene')
+prediction_dataloader = torch.load('/home/daril_kw/data/test_dataloader_parallel_gene.py')
 
 # we load the model
 #model = BertForSequenceClassification.from_pretrained('/home/daril_kw/data/model_trained_cpu_version')
