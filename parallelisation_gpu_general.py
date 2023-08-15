@@ -231,21 +231,21 @@ def load_data(rank,batch_size):
 
 
    
-    input_ids = torch.load(DIR_INPUTS_IDS)
+    input_ids = torch.load(DIR_INPUTS_IDS, map_location=torch.device('cpu'))
 
     
-    attention_masks = torch.load(DIR_ATTENTION_MASKS)
+    attention_masks = torch.load(DIR_ATTENTION_MASKS, map_location=torch.device('cpu'))
 
     
-    targets_input = torch.load(DIR_TARGETS_INPUT)
+    targets_input = torch.load(DIR_TARGETS_INPUT, map_location=torch.device('cpu'))
 
     
-    input_ids_test = torch.load(DIR_INPUTS_IDS_TEST)
+    input_ids_test = torch.load(DIR_INPUTS_IDS_TEST, map_location=torch.device('cpu'))
 
 
     if VERSION_TEST == 1:
-        attention_masks_test = torch.load(DIR_ATTENTION_MASKS_TEST)
-        targets_test = torch.load(DIR_TARGETS_INPUT_TEST)
+        attention_masks_test = torch.load(DIR_ATTENTION_MASKS_TEST, map_location=torch.device('cpu'))
+        targets_test = torch.load(DIR_TARGETS_INPUT_TEST, map_location=torch.device('cpu'))
 
 
     # we split the data into train and validation sets
@@ -286,9 +286,8 @@ def load_data(rank,batch_size):
 def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_size: int):
     ddp_setup(rank, world_size) 
     # we load the data
-    #train_dataloader= load_data(rank,batch_size)[0]
-    validation_dataloader = load_data(rank,batch_size)[1]
-    test_dataloader = load_data(rank,batch_size)[2]
+    train_dataloader, validation_dataloader, test_dataloader= load_data(rank,batch_size)
+    
     # we load the model
     model, optimizer = load_bert_model_and_tokenizer()
     # computing of the total number of steps
