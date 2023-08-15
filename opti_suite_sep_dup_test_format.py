@@ -450,18 +450,11 @@ def formatting_to_train(data_format, tokenizer):
 if __name__ == '__main__':
     
     # Management of the parameters
-    with open("/home/daril_kw/trajcbert/trajcbert/config_test_gene.json") as json_file:
+    with open("/home/daril_kw/trajcbert/trajcbert/parameter_sep_dup.json") as json_file:
         config = json.load(json_file)
 
-    #we verify that the dictionary config contains all the keys we need
-    print("sep_rate" in config.keys())
-    print("uniform" in config.keys())
-    print("nb_cat" in config.keys())
-    print("percentage_per_cat" in config.keys())
-    print("VERSION_TEST" in config.keys())
-    print("dup_rate" in config.keys())
 
-    dup_rate = 20
+    dup_rate = config["dup_rate"]
     sep_rate = config["sep_rate"]
     uniform =  config["uniform"]
     nb_cat = config["nb_cat"]
