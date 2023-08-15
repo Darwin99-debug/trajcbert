@@ -14,7 +14,7 @@ from torch.distributed import init_process_group, destroy_process_group
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-VERSION_TEST =1 
+
 
 
 DIR_INPUTS_IDS = '/home/daril_kw/data/input_ids.pt'
@@ -22,9 +22,9 @@ DIR_ATTENTION_MASKS = '/home/daril_kw/data/attention_masks.pt'
 DIR_TARGETS_INPUT = '/home/daril_kw/data/targets_inp.pt'
 PRETRAINED_MODEL_NAME = '/home/daril_kw/data/model_resized_embeddings_test'
 DIR_INPUTS_IDS_TEST = '/home/daril_kw/data/input_ids_test.pt'
-if VERSION_TEST ==1 :
-    DIR_ATTENTION_MASKS_TEST = '/home/daril_kw/data/attention_masks_test.pt'
-    DIR_TARGETS_INPUT_TEST = '/home/daril_kw/data/targets_inp_test.pt'
+
+DIR_ATTENTION_MASKS_TEST = '/home/daril_kw/data/attention_masks_test.pt'
+DIR_TARGETS_INPUT_TEST = '/home/daril_kw/data/targets_inp_test.pt'
 
 # WORLD_S=2
 
@@ -224,7 +224,7 @@ class Trainer:
             torch.distributed.barrier() # wait for all processes to finish the epoch            
 
 
-def load_data(rank,batch_size):
+def load_data(rank,batch_size, VERSION_TEST):
      #load the lists saved in deb_train_gpu_parallel.py
     # the lists saved full_inputs, inputs_ids, attention_masks and the targets in different files DIR_INPUTS_IDS, DIR_ATTENTION_MASKS, DIR_TARGETS_INPUT,PRETRAINED_MODEL_NAME, DIR_INPUTS_IDS_TEST, DIR_ATTENTION_MASKS_TEST, DIR_TARGETS_INPUT_TEST 
     # we use torch to load the data
@@ -284,10 +284,11 @@ def load_data(rank,batch_size):
 
     return train_dataloader, validation_dataloader, test_dataloader
 
-def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_size: int):
+def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_size: int, VERSION_TEST: int):
+
     ddp_setup(rank, world_size) 
     # we load the data
-    train_dataloader, validation_dataloader, test_dataloader= load_data(rank,batch_size)
+    train_dataloader, validation_dataloader, test_dataloader= load_data(rank,batch_size, VERSION_TEST)
     
     # we load the model
     model, optimizer = load_bert_model_and_tokenizer()
@@ -319,14 +320,18 @@ if __name__ == "__main__":
     with open("/home/daril_kw/trajcbert/trajcbert/config_test_gene.json") as json_file:
         config = json.load(json_file)
 
+    with open("/home/daril_kw/trajcbert/trajcbert/parameter_sep_dup.json", "w") as json_file:
+        param = json.load(json_file)
+
     batch_size = config["batch_size"]
     epochs = config["num_epochs"]
     save_every = config["save_every"]
+    VERSION_TEST = param["VERSION_TEST"]
     
 
     #world_size = torch.cuda.device_count()
     world_size = 2
-    mp.spawn(main, args=(world_size, save_every, epochs, batch_size), nprocs=world_size, join=True)
+    mp.spawn(main, args=(world_size, save_every, epochs, batch_size, VERSION_TEST), nprocs=world_size, join=True)
     """
     children = []
     for i in range(world_size):
