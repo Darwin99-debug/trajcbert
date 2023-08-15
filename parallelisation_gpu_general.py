@@ -320,8 +320,11 @@ if __name__ == "__main__":
     with open("/home/daril_kw/trajcbert/trajcbert/config_test_gene.json") as json_file:
         config = json.load(json_file)
 
-    with open("/home/daril_kw/trajcbert/trajcbert/parameter_sep_dup.json", "w") as json_file:
-        param = json.load(json_file)
+    with open("/home/daril_kw/trajcbert/trajcbert/parameter_sep_dup.json") as json_file2:
+        param = json.load(json_file2)
+
+
+
 
     batch_size = config["batch_size"]
     epochs = config["num_epochs"]
