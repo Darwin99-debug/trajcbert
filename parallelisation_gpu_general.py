@@ -286,7 +286,7 @@ def load_data(rank,batch_size):
 def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_size: int):
     ddp_setup(rank, world_size) 
     # we load the data
-    train_dataloader= load_data(rank,batch_size)[0]
+    #train_dataloader= load_data(rank,batch_size)[0]
     validation_dataloader = load_data(rank,batch_size)[1]
     test_dataloader = load_data(rank,batch_size)[2]
     # we load the model
