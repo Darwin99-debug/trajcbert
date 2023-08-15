@@ -20,7 +20,7 @@ VERSION_TEST =1
 DIR_INPUTS_IDS = '/home/daril_kw/data/input_ids.pt'
 DIR_ATTENTION_MASKS = '/home/daril_kw/data/attention_masks.pt'
 DIR_TARGETS_INPUT = '/home/daril_kw/data/targets_inp.pt'
-PRETRAINED_MODEL_NAME = '/home/daril_kw/data/model_resized_embeddings'
+PRETRAINED_MODEL_NAME = '/home/daril_kw/data/model_resized_embeddings_test_15rows'
 DIR_INPUTS_IDS_TEST = '/home/daril_kw/data/input_ids_test.pt'
 if VERSION_TEST ==1 :
     DIR_ATTENTION_MASKS_TEST = '/home/daril_kw/data/attention_masks_test.pt'
