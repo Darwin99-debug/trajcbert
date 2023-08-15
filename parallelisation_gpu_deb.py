@@ -117,16 +117,10 @@ model.save_pretrained('/home/daril_kw/data/model_before_training')
 
 
 print("gestion du format de l'input commencée")
-#gestion du format de l'input
-data_format['HOUR']=data_format['HOUR'].apply(lambda x: ' '+x)
-data_format['WEEK']=data_format['WEEK'].apply(lambda x: ' '+x)
-data_format['CALL_TYPE']=data_format['CALL_TYPE'].apply(lambda x: ' '+x)
-data_format['TAXI_ID']=data_format['TAXI_ID'].apply(lambda x: ' '+x)
-data_format['DAY']=data_format['DAY'].apply(lambda x: ' '+x)
 
-data_format['CONTEXT_INPUT'] =data_format['Tokenization_2'].apply(lambda x: x[-1]) + data_format['DAY'] + data_format['HOUR'] + data_format['WEEK'] + data_format['CALL_TYPE'] + data_format['TAXI_ID']
+data_format['CONTEXT_INPUT'] =data_format['Tokenization_2'].apply(lambda x: x[-1]) 
 
-len_context_info = len(data_format['CONTEXT_INPUT'][0].split(' '))
+len_context_info = 6
 
 #la colonne DEB_TRAJ sera la colonne Tokenization jusqu'a l'avant-dernier token exclu
 

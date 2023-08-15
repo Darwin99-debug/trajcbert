@@ -103,9 +103,9 @@ def get_deb_traj_and_target(data_format):
     data_format = add_spaces_for_concat(data_format, 'DAY')
 
     #the column CONTEXT_INPUT will be the concatenation of the last token of the tokenization column + the day + the hour + the week + the call type + the taxi id
-    data_format['CONTEXT_INPUT'] =data_format['Tokenization_2'].apply(lambda x: x[-1]) + data_format['DAY'] + data_format['HOUR'] + data_format['WEEK'] + data_format['CALL_TYPE'] + data_format['TAXI_ID']
+    data_format['CONTEXT_INPUT'] =data_format['Tokenization_2'].apply(lambda x: x[-1])
     #we get the length of the containing information of the CONTEXT_INPUT column
-    len_context_info = len(data_format['CONTEXT_INPUT'][0].split(' '))
+    len_context_info = 6
 
     #we get the DEB_TRAJ column
     data_format=get_deb_traj(data_format, len_context_info)
