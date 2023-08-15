@@ -1,8 +1,8 @@
 {
     "dup_rate" : 20,
     "sep_rate" : 20,
-    "uniform" : true ,
+    "uniform" : true,
     "nb_cat" : 5,
     "percentage_per_cat" : [0.3,0.2,0.3,0.1,0.1],
-    "VERSION_TEST" : 1
+    "VERSION_TEST" : 2
 }
