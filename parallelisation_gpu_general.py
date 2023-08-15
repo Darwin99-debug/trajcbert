@@ -20,7 +20,7 @@ VERSION_TEST =1
 DIR_INPUTS_IDS = '/home/daril_kw/data/input_ids.pt'
 DIR_ATTENTION_MASKS = '/home/daril_kw/data/attention_masks.pt'
 DIR_TARGETS_INPUT = '/home/daril_kw/data/targets_inp.pt'
-PRETRAINED_MODEL_NAME = '/home/daril_kw/data/model_resized_embeddings_test_15rows'
+PRETRAINED_MODEL_NAME = '/home/daril_kw/data/model_resized_embeddings_test'
 DIR_INPUTS_IDS_TEST = '/home/daril_kw/data/input_ids_test.pt'
 if VERSION_TEST ==1 :
     DIR_ATTENTION_MASKS_TEST = '/home/daril_kw/data/attention_masks_test.pt'
@@ -323,7 +323,7 @@ if __name__ == "__main__":
     
 
     #world_size = torch.cuda.device_count()
-    world_size = 2
+    world_size = 1
     mp.spawn(main, args=(world_size, save_every, epochs, batch_size), nprocs=world_size, join=True)
     """
     children = []
