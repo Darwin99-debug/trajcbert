@@ -5,6 +5,8 @@ from transformers import BertForSequenceClassification
 import torch
 import numpy as np 
 
+not_trained_model_dir = '/home/daril_kw/data/model_resized_embeddings_test'
+
 device = torch.device("cpu")
 
 
@@ -14,8 +16,11 @@ device = torch.device("cpu")
 prediction_dataloader = torch.load('/home/daril_kw/data/test_dataloader_parallel_gene.pt')
 
 # we load the model
-#model = BertForSequenceClassification.from_pretrained('/home/daril_kw/data/model_trained_cpu_version')
-model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/test/temp_file/whole_model_epoch_1")
+model = BertForSequenceClassification.from_pretrained(not_trained_model_dir)
+PATH = f"/home/daril_kw/data/test/temp_file/checkpoint_epoch_1.pt"
+state_dict = torch.load(PATH, map_location=device)
+model.load_state_dict(state_dict)
+
 print("we evaluate")
 model.eval()
  
