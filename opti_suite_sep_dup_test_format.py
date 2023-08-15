@@ -554,6 +554,7 @@ if __name__ == '__main__':
                 # Encode the text
                 encoded_sequence = tokenizer.encode(input_seq, add_special_tokens=False, padding=True)
                 input_sequences.append(encoded_sequence)
+                print("Encoded sequence {} has a length of {}".format(idx, len(encoded_sequence)))
             return input_sequences
                 
         #we add the columns that we need
