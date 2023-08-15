@@ -451,7 +451,7 @@ if __name__ == '__main__':
     
     # Management of the parameters
     with open("/home/daril_kw/trajcbert/trajcbert/parameter_sep_dup.json") as json_file:
-        config = json.loads(json_file)
+        config = json.loads(json_file.read())
 
 
     dup_rate = config["dup_rate"]
@@ -466,7 +466,7 @@ if __name__ == '__main__':
     tokenizer = BertTokenizer.from_pretrained(tokenizer_dir)
     #load the dataset from home/daril_kw/data/data_with_time_info_ok.json
     with open(data_format_dir, 'r') as openfile:
-        json_loaded = json.loads(openfile)
+        json_loaded = json.loads(openfile.read())
     
 
     data_format = pd.DataFrame(data=json_loaded)

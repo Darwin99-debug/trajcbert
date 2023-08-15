@@ -318,10 +318,10 @@ if __name__ == "__main__":
     import json
     # import the config file
     with open("/home/daril_kw/trajcbert/trajcbert/config_test_gene.json") as json_file:
-        config = json.loads(json_file)
+        config = json.loads(json_file.read())
 
     with open("/home/daril_kw/trajcbert/trajcbert/parameter_sep_dup.json") as json_file2:
-        param = json.loads(json_file2)
+        param = json.loads(json_file2.read())
 
 
 
