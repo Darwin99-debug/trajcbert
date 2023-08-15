@@ -83,7 +83,7 @@ def main():
         json_loaded = json.load(openfile)
 
     data_format = pd.DataFrame(data=json_loaded)
-    data_format = truncation_rows(data_format, 15)
+    data_format = truncation_rows(data_format, 10)
     data_format = add_tokenization_column(data_format, h3_config_size)
     data_format = extract_time_info(data_format)
     data_format = data_format.drop(['MISSING_DATA','DATE','ORIGIN_CALL', 'DAY_TYPE', 'ORIGIN_CALL', 'ORIGIN_STAND', 'Nb_points', 'TIMESTAMP'], axis=1)
