@@ -16,14 +16,14 @@ tokenizer_dir='/home/daril_kw/data/tokenizer_final'
 data_format_dir='/home/daril_kw/data/data_with_time_info_ok_opti.json'
 
 #saving
-data_test_dir='/home/daril_kw/data/data_test_gene_AR_to_format.pkl'
+DIR_INPUT = '/home/daril_kw/data/input_ids.pt'
+DIR_ATT_MASK ='/home/daril_kw/data/attention_masks.pt'
+DIR_TARGET_INP ='/home/daril_kw/data/targets_inp.pt'
+DIR_INPUT_TEST = '/home/daril_kw/data/input_ids_test.pt'
 
-input_ids_dir='/home/daril_kw/data/AR/input_ids_v_small_AR.pt'
-attention_masks_dir='/home/daril_kw/data/AR/attention_masks_v_small_AR.pt'
-targets_dir='/home/daril_kw/data/AR/targets_v_small_AR.pt'
-list_inputs_test_dir='/home/daril_kw/data/AR/list_inputs_test_v_small_AR.pt'
-targets_dict_dir='/home/daril_kw/data/AR/targets_dict_v_small_AR.pt'
-targets_input_dir= '/home/daril_kw/data/AR/targets_input_v_small_AR.pt'
+DIR_ATT_MASK_TEST ='/home/daril_kw/data/attention_masks_test.pt'
+DIR_TARGET_INP_TEST ='/home/daril_kw/data/targets_inp_test.pt'
+
 
  
 
@@ -569,12 +569,12 @@ if __name__ == '__main__':
 
 
     ##save the lists inputs_ids, attention_masks, same for the test data and the targets : we use the save function from torch
-    torch.save(input_ids, '/home/daril_kw/data/input_ids.pt')
-    torch.save(attention_masks, '/home/daril_kw/data/attention_masks.pt')
-    torch.save(targets_input, '/home/daril_kw/data/targets_inp.pt')
-    torch.save(input_ids_test, '/home/daril_kw/data/input_ids_test.pt')
+    torch.save(input_ids, DIR_INPUT)
+    torch.save(attention_masks, DIR_ATT_MASK)
+    torch.save(targets_input, DIR_TARGET_INP)
+    torch.save(input_ids_test, DIR_INPUT_TEST)
     if VERSION_TEST == 1 :
-        torch.save(attention_masks_test, '/home/daril_kw/data/attention_masks_test.pt')
-        torch.save(targets_input_test, '/home/daril_kw/data/targets_inp_test.pt')
+        torch.save(attention_masks_test, DIR_ATT_MASK_TEST)
+        torch.save(targets_input_test, DIR_TARGET_INP_TEST)
 
 

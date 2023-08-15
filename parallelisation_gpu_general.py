@@ -272,7 +272,7 @@ def load_data(rank,batch_size):
 
     test_input = torch.tensor(input_ids_test).to(rank)
 
-    if VERSION_TEST == 2 :
+    if VERSION_TEST == 1 :
         test_mask = torch.tensor(attention_masks_test).to(rank)
         test_label = torch.tensor(targets_test).to(rank)
         test_data = TensorDataset(test_input, test_mask, test_label)
