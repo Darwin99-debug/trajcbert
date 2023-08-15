@@ -286,7 +286,9 @@ def load_data(rank,batch_size):
 def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_size: int):
     ddp_setup(rank, world_size) 
     # we load the data
-    train_dataloader, validation_dataloader, test_dataloader = load_data(rank,batch_size)
+    train_dataloader= load_data(rank,batch_size)[0]
+    validation_dataloader = load_data(rank,batch_size)[1]
+    test_dataloader = load_data(rank,batch_size)[2]
     # we load the model
     model, optimizer = load_bert_model_and_tokenizer()
     # computing of the total number of steps
