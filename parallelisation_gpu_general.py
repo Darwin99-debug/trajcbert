@@ -3,7 +3,6 @@ import json
 import os
 from sklearn.model_selection import train_test_split
 import torch
-import pickle
 import numpy as np
 from torch.utils.data import TensorDataset, DataLoader, RandomSampler, SequentialSampler, Dataset
 from transformers import get_linear_schedule_with_warmup
@@ -226,29 +225,27 @@ class Trainer:
 
 def load_data(rank,batch_size):
      #load the lists saved in deb_train_gpu_parallel.py
-    # the lists saved full_inputs, inputs_ids, attention_masks and the targets in different files /home/daril_kw/data/input_ids.pkl, /home/daril_kw/data/attention_masks.pkl, /home/daril_kw/data/targets.pkl
+    # the lists saved full_inputs, inputs_ids, attention_masks and the targets in different files DIR_INPUTS_IDS, DIR_ATTENTION_MASKS, DIR_TARGETS_INPUT,PRETRAINED_MODEL_NAME, DIR_INPUTS_IDS_TEST, DIR_ATTENTION_MASKS_TEST, DIR_TARGETS_INPUT_TEST 
+    # we use torch to load the data
 
 
-    with open(DIR_INPUTS_IDS, 'rb') as f:
-        input_ids = pickle.load(f)
 
-    with open(DIR_ATTENTION_MASKS, 'rb') as f:
-        attention_masks = pickle.load(f)
+   
+    input_ids = torch.load(DIR_INPUTS_IDS)
 
-    with open(DIR_TARGETS_INPUT, 'rb') as f:
-        targets_input = pickle.load(f)
+    
+    attention_masks = torch.load(DIR_ATTENTION_MASKS)
 
-    with open(DIR_INPUTS_IDS_TEST, 'rb') as f:
-        input_ids_test = pickle.load(f)
+    
+    targets_input = torch.load(DIR_TARGETS_INPUT)
+
+    
+    input_ids_test = torch.load(DIR_INPUTS_IDS_TEST)
 
 
-    if VERSION_TEST == 1 :
-
-        with open(DIR_ATTENTION_MASKS_TEST, 'rb') as f:
-            attention_masks_test = pickle.load(f)
-
-        with open(DIR_TARGETS_INPUT_TEST, 'rb') as f:   
-            targets_test = pickle.load(f)
+    if VERSION_TEST == 1:
+        attention_masks_test = torch.load(DIR_ATTENTION_MASKS_TEST)
+        targets_test = torch.load(DIR_TARGETS_INPUT_TEST)
 
 
     # we split the data into train and validation sets
