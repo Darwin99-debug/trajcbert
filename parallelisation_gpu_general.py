@@ -209,7 +209,7 @@ class Trainer:
         #PATH = f"/home/daril_kw/data/test/temp_file/checkpoint_epoch_{epoch}.pt"
         #torch.save(ckp, PATH)
         PATH = f"/home/daril_kw/data/test/temp_file/whole_model_epoch_{epoch}"
-        torch.save(self.model, PATH)
+        torch.save_pretrained(self.model, PATH)
         print(f"Epoch {epoch} | Training checkpoint saved at {PATH}")
 
 
