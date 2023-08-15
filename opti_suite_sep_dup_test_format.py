@@ -552,7 +552,9 @@ if __name__ == '__main__':
             input_sequences = []
             for idx, input_seq in enumerate(input):
                 # Encode the text
-                encoded_sequence = tokenizer.encode(input_seq, add_special_tokens=False, padding=True)
+                encoded_sequence = tokenizer.encode(input_seq, add_special_tokens=False, padding=False)
+                #pad the sequence
+                encoded_sequence = encoded_sequence + [0] * (512 - len(encoded_sequence))
                 input_sequences.append(encoded_sequence)
                 print("Encoded sequence {} has a length of {}".format(idx, len(encoded_sequence)))
             return input_sequences
