@@ -26,8 +26,7 @@ list_inputs_test_dir='/home/daril_kw/data/AR/list_inputs_test_v_small_AR.pt'
 targets_dict_dir='/home/daril_kw/data/AR/targets_dict_v_small_AR.pt'
 targets_input_dir= '/home/daril_kw/data/AR/targets_input_v_small_AR.pt'
 
-# constants
-VERSION_TEST = 2 # 1 for the first version of the test data, 2 for the second version
+ 
 
 def add_spaces_for_concat(data_format, column):
     """Add spaces before and after the values of the column"""
@@ -452,11 +451,15 @@ def formatting_to_train(data_format, tokenizer):
 if __name__ == '__main__':
     
     # Management of the parameters
-    dup_rate = 20
-    sep_rate = 20
-    uniform = True
-    nb_cat = 5
-    percentage_per_cat = [0.3,0.2,0.3,0.1,0.1]
+    with open("/home/daril_kw/trajcbert/trajcbert/config_test_gene.json") as json_file:
+        config = json.load(json_file)
+
+    dup_rate = config["dup_rate"]
+    sep_rate = config["sep_rate"]
+    uniform =  config["uniform"]
+    nb_cat = config["nb_cat"]
+    percentage_per_cat = config["percentage_per_cat"]
+    VERSION_TEST = config["VERSION_TEST"]
 
 
     #load the tokenizer from /home/daril_kw/data/tokenizer_final
