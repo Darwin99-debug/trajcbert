@@ -15,7 +15,7 @@ prediction_dataloader = torch.load('/home/daril_kw/data/test_dataloader_parallel
 
 # we load the model
 #model = BertForSequenceClassification.from_pretrained('/home/daril_kw/data/model_trained_cpu_version')
-model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/test/temp_file/whole_model_epoch_1.pt")
+model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/test/temp_file/whole_model_epoch_1")
 print("we evaluate")
 model.eval()
  
