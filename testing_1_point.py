@@ -11,11 +11,11 @@ device = torch.device("cpu")
 
 #load the prediction_dataloader
 #prediction_dataloader = torch.load('/home/daril_kw/data/pred_dataloader_v_small.pt')
-prediction_dataloader = torch.load('/home/daril_kw/data/test_dataloader_parallel_gene.py')
+prediction_dataloader = torch.load('/home/daril_kw/data/test_dataloader_parallel_gene.pt')
 
 # we load the model
 #model = BertForSequenceClassification.from_pretrained('/home/daril_kw/data/model_trained_cpu_version')
-model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/test/temp_file/checkpoint_epoch_1.pt")
+model = BertForSequenceClassification.from_pretrained("/home/daril_kw/data/test/temp_file/checkpoint_epoch_1")
 print("we evaluate")
 model.eval()
  
