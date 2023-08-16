@@ -146,7 +146,8 @@ def main():
 
 
   #load targets_input and targets_dict
-  targets_input = torch.load('/home/daril_kw/data/AR/targets_input_v_small_AR.pt')
+  DIR_TARGETS_INPUT_TEST = '/home/daril_kw/data/targets_inp_test.pt'
+  targets_input = torch.load(DIR_TARGETS_INPUT_TEST)
   targets_dict_refound = {v: k for k, v in targets_input.items()}
   #load the prediction_dataloader
   #prediction_dataloader = torch.load('/home/daril_kw/data/pred_dataloader_v_small.pt')
