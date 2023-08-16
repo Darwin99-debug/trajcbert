@@ -97,6 +97,9 @@ model.eval()
  
 # Tracking variables 
 predictions , true_labels, list_inputs_test = [], [], []
+
+# losses
+losses = 0
 print("We predict")
 # Predict 
 for batch in prediction_dataloader:
@@ -114,6 +117,7 @@ for batch in prediction_dataloader:
                       attention_mask=b_input_mask)
 
     logits = outputs[0]
+    losses += outputs[0].mean().item()
 
   # Move logits and labels to CPU
     logits = logits.detach().cpu().numpy()
@@ -138,6 +142,8 @@ matthews_set = []
 print('Calculating Matthews Corr. Coef. for each batch...')
 
 pred_label= []
+# compute the loss
+
 # For each input batch...
 for i in range(len(true_labels)):
 
@@ -166,6 +172,15 @@ flat_list_inputs_test = [item for sublist in list_inputs_test for item in sublis
 mcc = matthews_corrcoef(flat_true_labels, flat_predictions)
 
 print('MCC: %.3f' % mcc)
+
+
+# compute the accuracy
+accuracy = (flat_true_labels == flat_predictions).mean()
+print('accuracy: %.3f' % accuracy)
+
+# print the loss
+print('loss: %.3f' % (losses/len(true_labels)))
+
 
 
 

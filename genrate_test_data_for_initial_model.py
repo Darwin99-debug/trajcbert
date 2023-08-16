@@ -74,3 +74,6 @@ def load_data(batch_size=32):
 
 
     return test_dataloader
+
+
+load_data()
