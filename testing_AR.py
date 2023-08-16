@@ -18,7 +18,7 @@ import json
 #To get the model directory, we take the last checkpoint of the training saved. For that we use the config file to get the number of epochs maximum and we check if the checkpoint exists
 with open("/home/daril_kw/trajcbert/trajcbert/config_test_gene.json") as json_file:
         config = json.loads(json_file.read())
-epoch = config['epochs']
+epoch = config['num_epochs']
 
 #we check if '/home/daril_kw/data/test/temp_file/checkpoint_epoch_{epoch}.pt' exists, otherwise we take the last checkpoint before
 while not os.path.exists('/home/daril_kw/data/test/temp_file/checkpoint_epoch_{epoch}.pt') and epoch > 0:
