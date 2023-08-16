@@ -4,21 +4,37 @@ from sklearn.metrics import matthews_corrcoef
 from transformers import BertForSequenceClassification
 import torch
 import numpy as np 
+import os
+import json
 
-not_trained_model_dir = '/home/daril_kw/data/model_resized_embeddings_test'
+
+
+DIR_MODEL_NOT_TRAINED = '/home/daril_kw/data/model_resized_embeddings_test'
+
+with open("/home/daril_kw/trajcbert/trajcbert/config_test_gene.json") as json_file:
+        config = json.loads(json_file.read())
+
+epoch = config['epochs']
+
+
+#we check if '/home/daril_kw/data/test/temp_file/checkpoint_epoch_{epoch}.pt' exists, otherwise we take the last checkpoint
+while not os.path.exists('/home/daril_kw/data/test/temp_file/checkpoint_epoch_{epoch}.pt') and epoch > 0:
+  epoch -= 1
+   
+TRAINED_MODEL_PATH = f"/home/daril_kw/data/test/temp_file/checkpoint_epoch_1.pt"
+DIR_TEST_DATALOADER = '/home/daril_kw/data/test_dataloader_parallel_gene.pt'
+
 
 device = torch.device("cpu")
 
-
-
 #load the prediction_dataloader
 #prediction_dataloader = torch.load('/home/daril_kw/data/pred_dataloader_v_small.pt')
-prediction_dataloader = torch.load('/home/daril_kw/data/test_dataloader_parallel_gene.pt')
+prediction_dataloader = torch.load(DIR_TEST_DATALOADER)
 
 # we load the model
-model = BertForSequenceClassification.from_pretrained(not_trained_model_dir)
-PATH = f"/home/daril_kw/data/test/temp_file/checkpoint_epoch_1.pt"
-state_dict = torch.load(PATH, map_location=device)
+model = BertForSequenceClassification.from_pretrained(DIR_MODEL_NOT_TRAINED)
+
+state_dict = torch.load(TRAINED_MODEL_PATH, map_location=device)
 model.load_state_dict(state_dict)
 
 print("we evaluate")
@@ -57,7 +73,6 @@ for batch in prediction_dataloader:
     list_inputs_test.append(b_input_ids.tolist())
 
 print('    DONE.')
-
 
 
 

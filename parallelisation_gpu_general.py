@@ -16,7 +16,7 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 
 
 
-
+#LOADING
 DIR_INPUTS_IDS = '/home/daril_kw/data/input_ids.pt'
 DIR_ATTENTION_MASKS = '/home/daril_kw/data/attention_masks.pt'
 DIR_TARGETS_INPUT = '/home/daril_kw/data/targets_inp.pt'
@@ -25,6 +25,10 @@ DIR_INPUTS_IDS_TEST = '/home/daril_kw/data/input_ids_test.pt'
 
 DIR_ATTENTION_MASKS_TEST = '/home/daril_kw/data/attention_masks_test.pt'
 DIR_TARGETS_INPUT_TEST = '/home/daril_kw/data/targets_inp_test.pt'
+
+
+#SAVING
+DIR_TEST_DATALOADER = '/home/daril_kw/data/test_dataloader_parallel_gene.pt'
 
 # WORLD_S=2
 
@@ -309,7 +313,7 @@ def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_s
 
 
     #save the test dataloader using torch.save
-    torch.save(test_dataloader, '/home/daril_kw/data/test_dataloader_parallel_gene.pt')
+    torch.save(test_dataloader, DIR_TEST_DATALOADER)
 
 
 

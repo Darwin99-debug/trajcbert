@@ -123,7 +123,7 @@ def manage_duplication(dataframe, liste_to_duplicate):
 
 
 
-def attribution_deb_traj_and_target(dataframe, uniform, list_rate_per_cat, nb_categories):
+def attribution_deb_traj_and_target(dataframe, uniform, list_rate_per_cat, nb_categories, min_traj_input):
 
     """Prepare the training data without duplicates
     we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
@@ -136,7 +136,7 @@ def attribution_deb_traj_and_target(dataframe, uniform, list_rate_per_cat, nb_ca
     dataframe = dataframe_original.copy()
 
     # Create the threshold for each category
-    list_threshold = [0.3 + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
+    list_threshold = [min_traj_input + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
 
     # Remove the useless rows and rows with trajectory length < 3
     dataframe.loc[:, 'Tokenization_2'] = dataframe['Tokenization_2'].apply(lambda x: x if type(x) == list else [])
@@ -270,7 +270,7 @@ def attribution_duplicate_or_separate(list_row_to_select, nb_to_duplicate, nb_to
     return list_index_to_duplicate, list_index_to_separate
 
 
-def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, nb_categories, list_rate_per_cat=None):
+def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, nb_categories, min_traj_input, list_rate_per_cat=None):
     """
     This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
     The separation rate is the proportion of rows that will separated into two different trajectories. 
@@ -306,7 +306,7 @@ def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, n
     dataframe_sep_and_dup = manage_duplication(dataframe_separated, list_index_to_duplicate)
 
     #we attribute the target and the deb_traj to the rows
-    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup, uniforme_bool, list_rate_per_cat, nb_categories)
+    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup, uniforme_bool, list_rate_per_cat, nb_categories, min_traj_input)
 
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
@@ -459,6 +459,7 @@ if __name__ == '__main__':
     uniform =  config["uniform"]
     nb_cat = config["nb_cat"]
     percentage_per_cat = config["percentage_per_cat"]
+    min_traj_rate = config["rate_min_traj_input"]
     VERSION_TEST = config["VERSION_TEST"]
 
 
@@ -488,7 +489,7 @@ if __name__ == '__main__':
 #   WE MANAGE THE TRAIN AND VALIDATION DATA
 #   -----------------------------------------
     #we prepare the train data
-    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=dup_rate, separation_rate=sep_rate, uniforme_bool=uniform,nb_categories=nb_cat,list_rate_per_cat=percentage_per_cat)
+    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=dup_rate, separation_rate=sep_rate, uniforme_bool=uniform,nb_categories=nb_cat,min_traj_input=min_traj_rate,list_rate_per_cat=percentage_per_cat)
     #we call the function to get the input_ids, the attention_masks and the targets
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(df_full_dup, tokenizer)
 
