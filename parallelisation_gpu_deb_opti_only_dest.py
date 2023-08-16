@@ -253,13 +253,13 @@ def main():
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(data_format, tokenizer)
     
     #save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
-    with open(f"/home/daril_kw/data/savings_for_parallel/input_ids_full_opti_for_para_1.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_with_dest_context/input_ids_full_opti_for_para_1.pkl", 'wb') as fp:
         pickle.dump(input_ids, fp)
-    with open(f"/home/daril_kw/data/savings_for_parallel/attention_masks_full_opti_for_para_1.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_with_dest_context/attention_masks_full_opti_for_para_1.pkl", 'wb') as fp:
         pickle.dump(attention_masks, fp)
-    with open(f"/home/daril_kw/data/savings_for_parralel/targets_full_opti_for_para_1.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_with_dest_context/targets_full_opti_for_para_1.pkl", 'wb') as fp:
         pickle.dump(targets, fp)
-    with open(f"/home/daril_kw/data/savings_for_parralel/full_inputs_full_opti_for_para_1.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_with_dest_context/full_inputs_full_opti_for_para_1.pkl", 'wb') as fp:
         pickle.dump(full_inputs, fp)
 
 
