@@ -148,7 +148,11 @@ def main():
   #load targets_input and targets_dict
   DIR_TARGETS_INPUT_TEST = '/home/daril_kw/data/targets_inp_test.pt'
   targets_input = torch.load(DIR_TARGETS_INPUT_TEST)
-  targets_dict_refound = {v: k for k, v in targets_input.items()}
+
+
+  #targets_dict_refound = {v: k for k, v in targets_input.items()}
+  #the above line is to get the targets_dict_refound from the targets_input but does not work because the targets_input is a dictionary of dictionaries
+  targets_dict_refound = {v: k for k, v in targets_input.items() for k, v in v.items()}
   #load the prediction_dataloader
   #prediction_dataloader = torch.load('/home/daril_kw/data/pred_dataloader_v_small.pt')
   prediction_dataloader = torch.load(DIR_TEST_DATALOADER)
