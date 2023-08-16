@@ -175,6 +175,9 @@ def main():
   #we get the scores on the coordinates using the MSE criterion
   MSE_score = calculate_MSE_score(all_predictions_detokenized, all_true_labels_coord)
 
+  print("MAD score : ", MAD_score)
+  print("MSE score : ", MSE_score)
+
   #the difference between the MSE and the MAD is that the MSE is more sensitive to outliers
 
      
