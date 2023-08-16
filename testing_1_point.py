@@ -14,7 +14,7 @@ DIR_MODEL_NOT_TRAINED = '/home/daril_kw/data/model_resized_embeddings_test'
 with open("/home/daril_kw/trajcbert/trajcbert/config_test_gene.json") as json_file:
         config = json.loads(json_file.read())
 
-epoch = config['epochs']
+epoch = config['num_epochs']
 
 
 #we check if '/home/daril_kw/data/test/temp_file/checkpoint_epoch_{epoch}.pt' exists, otherwise we take the last checkpoint
