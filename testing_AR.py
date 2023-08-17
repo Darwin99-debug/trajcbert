@@ -100,7 +100,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         list_true_tokens = list_true_tokens.tolist()
         #we get the ids of the true tokens
         list_true_tokens_ids = [target_dict[token] for token in list_true_tokens]
-        )
+        
         
       
         all_true_labels[batch_idx].append(list_true_tokens)
