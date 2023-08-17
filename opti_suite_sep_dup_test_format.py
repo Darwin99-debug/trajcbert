@@ -469,7 +469,9 @@ def get_targets_dict(data_format):
     #create the targets dict
     targets_dict={}
     for i in range(len(list_possible_target)):
-        targets_dict[i]=list_possible_target[i]
+        targets_dict[list_possible_target[i]]=i
+
+    print("targets_dict : ", targets_dict)
 
     return targets_dict
 
