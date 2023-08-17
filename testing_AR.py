@@ -166,7 +166,7 @@ def main():
 
   #load the prediction_dataloader
   #prediction_dataloader = torch.load('/home/daril_kw/data/pred_dataloader_v_small.pt')
-  prediction_dataloader = torch.load(DIR_TEST_DATALOADER)
+  prediction_dataloader = torch.load(DIR_TEST_DATALOADER, map_location=device)
 
   # we load the model
   model = BertForSequenceClassification.from_pretrained(DIR_MODEL_NOT_TRAINED)
