@@ -86,7 +86,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         list_true_tokens = traj[first_token_traj:] #we remove the 6 context tokens
         all_true_labels[batch_idx].append(list_true_tokens)
         #we get the list of the detokenized true tokens of the trajectory, ie we get the coordinates of the tokens if it is not the sep token
-        list_true_tokens_detokenized = [h3.h3_to_geo(list(target_dict.keys())[list(target_dict.values()).index(token)]) if list(target_dict.keys())[list(target_dict.values()).index(token)] != '[SEP]' else None for token in list_true_tokens]
+        #list_true_tokens_detokenized = [h3.h3_to_geo(list(target_dict.keys())[list(target_dict.values()).index(token)]) if list(target_dict.keys())[list(target_dict.values()).index(token)] != '[SEP]' else None for token in list_true_tokens]
 
         #we take this token as the target token, remove every token after this token included and pad the input so that it has the same length as the input of the model ie 512
         #traj_i must contain the input of the model ie the cls token + context tokens + the real trajectory + the SEP token
@@ -114,7 +114,8 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           traj_i_padded[index_token_to_predict] = predicted_token
 
          
-  return all_predictions, all_predictions_detokenized, all_true_labels, all_true_labels_coord
+  #return all_predictions, all_predictions_detokenized, all_true_labels, all_true_labels_coord
+  return all_predictions, all_predictions_detokenized, all_true_labels
 
 
 
@@ -172,8 +173,8 @@ def main():
   #we get the list of the coordinates associated to all_true_labels
   all_true_labels_coord = []
   #reminder : targets_dict[token] = id of the token and list(targets_dict.keys())[list(targets_dict.values()).index(id)] = token
-  for i in range(len(all_true_labels)):
-    all_true_labels_coord.append([h3.h3_to_geo(targets_dict[all_true_labels[i][j]]) for j in range(len(all_true_labels[i]))])
+  #for i in range(len(all_true_labels)):
+  #  all_true_labels_coord.append([h3.h3_to_geo(targets_dict[all_true_labels[i][j]]) for j in range(len(all_true_labels[i]))])
   
   #we get the accuracy of the predictions
   accuracy = flat_accuracy(np.array(all_predictions), np.array(all_true_labels))
@@ -186,10 +187,10 @@ def main():
 
   #we can compare the coordinates of the predictions with the coordinates of the true labels
   #we use the MAD metric : we get the median of the absolute difference between the coordinates of the predictions and the coordinates of the true labels
-  MAD_score = calculate_MAD_score(all_predictions_detokenized, all_true_labels_coord)
+  #MAD_score = calculate_MAD_score(all_predictions_detokenized, all_true_labels_coord)
 
   #we get the scores on the coordinates using the MSE criterion
-  MSE_score = calculate_MSE_score(all_predictions_detokenized, all_true_labels_coord)
+  #MSE_score = calculate_MSE_score(all_predictions_detokenized, all_true_labels_coord)
 
   
 
