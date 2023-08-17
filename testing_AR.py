@@ -93,6 +93,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         #we get the list of the true tokens of the part of the trajectory we are going to predict
         #ie the trajectory from the point 
         list_true_tokens = traj[first_token_to_predict:]
+        print(f"the list of true tokens is {list_true_tokens}")
         print(f"the length of the list of true tokens is {len(list_true_tokens)}")
         #we get the nimbers instead of the tensors
         list_true_tokens = list_true_tokens.tolist()
@@ -206,6 +207,10 @@ def main():
   #  all_true_labels_coord.append([h3.h3_to_geo(targets_dict[all_true_labels[i][j]]) for j in range(len(all_true_labels[i]))])
   
   #we get the accuracy of the predictions
+  #we manage the format of the predictions and the true labels
+  all_predictions = [item for sublist in all_predictions for item in sublist]
+  all_true_labels = [item for sublist in all_true_labels for item in sublist]
+  
   accuracy = flat_accuracy(np.array(all_predictions), np.array(all_true_labels))
   #we want the accumulated loss witch is the loss of the predictions calculated with the cross entropy criterion 
   #we get the accumulated loss
