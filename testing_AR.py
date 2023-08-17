@@ -127,7 +127,9 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           #we add the detokenized predicted token to the list of detokenized predictions
           #all_predictions_detokenized[batch_idx].append(predicted_token_detokenized)
           #we add the predicted to the input by replacing the first pad token by the predicted token and take the next true token as the target token
-          traj_i_padded[0][first_token_to_predict] = predicted_token
+          traj_i_padded=traj[:first_token_to_predict]
+          traj_i_padded.append(predicted_token)
+          traj_i_padded = torch.nn.functional.pad(traj_i_padded, (0,512-len(traj_i_padded)), 'constant', 0)
 
          
   #return all_predictions, all_predictions_detokenized, all_true_labels, all_true_labels_coord
