@@ -468,11 +468,31 @@ def get_targets_dict(data_format, tokenizer):
     #remove the duplicates
     list_possible_target_encoded  = list(set(list_possible_target_encoded ))
     #create the targets dict
+    """
     targets_dict={}
     for i in range(len(list_possible_target_encoded )):
         targets_dict[list_possible_target_encoded [i]]=i
+    #add the sep token associated with the id 102 and shift the ids of the other tokens
 
-    #print("targets_dict : ", targets_dict)
+    targets_dict['[SEP]']=102
+    for i in range(len(list_possible_target_encoded )):
+        if targets_dict[list_possible_target_encoded [i]]>=102:
+            targets_dict[list_possible_target_encoded [i]]+=1
+    """
+
+            #we can do the above thing in only one loop
+    targets_dict={}
+    for i in range(len(list_possible_target_encoded )):
+        if list_possible_target_encoded[i]=='[SEP]':
+            targets_dict[list_possible_target_encoded[i]]=102
+        else:
+            if len(targets_dict)<102:
+                targets_dict[list_possible_target_encoded[i]]=i
+            else:
+                targets_dict[list_possible_target_encoded[i]]=i+1
+
+
+    print("targets_dict : ", targets_dict)
 
     return targets_dict
 
@@ -543,7 +563,6 @@ if __name__ == '__main__':
         targets_ids_test = []
         for i in range(len(targets_test)):
             targets_ids_test.append(targets_dict[tokenizer.encode(targets_test[i], add_special_tokens=False, truncation=False, padding=False)[0]])
-
     
 
 
