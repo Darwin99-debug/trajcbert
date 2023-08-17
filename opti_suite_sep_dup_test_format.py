@@ -18,11 +18,15 @@ data_format_dir='/home/daril_kw/data/data_with_time_info_ok_opti.json'
 #saving
 DIR_INPUT = '/home/daril_kw/data/input_ids.pt'
 DIR_ATT_MASK ='/home/daril_kw/data/attention_masks.pt'
-DIR_TARGET_INP ='/home/daril_kw/data/targets_inp.pt'
-DIR_INPUT_TEST = '/home/daril_kw/data/input_ids_test.pt'
+DIR_TARGET_DICT ='/home/daril_kw/data/targets_dict_whole.json'
+DIR_TARGET_IDS ='/home/daril_kw/data/targets_ids.pt'
 
+DIR_INPUT_TEST = '/home/daril_kw/data/input_ids_test.pt'
 DIR_ATT_MASK_TEST ='/home/daril_kw/data/attention_masks_test.pt'
-DIR_TARGET_INP_TEST ='/home/daril_kw/data/targets_inp_test.pt'
+DIR_TARGET_IDS_TEST ='/home/daril_kw/data/targets_ids_test.pt'
+
+
+
 
 
  
@@ -446,6 +450,29 @@ def formatting_to_train(data_format, tokenizer):
 
     return input_ids, attention_masks, targets, full_inputs
 
+def get_targets_dict(data_format):
+    """
+    the targets dict works like this : the key is the token and the value is the id of the token
+    if we want to get the id of a token we just have to do targets_dict[token]
+    if we want to get the token of an id we just have to do list(targets_dict.keys())[list(targets_dict.values()).index(id)]
+    """
+
+    #get every token in the lists of the tokenization_2 column
+    list_possible_target = []
+    for i in range(len(data_format)):
+        for j in range(len(data_format['Tokenization_2'][i])):
+            list_possible_target.append(data_format['Tokenization_2'][i][j])
+    #add the [SEP] token that can also be a target
+    list_possible_target.append('[SEP]')
+    #remove the duplicates
+    list_possible_target = list(set(list_possible_target))
+    #create the targets dict
+    targets_dict={}
+    for i in range(len(list_possible_target)):
+        targets_dict[list_possible_target[i]]=i
+
+    return targets_dict
+
  
 if __name__ == '__main__':
     
@@ -483,6 +510,9 @@ if __name__ == '__main__':
     #Comme cette colonne contiient les informations en string séparé par un espace, on récupère la liste correspondante puis on compte le nombre d'éléments de cette liste
     len_context_info = len(data_format['CONTEXT_INPUT'][0].split(' '))
 
+    #get the targets dict before separating the dataframe into train and test
+    targets_dict = get_targets_dict(data_format)
+
     #we separate the dataframe into train and test 
     data_train, data_test = train_test_split(data_format, test_size=0.2, random_state=2023)
 
@@ -492,14 +522,11 @@ if __name__ == '__main__':
     df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=dup_rate, separation_rate=sep_rate, uniforme_bool=uniform,nb_categories=nb_cat,min_traj_input=min_traj_rate,list_rate_per_cat=percentage_per_cat)
     #we call the function to get the input_ids, the attention_masks and the targets
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(df_full_dup, tokenizer)
-
-    #we get the targets in the right format
-    targets_dict={}
+    targets_ids_train = []
     for i in range(len(targets)):
-        if targets[i] not in targets_dict:
-            targets_dict[targets[i]]=len(targets_dict)
+        targets_ids_train.append(targets_dict[targets[i]])
+    #the targets_ids_train list contains the ids of the targets of the train data
 
-    targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
 
 #WE MANAGE THE TEST DATA
 #------------------------
@@ -509,13 +536,13 @@ if __name__ == '__main__':
         df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, uniforme_bool=uniform,nb_categories=nb_cat,list_rate_per_cat=percentage_per_cat)
         input_ids_test, attention_masks_test, targets_test, full_inputs_test = formatting_to_train(df_test, tokenizer)
 
-        #we get the targets in the right format
-        targets_dict_test={}
+        #we get the ids in the targets_dict defined before for the targets of the test data
+        targets_ids_test = []
         for i in range(len(targets_test)):
-            if targets_test[i] not in targets_dict_test:
-                targets_dict_test[targets_test[i]]=len(targets_dict_test)
+            targets_ids_test.append(targets_dict[targets_test[i]])
 
-        targets_input_test=[targets_dict_test[targets_test[i]] for i in range(len(targets_test))]
+    
+
 
     elif VERSION_TEST == 2:
     #this version of the test data is the one we will use for the final test in an autoregressive way
@@ -572,10 +599,14 @@ if __name__ == '__main__':
     ##save the lists inputs_ids, attention_masks, same for the test data and the targets : we use the save function from torch
     torch.save(input_ids, DIR_INPUT)
     torch.save(attention_masks, DIR_ATT_MASK)
-    torch.save(targets_input, DIR_TARGET_INP)
+    torch.save(targets_dict, DIR_TARGET_DICT)
+    torch.save(targets_ids_train, DIR_TARGET_IDS)
     torch.save(input_ids_test, DIR_INPUT_TEST)
+    
     if VERSION_TEST == 1 :
         torch.save(attention_masks_test, DIR_ATT_MASK_TEST)
-        torch.save(targets_input_test, DIR_TARGET_INP_TEST)
+        torch.save(targets_ids_test, DIR_TARGET_IDS_TEST)
+
+        
 
 

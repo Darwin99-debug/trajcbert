@@ -19,12 +19,13 @@ from torch.nn.parallel import DistributedDataParallel as DDP
 #LOADING
 DIR_INPUTS_IDS = '/home/daril_kw/data/input_ids.pt'
 DIR_ATTENTION_MASKS = '/home/daril_kw/data/attention_masks.pt'
-DIR_TARGETS_INPUT = '/home/daril_kw/data/targets_inp.pt'
+DIR_TARGET_IDS ='/home/daril_kw/data/targets_ids.pt'
 PRETRAINED_MODEL_NAME = '/home/daril_kw/data/model_resized_embeddings_test'
 DIR_INPUTS_IDS_TEST = '/home/daril_kw/data/input_ids_test.pt'
 
 DIR_ATTENTION_MASKS_TEST = '/home/daril_kw/data/attention_masks_test.pt'
-DIR_TARGETS_INPUT_TEST = '/home/daril_kw/data/targets_inp_test.pt'
+DIR_TARGETS_IDS_TEST = '/home/daril_kw/data/targets_inp_test.pt'
+
 
 
 #SAVING
@@ -242,7 +243,7 @@ def load_data(rank,batch_size, VERSION_TEST):
     attention_masks = torch.load(DIR_ATTENTION_MASKS, map_location=torch.device('cpu'))
 
     
-    targets_input = torch.load(DIR_TARGETS_INPUT, map_location=torch.device('cpu'))
+    targets_ids = torch.load(DIR_TARGET_IDS, map_location=torch.device('cpu'))
 
     
     input_ids_test = torch.load(DIR_INPUTS_IDS_TEST, map_location=torch.device('cpu'))
@@ -250,13 +251,13 @@ def load_data(rank,batch_size, VERSION_TEST):
 
     if VERSION_TEST == 1:
         attention_masks_test = torch.load(DIR_ATTENTION_MASKS_TEST, map_location=torch.device('cpu'))
-        targets_test = torch.load(DIR_TARGETS_INPUT_TEST, map_location=torch.device('cpu'))
+        targets_ids_test = torch.load(DIR_TARGETS_IDS_TEST, map_location=torch.device('cpu'))
 
 
     # we split the data into train and validation sets
-    train_inputs, validation_inputs, train_labels, validation_labels = train_test_split(input_ids, targets_input,random_state=2023, test_size=0.1)
-    train_masks, validation_masks, _, _ = train_test_split(attention_masks, targets_input,random_state=2023, test_size=0.1)
-
+    train_inputs, validation_inputs, train_labels, validation_labels = train_test_split(input_ids, targets_ids,random_state=2023, test_size=0.1)
+    train_masks, validation_masks, _, _ = train_test_split(attention_masks, input_ids,random_state=2023, test_size=0.1)
+    #the input_ids in the second split is just a dummy variable, we don't need it
 
     print("Data conversion to tensors...\n")
     #on convertit les données en tenseurs
@@ -278,7 +279,7 @@ def load_data(rank,batch_size, VERSION_TEST):
 
     if VERSION_TEST == 1 :
         test_mask = torch.tensor(attention_masks_test).to(rank)
-        test_label = torch.tensor(targets_test).to(rank)
+        test_label = torch.tensor(targets_ids_test).to(rank)
         test_data = TensorDataset(test_input, test_mask, test_label)
     else :
         test_data = TensorDataset(test_input)

@@ -49,7 +49,7 @@ def flat_matthews(preds, labels):
     labels_flat = labels.flatten()
     return matthews_corrcoef(labels_flat,pred_flat)
 
-def test_autoregressively(prediction_dataloader, targets_input, model, min_traj_rate, target_dict_refound):
+def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_dict):
   """this function will predict the labels of the test set autoregressively"""
 
   device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -59,6 +59,7 @@ def test_autoregressively(prediction_dataloader, targets_input, model, min_traj_
   all_predictions = [[] for i in range(len(prediction_dataloader.dataset))]
   all_predictions_detokenized = [[] for i in range(len(prediction_dataloader.dataset))]
   all_true_labels = [[] for i in range(len(prediction_dataloader.dataset))]
+  all_true_labels_coord = []
   
   with torch.no_grad():
     for batch_idx, batch in enumerate(tqdm(prediction_dataloader)):
@@ -84,6 +85,8 @@ def test_autoregressively(prediction_dataloader, targets_input, model, min_traj_
         #we get the list of the true tokens of the trajectory
         list_true_tokens = traj[first_token_traj:] #we remove the 6 context tokens
         all_true_labels[batch_idx].append(list_true_tokens)
+        #we get the list of the detokenized true tokens of the trajectory, ie we get the coordinates of the tokens if it is not the sep token
+        list_true_tokens_detokenized = [h3.h3_to_geo(list(target_dict.keys())[list(target_dict.values()).index(token)]) if list(target_dict.keys())[list(target_dict.values()).index(token)] != '[SEP]' else None for token in list_true_tokens]
 
         #we take this token as the target token, remove every token after this token included and pad the input so that it has the same length as the input of the model ie 512
         #traj_i must contain the input of the model ie the cls token + context tokens + the real trajectory + the SEP token
@@ -100,19 +103,18 @@ def test_autoregressively(prediction_dataloader, targets_input, model, min_traj_
           #we get the logits
           logits = outputs[1].detach().cpu().numpy()
           #we get the predicted token
-          predicted_token = np.argmax(logits)
+          predicted_token = np.argmax(logits) #the preicted token is the id in the targets_dict
           #we add the predicted token to the list of predictions
           all_predictions[batch_idx].append(predicted_token)
-          #we get the detokenized predicted token
-          #predicted_token_detokenized = h3.h3_to_geo(target_dict[predicted_token])
-          #we get the detokenized predicted token
-          predicted_token_detokenized = h3.h3_to_geo(target_dict_refound[predicted_token])
+          #we get the detokenized predicted token ie from the id of the token we get the token and then we get the coordinates of the token if it is not the sep token
+          predicted_token_detokenized = h3.h3_to_geo(list(target_dict.keys())[list(target_dict.values()).index(predicted_token)]) if list(target_dict.keys())[list(target_dict.values()).index(predicted_token)] != '[SEP]' else None
           #we add the detokenized predicted token to the list of detokenized predictions
           all_predictions_detokenized[batch_idx].append(predicted_token_detokenized)
           #we add the predicted to the input by replacing the first pad token by the predicted token and take the next true token as the target token
           traj_i_padded[index_token_to_predict] = predicted_token
-            
-  return all_predictions, all_predictions_detokenized, all_true_labels
+
+         
+  return all_predictions, all_predictions_detokenized, all_true_labels, all_true_labels_coord
 
 
 
@@ -146,13 +148,13 @@ def main():
 
 
   #load targets_input and targets_dict
-  DIR_TARGETS_INPUT_TEST = '/home/daril_kw/data/targets_inp_test.pt'
-  targets_input = torch.load(DIR_TARGETS_INPUT_TEST)
+  #the targets dict works like this : the key is the token and the value is the id of the token
+    #if we want to get the id of a token we just have to do targets_dict[token]
+    #if we want to get the token of an id we just have to do list(targets_dict.keys())[list(targets_dict.values()).index(id)]
+  DIR_TARGET_DICT ='/home/daril_kw/data/targets_dict_whole.json'
+  targets_dict = torch.load(DIR_TARGET_DICT)
 
 
-  #targets_dict_refound = {v: k for k, v in targets_input.items()}
-  #the above line is to get the targets_dict_refound from the targets_input but does not work because the targets_input is a dictionary of dictionaries
-  targets_dict_refound = {v: k for k, v in targets_input.items() for k, v in v.items()}
   #load the prediction_dataloader
   #prediction_dataloader = torch.load('/home/daril_kw/data/pred_dataloader_v_small.pt')
   prediction_dataloader = torch.load(DIR_TEST_DATALOADER)
@@ -165,14 +167,23 @@ def main():
   model.eval()
 
   #we predict
-  all_predictions, all_predictions_detokenized, all_true_labels = test_autoregressively(prediction_dataloader, targets_input, model, min_traj_rate, targets_dict_refound)
+  all_predictions, all_predictions_detokenized, all_true_labels = test_autoregressively(prediction_dataloader, model, min_traj_rate, targets_dict)
 
   #we get the list of the coordinates associated to all_true_labels
   all_true_labels_coord = []
-
+  #reminder : targets_dict[token] = id of the token and list(targets_dict.keys())[list(targets_dict.values()).index(id)] = token
   for i in range(len(all_true_labels)):
-    all_true_labels_coord.append([h3.h3_to_geo(targets_dict_refound[all_true_labels[i][j]]) for j in range(len(all_true_labels[i]))])
+    all_true_labels_coord.append([h3.h3_to_geo(targets_dict[all_true_labels[i][j]]) for j in range(len(all_true_labels[i]))])
   
+  #we get the accuracy of the predictions
+  accuracy = flat_accuracy(np.array(all_predictions), np.array(all_true_labels))
+  #we want the accumulated loss witch is the loss of the predictions calculated with the cross entropy criterion 
+  #we get the accumulated loss
+  accumulated_loss = np.sum(np.array(all_predictions) == np.array(all_true_labels))/len(np.array(all_predictions))
+
+  print("accuracy : ", accuracy)
+  print("accumulated loss : ", accumulated_loss)
+
   #we can compare the coordinates of the predictions with the coordinates of the true labels
   #we use the MAD metric : we get the median of the absolute difference between the coordinates of the predictions and the coordinates of the true labels
   MAD_score = calculate_MAD_score(all_predictions_detokenized, all_true_labels_coord)
@@ -180,9 +191,11 @@ def main():
   #we get the scores on the coordinates using the MSE criterion
   MSE_score = calculate_MSE_score(all_predictions_detokenized, all_true_labels_coord)
 
+  
+
+
   print("MAD score : ", MAD_score)
   print("MSE score : ", MSE_score)
-
   #the difference between the MSE and the MAD is that the MSE is more sensitive to outliers
 
      
