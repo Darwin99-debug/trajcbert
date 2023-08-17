@@ -472,7 +472,7 @@ def get_targets_dict(data_format, tokenizer):
     for i in range(len(list_possible_target_encoded )):
         targets_dict[list_possible_target_encoded [i]]=i
 
-    print("targets_dict : ", targets_dict)
+    #print("targets_dict : ", targets_dict)
 
     return targets_dict
 
@@ -527,7 +527,7 @@ if __name__ == '__main__':
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(df_full_dup, tokenizer)
     targets_ids_train = []
     for i in range(len(targets)):
-        targets_ids_train.append(targets_dict[targets[i]])
+        targets_ids_train.append(targets_dict[tokenizer.encode(targets[i], add_special_tokens=False, truncation=False, padding=False)[0]])
     #the targets_ids_train list contains the ids of the targets of the train data
 
 
@@ -542,7 +542,7 @@ if __name__ == '__main__':
         #we get the ids in the targets_dict defined before for the targets of the test data
         targets_ids_test = []
         for i in range(len(targets_test)):
-            targets_ids_test.append(targets_dict[targets_test[i]])
+            targets_ids_test.append(targets_dict[tokenizer.encode(targets_test[i], add_special_tokens=False, truncation=False, padding=False)[0]])
 
     
 
