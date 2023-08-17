@@ -18,11 +18,15 @@ data_format_dir='/home/daril_kw/data/data_with_time_info_ok_opti.json'
 #saving
 DIR_INPUT = '/home/daril_kw/data/input_ids.pt'
 DIR_ATT_MASK ='/home/daril_kw/data/attention_masks.pt'
-DIR_TARGET_INP ='/home/daril_kw/data/targets_inp.pt'
-DIR_INPUT_TEST = '/home/daril_kw/data/input_ids_test.pt'
+DIR_TARGET_DICT ='/home/daril_kw/data/targets_dict_whole.json'
+DIR_TARGET_IDS ='/home/daril_kw/data/targets_ids.pt'
 
+DIR_INPUT_TEST = '/home/daril_kw/data/input_ids_test.pt'
 DIR_ATT_MASK_TEST ='/home/daril_kw/data/attention_masks_test.pt'
-DIR_TARGET_INP_TEST ='/home/daril_kw/data/targets_inp_test.pt'
+DIR_TARGET_IDS_TEST ='/home/daril_kw/data/targets_ids_test.pt'
+
+
+
 
 
  
@@ -123,7 +127,7 @@ def manage_duplication(dataframe, liste_to_duplicate):
 
 
 
-def attribution_deb_traj_and_target(dataframe, uniform, list_rate_per_cat, nb_categories):
+def attribution_deb_traj_and_target(dataframe, uniform, list_rate_per_cat, nb_categories, min_traj_input):
 
     """Prepare the training data without duplicates
     we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
@@ -136,7 +140,7 @@ def attribution_deb_traj_and_target(dataframe, uniform, list_rate_per_cat, nb_ca
     dataframe = dataframe_original.copy()
 
     # Create the threshold for each category
-    list_threshold = [0.3 + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
+    list_threshold = [min_traj_input + i * ((1 - 0.3) / (nb_categories - 2)) for i in range(nb_categories - 1)]
 
     # Remove the useless rows and rows with trajectory length < 3
     dataframe.loc[:, 'Tokenization_2'] = dataframe['Tokenization_2'].apply(lambda x: x if type(x) == list else [])
@@ -270,7 +274,7 @@ def attribution_duplicate_or_separate(list_row_to_select, nb_to_duplicate, nb_to
     return list_index_to_duplicate, list_index_to_separate
 
 
-def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, nb_categories, list_rate_per_cat=None):
+def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, nb_categories, min_traj_input, list_rate_per_cat=None):
     """
     This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
     The separation rate is the proportion of rows that will separated into two different trajectories. 
@@ -306,7 +310,7 @@ def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, n
     dataframe_sep_and_dup = manage_duplication(dataframe_separated, list_index_to_duplicate)
 
     #we attribute the target and the deb_traj to the rows
-    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup, uniforme_bool, list_rate_per_cat, nb_categories)
+    df_full = attribution_deb_traj_and_target(dataframe_sep_and_dup, uniforme_bool, list_rate_per_cat, nb_categories, min_traj_input)
 
     return df_full, dataframe_separated, list_index_to_separate, list_index_to_duplicate
 
@@ -446,6 +450,46 @@ def formatting_to_train(data_format, tokenizer):
 
     return input_ids, attention_masks, targets, full_inputs
 
+def get_targets_dict(data_format, tokenizer):
+    """
+    the targets dict works like this : the key is the token and the value is the id of the token
+    if we want to get the id of a token we just have to do targets_dict[token]
+    if we want to get the token of an id we just have to do list(targets_dict.keys())[list(targets_dict.values()).index(id)]
+    """
+
+    #get every token in the lists of the tokenization_2 column
+    list_possible_target_encoded = []
+    for i in range(len(data_format)):
+        for j in range(len(data_format['Tokenization_2'][i])):
+            encoded_token = tokenizer.encode(data_format['Tokenization_2'][i][j], add_special_tokens=False, truncation=False, padding=False)
+            list_possible_target_encoded.append(encoded_token[0]) #encoded_token is a list of one element
+    #add the [SEP] token that can also be a target
+    list_possible_target_encoded.append(102)
+    #remove the duplicates
+    list_possible_target_encoded  = list(set(list_possible_target_encoded ))
+    #create the targets dict
+    """
+    targets_dict={}
+    for i in range(len(list_possible_target_encoded )):
+        targets_dict[list_possible_target_encoded [i]]=i
+    #add the sep token associated with the id 102 and shift the ids of the other tokens
+
+    targets_dict['[SEP]']=102
+    for i in range(len(list_possible_target_encoded )):
+        if targets_dict[list_possible_target_encoded [i]]>=102:
+            targets_dict[list_possible_target_encoded [i]]+=1
+    """
+
+            #we can do the above thing in only one loop
+    targets_dict={}
+    for i in range(len(list_possible_target_encoded)):
+        targets_dict[list_possible_target_encoded[i]]=i
+
+
+    print("targets_dict : ", targets_dict)
+
+    return targets_dict
+
  
 if __name__ == '__main__':
     
@@ -459,6 +503,7 @@ if __name__ == '__main__':
     uniform =  config["uniform"]
     nb_cat = config["nb_cat"]
     percentage_per_cat = config["percentage_per_cat"]
+    min_traj_rate = config["rate_min_traj_input"]
     VERSION_TEST = config["VERSION_TEST"]
 
 
@@ -482,23 +527,23 @@ if __name__ == '__main__':
     #Comme cette colonne contiient les informations en string séparé par un espace, on récupère la liste correspondante puis on compte le nombre d'éléments de cette liste
     len_context_info = len(data_format['CONTEXT_INPUT'][0].split(' '))
 
+    #get the targets dict before separating the dataframe into train and test
+    targets_dict = get_targets_dict(data_format, tokenizer)
+
     #we separate the dataframe into train and test 
     data_train, data_test = train_test_split(data_format, test_size=0.2, random_state=2023)
 
 #   WE MANAGE THE TRAIN AND VALIDATION DATA
 #   -----------------------------------------
     #we prepare the train data
-    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=dup_rate, separation_rate=sep_rate, uniforme_bool=uniform,nb_categories=nb_cat,list_rate_per_cat=percentage_per_cat)
+    df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=dup_rate, separation_rate=sep_rate, uniforme_bool=uniform,nb_categories=nb_cat,min_traj_input=min_traj_rate,list_rate_per_cat=percentage_per_cat)
     #we call the function to get the input_ids, the attention_masks and the targets
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(df_full_dup, tokenizer)
-
-    #we get the targets in the right format
-    targets_dict={}
+    targets_ids_train = []
     for i in range(len(targets)):
-        if targets[i] not in targets_dict:
-            targets_dict[targets[i]]=len(targets_dict)
+        targets_ids_train.append(targets_dict[tokenizer.encode(targets[i], add_special_tokens=False, truncation=False, padding=False)[0]])
+    #the targets_ids_train list contains the ids of the targets of the train data
 
-    targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
 
 #WE MANAGE THE TEST DATA
 #------------------------
@@ -508,13 +553,12 @@ if __name__ == '__main__':
         df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, uniforme_bool=uniform,nb_categories=nb_cat,list_rate_per_cat=percentage_per_cat)
         input_ids_test, attention_masks_test, targets_test, full_inputs_test = formatting_to_train(df_test, tokenizer)
 
-        #we get the targets in the right format
-        targets_dict_test={}
+        #we get the ids in the targets_dict defined before for the targets of the test data
+        targets_ids_test = []
         for i in range(len(targets_test)):
-            if targets_test[i] not in targets_dict_test:
-                targets_dict_test[targets_test[i]]=len(targets_dict_test)
+            targets_ids_test.append(targets_dict[tokenizer.encode(targets_test[i], add_special_tokens=False, truncation=False, padding=False)[0]])
+    
 
-        targets_input_test=[targets_dict_test[targets_test[i]] for i in range(len(targets_test))]
 
     elif VERSION_TEST == 2:
     #this version of the test data is the one we will use for the final test in an autoregressive way
@@ -571,10 +615,14 @@ if __name__ == '__main__':
     ##save the lists inputs_ids, attention_masks, same for the test data and the targets : we use the save function from torch
     torch.save(input_ids, DIR_INPUT)
     torch.save(attention_masks, DIR_ATT_MASK)
-    torch.save(targets_input, DIR_TARGET_INP)
+    torch.save(targets_dict, DIR_TARGET_DICT)
+    torch.save(targets_ids_train, DIR_TARGET_IDS)
     torch.save(input_ids_test, DIR_INPUT_TEST)
+    
     if VERSION_TEST == 1 :
         torch.save(attention_masks_test, DIR_ATT_MASK_TEST)
-        torch.save(targets_input_test, DIR_TARGET_INP_TEST)
+        torch.save(targets_ids_test, DIR_TARGET_IDS_TEST)
+
+        
 
 
