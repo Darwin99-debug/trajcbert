@@ -92,6 +92,8 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         #we get the list of the true tokens of the part of the trajectory we are going to predict
         #ie the trajectory from the point 
         list_true_tokens = traj[first_token_to_predict:]
+        #we get the ids of the true tokens
+        list_true_tokens_ids = [target_dict[token] for token in list_true_tokens]
       
         all_true_labels[batch_idx].append(list_true_tokens)
         #we get the list of the detokenized true tokens of the trajectory, ie we get the coordinates of the tokens if it is not the sep token
@@ -106,7 +108,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           traj_i_padded = traj_i_padded.unsqueeze(0)
           att_mask = att_mask.unsqueeze(0)
           #we get the outputs of the model
-          outputs = model(input_ids=traj_i_padded, token_type_ids=None, attention_mask=att_mask, labels=list_true_tokens[index_token_to_predict-first_token_traj].unsqueeze(0)) # we need the -first_token_traj because the labels are the true tokens of the trajectory from the point first_token_traj to the end of the trajectory
+          outputs = model(input_ids=traj_i_padded, token_type_ids=None, attention_mask=att_mask, labels=list_true_tokens_ids[index_token_to_predict-first_token_traj].unsqueeze(0)) # we need the -first_token_traj because the labels are the true tokens of the trajectory from the point first_token_traj to the end of the trajectory
           #we get the logits
           logits = outputs[1].detach().cpu().numpy()
           #we get the predicted token
