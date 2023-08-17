@@ -138,7 +138,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
 
           traj_i_padded=traj[:first_token_to_predict]
           #we get all the predicted tokens for this line
-          for i in range(index_token_to_predict-first_token_traj+1):
+          for i in range(index_token_to_predict-first_token_traj):
             traj_i_padded = torch.cat((traj_i_padded, torch.tensor([all_predictions[batch_idx][i]])))
           
           traj_i_padded = torch.nn.functional.pad(traj_i_padded, (0,512-len(traj_i_padded)), 'constant', 0)
