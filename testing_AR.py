@@ -98,7 +98,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         list_true_tokens = list_true_tokens.tolist()
         #we get the ids of the true tokens
         list_true_tokens_ids = [target_dict[token] for token in list_true_tokens]
-        print(f"the length of the list of true tokens ids is {len(list_true_tokens_ids)}")
+        
       
         all_true_labels[batch_idx].append(list_true_tokens)
         #we get the list of the detokenized true tokens of the trajectory, ie we get the coordinates of the tokens if it is not the sep token
@@ -116,7 +116,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           traj_i_padded = traj_i_padded.unsqueeze(0)
           
           #we have to put the labels in the right shape for the model ie (1)
-          target=torch.tensor(list_true_tokens_ids[index_token_to_predict-first_token_traj]).unsqueeze(0).to(device)
+          target=torch.tensor(list_true_tokens_ids[index_token_to_predict-first_token_to_predict]).unsqueeze(0).to(device)
           #we get the outputs of the model
           outputs = model(input_ids=traj_i_padded, token_type_ids=None, attention_mask=att_mask, labels=target) # we need the -first_token_traj because the labels are the true tokens of the trajectory from the point first_token_traj to the end of the trajectory
           #we get the logits
@@ -136,7 +136,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           traj_i_padded=traj[:first_token_to_predict]
           #we get all the predicted tokens for this line
           for i in range(len(all_predictions[batch_idx])):
-            print(f"we add the token number {i} to the input")
+            #print(f"we add the token number {i} to the input")
             traj_i_padded = torch.cat((traj_i_padded, torch.tensor([all_predictions[batch_idx][i]])))
           
           traj_i_padded = torch.nn.functional.pad(traj_i_padded, (0,512-len(traj_i_padded)), 'constant', 0)
