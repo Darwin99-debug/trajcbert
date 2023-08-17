@@ -99,7 +99,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
       
         print(f"the length of the list of true tokens is {len(list_true_tokens)}")
         print(f"the nb of tokens to predict is {nb_token_to_predict}")
-        assert len(list_true_tokens) == nb_token_to_predict - first_token_traj
+        assert len(list_true_tokens) == nb_token_to_predict 
         #we get the nimbers instead of the tensors
         list_true_tokens = list_true_tokens.tolist()
         #we get the ids of the true tokens
