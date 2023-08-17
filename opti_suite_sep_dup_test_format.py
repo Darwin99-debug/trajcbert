@@ -450,7 +450,7 @@ def formatting_to_train(data_format, tokenizer):
 
     return input_ids, attention_masks, targets, full_inputs
 
-def get_targets_dict(data_format):
+def get_targets_dict(data_format, tokenizer):
     """
     the targets dict works like this : the key is the token and the value is the id of the token
     if we want to get the id of a token we just have to do targets_dict[token]
@@ -458,18 +458,19 @@ def get_targets_dict(data_format):
     """
 
     #get every token in the lists of the tokenization_2 column
-    list_possible_target = []
+    list_possible_target_encoded = []
     for i in range(len(data_format)):
         for j in range(len(data_format['Tokenization_2'][i])):
-            list_possible_target.append(data_format['Tokenization_2'][i][j])
+            encoded_token = tokenizer.tokenize(data_format['Tokenization_2'][i][j], add_special_tokens=False, truncation=False, padding=False)
+            list_possible_target_encoded.append(encoded_token[0]) #encoded_token is a list of one element
     #add the [SEP] token that can also be a target
-    list_possible_target.append('[SEP]')
+    list_possible_target_encoded .append('[SEP]')
     #remove the duplicates
-    list_possible_target = list(set(list_possible_target))
+    list_possible_target_encoded  = list(set(list_possible_target_encoded ))
     #create the targets dict
     targets_dict={}
-    for i in range(len(list_possible_target)):
-        targets_dict[list_possible_target[i]]=i
+    for i in range(len(list_possible_target_encoded )):
+        targets_dict[list_possible_target_encoded [i]]=i
 
     print("targets_dict : ", targets_dict)
 
@@ -513,7 +514,7 @@ if __name__ == '__main__':
     len_context_info = len(data_format['CONTEXT_INPUT'][0].split(' '))
 
     #get the targets dict before separating the dataframe into train and test
-    targets_dict = get_targets_dict(data_format)
+    targets_dict = get_targets_dict(data_format, tokenizer)
 
     #we separate the dataframe into train and test 
     data_train, data_test = train_test_split(data_format, test_size=0.2, random_state=2023)
