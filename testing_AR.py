@@ -84,7 +84,8 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         first_token_to_predict = first_token_traj+int(min_traj_rate*nb_tokens_traj)
         print(f"the number of tokens of the trajectory that we do not predict is {min_traj_rate*nb_tokens_traj}")
         print("the length of the trajectory is ", nb_tokens_traj)
-        print(f"we are going to predict the tokens from the point {first_token_to_predict} to the end of the trajectory, ie we predict {nb_tokens_traj-first_token_to_predict} tokens")
+        nb_token_to_predict = nb_tokens_traj-first_token_to_predict
+        print(f"we are going to predict the tokens from the point {first_token_to_predict} to the end of the trajectory, ie we predict {nb_token_to_predict} tokens")
         
         #we take this token as the target token, remove every token after this token included and pad the input so that it has the same length as the input of the model ie 512
         #traj_i must contain the input of the model ie the cls token + context tokens + the real trajectory + the SEP token
@@ -97,7 +98,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         
         print(f"the list of true tokens is {list_true_tokens}")
         print(f"the length of the list of true tokens is {len(list_true_tokens)}")
-        assert len(list_true_tokens) == nb_tokens_traj-first_token_to_predict
+        assert len(list_true_tokens) == nb_token_to_predict - first_token_traj
         #we get the nimbers instead of the tensors
         list_true_tokens = list_true_tokens.tolist()
         #we get the ids of the true tokens
