@@ -52,7 +52,8 @@ def flat_matthews(preds, labels):
 def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_dict):
   """this function will predict the labels of the test set autoregressively"""
 
-  device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+  #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+  device = torch.device("cpu")
   model.to(device)
   model.eval()
 
