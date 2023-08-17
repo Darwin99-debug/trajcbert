@@ -461,10 +461,10 @@ def get_targets_dict(data_format, tokenizer):
     list_possible_target_encoded = []
     for i in range(len(data_format)):
         for j in range(len(data_format['Tokenization_2'][i])):
-            encoded_token = tokenizer.tokenize(data_format['Tokenization_2'][i][j], add_special_tokens=False, truncation=False, padding=False)
+            encoded_token = tokenizer.encode(data_format['Tokenization_2'][i][j], add_special_tokens=False, truncation=False, padding=False)
             list_possible_target_encoded.append(encoded_token[0]) #encoded_token is a list of one element
     #add the [SEP] token that can also be a target
-    list_possible_target_encoded .append('[SEP]')
+    list_possible_target_encoded.append('[SEP]')
     #remove the duplicates
     list_possible_target_encoded  = list(set(list_possible_target_encoded ))
     #create the targets dict
