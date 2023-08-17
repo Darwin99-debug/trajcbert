@@ -106,7 +106,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         
         #the below loop is going to predict the tokens of the trajectory from the point first_token_traj to the end of the trajectory
         for index_token_to_predict in range(first_token_to_predict,nb_tokens_traj):
-          print(f"we predict the token number {index_token_to_predict-first_token_traj} on {nb_tokens_traj-first_token_to_predict} tokens to predict")
+          print(f"we predict the token number {index_token_to_predict} on {nb_tokens_traj-first_token_to_predict} tokens to predict")
         
           #we get the attention mask associated to the input that is going to be 1s for the tokens that are not padded and 0s for the tokens that are padded
           att_mask = torch.cat((torch.ones(len(traj_i)), torch.zeros(512-len(traj_i)))).to(device)
