@@ -83,6 +83,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         nb_tokens_traj = len(traj)-first_token_traj
         print(f"there are {nb_tokens_traj} tokens in the trajectory")
         first_token_to_predict = first_token_traj+int(min_traj_rate*nb_tokens_traj)
+        print("the length of the trajectory is ", nb_tokens_traj)
         print(f"we are going to predict the tokens from the point {first_token_to_predict} to the end of the trajectory, ie we predict {nb_tokens_traj-first_token_to_predict} tokens")
         
         #we take this token as the target token, remove every token after this token included and pad the input so that it has the same length as the input of the model ie 512
@@ -115,10 +116,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           #we unsqueeze the input and the attention mask to get the right shape for the model ie (1,512)
           att_mask = att_mask.unsqueeze(0)
           traj_i_padded = traj_i_padded.unsqueeze(0)
-          
-          #we have to put the labels in the right shape for the model ie (1)
-          target=torch.tensor(list_true_tokens_ids[index_token_to_predict-first_token_to_predict]).unsqueeze(0).to(device)
-          #we get the outputs of the model
+          print(f"the length of the list of true tokens ids is {len(list_true_tokens_ids)}"odel
           outputs = model(input_ids=traj_i_padded, token_type_ids=None, attention_mask=att_mask, labels=target) # we need the -first_token_traj because the labels are the true tokens of the trajectory from the point first_token_traj to the end of the trajectory
           #we get the logits
           logits = outputs[1].detach().cpu().numpy()
@@ -210,7 +208,7 @@ def main():
   #we manage the format of the predictions and the true labels
   all_predictions = [item for sublist in all_predictions for item in sublist]
   all_true_labels = [item for sublist in all_true_labels for item in sublist]
-  
+
   accuracy = flat_accuracy(np.array(all_predictions), np.array(all_true_labels))
   #we want the accumulated loss witch is the loss of the predictions calculated with the cross entropy criterion 
   #we get the accumulated loss
