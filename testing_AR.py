@@ -121,9 +121,9 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           #we add the predicted token to the list of predictions
           all_predictions[batch_idx].append(predicted_token)
           #we get the detokenized predicted token ie from the id of the token we get the token and then we get the coordinates of the token if it is not the sep token
-          predicted_token_detokenized = h3.h3_to_geo(list(target_dict.keys())[list(target_dict.values()).index(predicted_token)]) if list(target_dict.keys())[list(target_dict.values()).index(predicted_token)] != '[SEP]' else None
+          #predicted_token_detokenized = h3.h3_to_geo(list(target_dict.keys())[list(target_dict.values()).index(predicted_token)]) if list(target_dict.keys())[list(target_dict.values()).index(predicted_token)] != '[SEP]' else None
           #we add the detokenized predicted token to the list of detokenized predictions
-          all_predictions_detokenized[batch_idx].append(predicted_token_detokenized)
+          #all_predictions_detokenized[batch_idx].append(predicted_token_detokenized)
           #we add the predicted to the input by replacing the first pad token by the predicted token and take the next true token as the target token
           traj_i_padded[index_token_to_predict] = predicted_token
 
