@@ -64,6 +64,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
     for batch_idx, batch in enumerate(tqdm(prediction_dataloader)):
       batch = batch[0].to(device) 
       #we do a loop on the trajectories of the batch
+      print(f"there are {len(batch)} trajectories in the batch")
       for line in range(len(batch)):
       #we are going to predict the trajectory named traj autoregressively from the point nb_tokens to the end of the trajectory
         #traj is the trajectory we are going to predict ie contains the real trajectory minus the context tokens
@@ -104,7 +105,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         #list_true_tokens_detokenized = [h3.h3_to_geo(list(target_dict.keys())[list(target_dict.values()).index(token)]) if list(target_dict.keys())[list(target_dict.values()).index(token)] != '[SEP]' else None for token in list_true_tokens]
         
         #the below loop is going to predict the tokens of the trajectory from the point first_token_traj to the end of the trajectory
-        for index_token_to_predict in range(first_token_traj,nb_tokens_traj):
+        for index_token_to_predict in range(first_token_to_predict,nb_tokens_traj):
         
           #we get the attention mask associated to the input that is going to be 1s for the tokens that are not padded and 0s for the tokens that are padded
           att_mask = torch.cat((torch.ones(len(traj_i)), torch.zeros(512-len(traj_i)))).to(device)
