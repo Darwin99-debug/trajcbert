@@ -126,9 +126,10 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           #predicted_token_detokenized = h3.h3_to_geo(list(target_dict.keys())[list(target_dict.values()).index(predicted_token)]) if list(target_dict.keys())[list(target_dict.values()).index(predicted_token)] != '[SEP]' else None
           #we add the detokenized predicted token to the list of detokenized predictions
           #all_predictions_detokenized[batch_idx].append(predicted_token_detokenized)
-          #we add the predicted to the input by replacing the first pad token by the predicted token and take the next true token as the target token
+          #we add the predicted to the input by taking the input of the model and adding the predicted token at the end
           traj_i_padded=traj[:first_token_to_predict]
-          traj_i_padded.append(predicted_token)
+          traj_i_padded = torch.cat((traj_i_padded, torch.tensor([predicted_token])))
+          
           traj_i_padded = torch.nn.functional.pad(traj_i_padded, (0,512-len(traj_i_padded)), 'constant', 0)
 
          
