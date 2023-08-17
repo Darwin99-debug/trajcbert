@@ -12,6 +12,7 @@ DIR_INPUTS_IDS = '/home/daril/trajcbert/savings_for_parrallel_1_2/input_ids_f_83
 DIR_ATTENTION_MASKS = '/home/daril/trajcbert/savings_for_parrallel_1_2/attention_masks_833383_opti.pkl'
 DIR_TARGETS = '/home/daril/trajcbert/savings_for_parrallel_1_2/targets_833383_opti.pkl'
 PRETRAINED_MODEL_NAME = '/home/daril/trajcbert/savings_for_parrallel_1_2/model_before_training_opti_833383'
+DATALOADER_DIR = '/home/daril/trajcbert/savings/test_dataloader_833383.pt'
 
 
 
@@ -65,12 +66,9 @@ def load_data(batch_size=32):
     test_sampler = SequentialSampler(test_data) # we don't use the DistributedSampler here because the validation is on a CPU
     test_dataloader = DataLoader(test_data, sampler=test_sampler, batch_size=batch_size)
     # save the test dataloader
-    with open('/home/daril/trajcbert/savings/test_dataloader_833383.pt', 'wb') as f:
-        pickle.dump(test_dataloader, f)
+  
 
-
-
-
+    torch.save(test_dataloader, DATALOADER_DIR)
 
 
     return test_dataloader
