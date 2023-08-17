@@ -108,7 +108,6 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           att_mask = torch.cat((torch.ones(len(traj_i)), torch.zeros(512-len(traj_i)))).to(device)
           print(f"att_mask : {att_mask}")
           print(f"att_mask type : {type(att_mask)}")
-          print(f"traj_i_padded : {traj_i_padded}")
           print(f"traj_i_padded type : {type(traj_i_padded)}")
           #we get the batch
           traj_i_padded = traj_i_padded.unsqueeze(0)
