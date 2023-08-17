@@ -28,7 +28,7 @@ DIR_MODEL_NOT_TRAINED = '/home/daril_kw/data/model_resized_embeddings_test'
 TRAINED_MODEL_PATH = f"/home/daril_kw/data/test/temp_file/checkpoint_epoch_1.pt"
 DIR_TEST_DATALOADER = '/home/daril_kw/data/test_dataloader_parallel_gene.pt'
 
-device = torch.device("cpu") 
+
 
 def flat_accuracy(preds, labels):
     """this function computes the accuracy of the predictions"""
@@ -49,11 +49,9 @@ def flat_matthews(preds, labels):
     labels_flat = labels.flatten()
     return matthews_corrcoef(labels_flat,pred_flat)
 
-def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_dict):
+def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_dict, device):
   """this function will predict the labels of the test set autoregressively"""
 
-  #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-  device = torch.device("cpu")
   model.to(device)
   model.eval()
 
@@ -150,6 +148,7 @@ def calculate_MSE_score(all_predictions_detokenized, all_true_labels_coord):
 
 
 def main():
+  device = torch.device("cpu") 
 
   with open("/home/daril_kw/trajcbert/trajcbert/parameter_sep_dup.json") as json_file:
       config_param = json.loads(json_file.read())
@@ -177,7 +176,7 @@ def main():
   model.eval()
 
   #we predict
-  all_predictions, all_predictions_detokenized, all_true_labels = test_autoregressively(prediction_dataloader, model, min_traj_rate, targets_dict)
+  all_predictions, all_predictions_detokenized, all_true_labels = test_autoregressively(prediction_dataloader, model, min_traj_rate, targets_dict, device)
 
   #we get the list of the coordinates associated to all_true_labels
   all_true_labels_coord = []
