@@ -85,8 +85,6 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         first_token_to_predict = first_token_traj+int(min_traj_rate*nb_tokens_traj)
         print(f"we are going to predict the tokens from the point {first_token_to_predict} to the end of the trajectory, ie we predict {nb_tokens_traj-first_token_to_predict} tokens")
         
-    
-
         #we take this token as the target token, remove every token after this token included and pad the input so that it has the same length as the input of the model ie 512
         #traj_i must contain the input of the model ie the cls token + context tokens + the real trajectory + the SEP token
         traj_i = traj[:first_token_to_predict]
@@ -100,6 +98,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         list_true_tokens = list_true_tokens.tolist()
         #we get the ids of the true tokens
         list_true_tokens_ids = [target_dict[token] for token in list_true_tokens]
+        print(f"the length of the list of true tokens ids is {len(list_true_tokens_ids)}")
       
         all_true_labels[batch_idx].append(list_true_tokens)
         #we get the list of the detokenized true tokens of the trajectory, ie we get the coordinates of the tokens if it is not the sep token
@@ -117,10 +116,9 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           traj_i_padded = traj_i_padded.unsqueeze(0)
           
           #we have to put the labels in the right shape for the model ie (1)
-          list_true_tokens_ids[index_token_to_predict-first_token_traj] = torch.tensor(list_true_tokens_ids[index_token_to_predict-first_token_traj]).unsqueeze(0).to(device)
-          
+          target=torch.tensor(list_true_tokens_ids[index_token_to_predict-first_token_traj]).unsqueeze(0).to(device)
           #we get the outputs of the model
-          outputs = model(input_ids=traj_i_padded, token_type_ids=None, attention_mask=att_mask, labels=list_true_tokens_ids[index_token_to_predict-first_token_traj]) # we need the -first_token_traj because the labels are the true tokens of the trajectory from the point first_token_traj to the end of the trajectory
+          outputs = model(input_ids=traj_i_padded, token_type_ids=None, attention_mask=att_mask, labels=target) # we need the -first_token_traj because the labels are the true tokens of the trajectory from the point first_token_traj to the end of the trajectory
           #we get the logits
           logits = outputs[1].detach().cpu().numpy()
           #we get the predicted token traj_i_padded = torch.cat((traj_i_padded, torch.tensor([predicted_token])))
