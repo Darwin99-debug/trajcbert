@@ -81,8 +81,8 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
 
         #we get the length of the trajectory (ie the number of tokens of the trajectory from the first token of the trajectory to the end of the trajectory)
         nb_tokens_traj = len(traj)-first_token_traj
-        print(f"there are {nb_tokens_traj} tokens in the trajectory")
         first_token_to_predict = first_token_traj+int(min_traj_rate*nb_tokens_traj)
+        print(f"the number of tokens of the trajectory that we do not predict is {min_traj_rate*nb_tokens_traj}")
         print("the length of the trajectory is ", nb_tokens_traj)
         print(f"we are going to predict the tokens from the point {first_token_to_predict} to the end of the trajectory, ie we predict {nb_tokens_traj-first_token_to_predict} tokens")
         
@@ -92,8 +92,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
         traj_i_padded = torch.nn.functional.pad(traj_i, (0,512-len(traj_i)), 'constant', 0)
 
         #we get the list of the true tokens of the part of the trajectory we are going to predict
-        #ie the trajectory from the point 
-        list_true_tokens = traj[first_token_to_predict:]
+        #ie we get the trahectory from the point fisrt_to_predict to the end of the trajectory
         assert len(list_true_tokens) == nb_tokens_traj-first_token_to_predict
         print(f"the list of true tokens is {list_true_tokens}")
         print(f"the length of the list of true tokens is {len(list_true_tokens)}")
