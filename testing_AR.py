@@ -80,7 +80,9 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
 
         #we get the length of the trajectory (ie the number of tokens of the trajectory from the first token of the trajectory to the end of the trajectory)
         nb_tokens_traj = len(traj)-first_token_traj
+        print(f"there are {nb_tokens_traj} tokens in the trajectory")
         first_token_to_predict = first_token_traj+int(min_traj_rate*nb_tokens_traj)
+        print(f"we are going to predict the tokens from the point {first_token_to_predict} to the end of the trajectory, ie we predict {nb_tokens_traj-first_token_to_predict} tokens")
         
     
 
