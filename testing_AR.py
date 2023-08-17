@@ -107,8 +107,11 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           #we get the attention mask associated to the input that is going to be 1s for the tokens that are not padded and 0s for the tokens that are padded
           att_mask = torch.cat((torch.ones(len(traj_i)), torch.zeros(512-len(traj_i)))).to(device)
         
+          #we unsqueeze the input and the attention mask to get the right shape for the model
+          att_mask = att_mask.unsqueeze(0)
+          traj_i_padded = traj_i_padded.unsqueeze(0)
           #we get the outputs of the model
-          outputs = model(input_ids=traj_i_padded, token_type_ids=None, attention_mask=att_mask, labels=list_true_tokens_ids[index_token_to_predict-first_token_traj].unsqueeze(0)) # we need the -first_token_traj because the labels are the true tokens of the trajectory from the point first_token_traj to the end of the trajectory
+          outputs = model(input_ids=traj_i_padded, token_type_ids=None, attention_mask=att_mask, labels=list_true_tokens_ids[index_token_to_predict-first_token_traj]) # we need the -first_token_traj because the labels are the true tokens of the trajectory from the point first_token_traj to the end of the trajectory
           #we get the logits
           logits = outputs[1].detach().cpu().numpy()
           #we get the predicted token
