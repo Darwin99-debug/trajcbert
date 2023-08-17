@@ -81,17 +81,22 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
 
         #we get the length of the trajectory (ie the number of tokens of the trajectory from the first token of the trajectory to the end of the trajectory)
         nb_tokens_traj = len(traj)-first_token_traj
+        first_token_to_predict = first_token_traj+int(min_traj_rate*nb_tokens_traj)
         
-        #we get the list of the true tokens of the trajectory
-        list_true_tokens = traj[first_token_traj:] #we remove the 6 context tokens
-        all_true_labels[batch_idx].append(list_true_tokens)
-        #we get the list of the detokenized true tokens of the trajectory, ie we get the coordinates of the tokens if it is not the sep token
-        #list_true_tokens_detokenized = [h3.h3_to_geo(list(target_dict.keys())[list(target_dict.values()).index(token)]) if list(target_dict.keys())[list(target_dict.values()).index(token)] != '[SEP]' else None for token in list_true_tokens]
+    
 
         #we take this token as the target token, remove every token after this token included and pad the input so that it has the same length as the input of the model ie 512
         #traj_i must contain the input of the model ie the cls token + context tokens + the real trajectory + the SEP token
-        traj_i = traj[:first_token_traj+int(min_traj_rate*nb_tokens_traj)] 
+        traj_i = traj[:first_token_to_predict]
         traj_i_padded = torch.nn.functional.pad(traj_i, (0,512-len(traj_i)), 'constant', 0)
+
+        #we get the list of the true tokens of the part of the trajectory we are going to predict
+        #ie the trajectory from the point 
+        list_true_tokens = traj[first_token_to_predict:]
+      
+        all_true_labels[batch_idx].append(list_true_tokens)
+        #we get the list of the detokenized true tokens of the trajectory, ie we get the coordinates of the tokens if it is not the sep token
+        #list_true_tokens_detokenized = [h3.h3_to_geo(list(target_dict.keys())[list(target_dict.values()).index(token)]) if list(target_dict.keys())[list(target_dict.values()).index(token)] != '[SEP]' else None for token in list_true_tokens]
         
         #the below loop is going to predict the tokens of the trajectory from the point first_token_traj to the end of the trajectory
         for index_token_to_predict in range(first_token_traj,nb_tokens_traj):
@@ -99,7 +104,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           #we get the attention mask associated to the input that is going to be 1s for the tokens that are not padded and 0s for the tokens that are padded
           att_mask = torch.cat((torch.ones(len(traj_i)), torch.zeros(512-len(traj_i)))).to(device)
           #we predict the target token
-          outputs = model(traj_i_padded, token_type_ids=None, attention_mask=att_mask)
+          outputs = model(traj_i_padded, token_type_ids=None, attention_mask=att_mask, labels=list_true_tokens[index_token_to_predict-first_token_traj].unsqueeze(0)) # we need the -first_token_traj because the labels are the true tokens of the trajectory from the point first_token_traj to the end of the trajectory
           #we get the logits
           logits = outputs[1].detach().cpu().numpy()
           #we get the predicted token
