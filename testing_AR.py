@@ -94,7 +94,7 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
 
         #we get the list of the true tokens of the part of the trajectory we are going to predict
         #ie we get the trahectory from the point fisrt_to_predict to the end of the trajectory
-        list_true_tokens = traj[first_token_to_predict:]
+        list_true_tokens = traj[first_token_to_predict+first_token_traj:]
         
       
         print(f"the length of the list of true tokens is {len(list_true_tokens)}")
