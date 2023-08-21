@@ -6,17 +6,25 @@ import pickle
 from torch.utils.data import TensorDataset, DataLoader, SequentialSampler
 
 
-DIR_INPUTS_IDS = (
-    "/home/daril/trajcbert/savings_for_parrallel_1_2/input_ids_f_833383.pkl"
-)
-DIR_ATTENTION_MASKS = (
-    "/home/daril/trajcbert/savings_for_parrallel_1_2/attention_masks_833383_opti.pkl"
-)
-DIR_TARGETS = "/home/daril/trajcbert/savings_for_parrallel_1_2/targets_833383_opti.pkl"
-PRETRAINED_MODEL_NAME = (
-    "/home/daril/trajcbert/models/model_saved_parallel_version_1_2_32"
-)
-DATALOADER_DIR = "/home/daril/trajcbert/savings/test_dataloader_833383.pt"
+
+
+
+
+
+
+DIR_INPUTS_IDS = '/home/daril/trajcbert/savings_for_parrallel_1_2/input_ids_f_833383.pkl'
+DIR_ATTENTION_MASKS = '/home/daril/trajcbert/savings_for_parrallel_1_2/attention_masks_833383_opti.pkl'
+DIR_TARGETS = '/home/daril/trajcbert/savings_for_parrallel_1_2/targets_833383_opti.pkl'
+PRETRAINED_MODEL_NAME = '/home/daril/trajcbert/models/model_saved_parallel_version_1_2_10_epochs'
+DATALOADER_DIR = '/home/daril/trajcbert/savings/test_dataloader_833383.pt'
+
+
+
+
+
+
+
+
 
 
 # device = torch.device("cpu")
