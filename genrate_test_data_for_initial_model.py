@@ -53,6 +53,10 @@ def load_data(batch_size=32):
     
     train_masks, test_mask, _, _ = train_test_split(attention_masks, targets_input,random_state=2023, test_size=0.2)
 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    # we create the dataloader for the test data
+
 
     
    
