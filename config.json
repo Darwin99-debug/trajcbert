@@ -1,14 +1,7 @@
 {
-<<<<<<< HEAD
-    "batch_size": 64,
-    "optimizer": "Adam",
-    "learning_rate": 2e-5,
-    "num_epochs":150,
-=======
     "batch_size": 32,
     "optimizer": "Adam",
     "learning_rate": 2e-5,
     "num_epochs": 10,
->>>>>>> 90c98b7e025863d170c862f22c28d06a92d0a5b9
     "save_every": 1
 }

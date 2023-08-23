@@ -353,7 +353,7 @@ if __name__ == "__main__":
     import json
 
     # import the config file
-    with open("config_1_2 _batch_size_32.json") as json_file:
+    with open("config.json") as json_file:
         config = json.load(json_file)
 
     batch_size = config["batch_size"]
