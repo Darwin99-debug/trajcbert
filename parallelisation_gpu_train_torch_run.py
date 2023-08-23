@@ -365,7 +365,7 @@ if __name__ == "__main__":
 
     main(
         save_every=save_every,
-        epochs=epochs,
+        total_epochs=epochs,
         batch_size=batch_size,
         snapshot_path=SNASHOT_PATH,
     )
