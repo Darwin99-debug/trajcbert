@@ -84,7 +84,7 @@ class Trainer:
     model: the model to train like BertForSequenceClassification
     train_data: the training data
     optimizer: the optimizer to use like AdamW
-    gpu_id: the id of the gpu to use
+    local_rank: the id of the gpu to use
     save_every: the number of epochs between each checkpoint
     scheduler: the scheduler to use like get_linear_schedule_with_warmup
 
@@ -102,8 +102,9 @@ class Trainer:
         scheduler: torch.optim.lr_scheduler.LambdaLR,
         snapshot_path: str,
     ) -> None:
-        self.gpu_id = int(os.environ["LOCAL_RANK"])
-        self.model = model.to(self.gpu_id)
+        self.local_rank = int(os.environ["LOCAL_RANK"])
+        self.global_rank = int(os.environ["RANK"])
+        self.model = model.to(self.local_rank)
         self.train_data = train_data
         self.validation_data = validation_data
         self.optimizer = optimizer
@@ -116,7 +117,7 @@ class Trainer:
         self.scheduler = scheduler
         self.model = DDP(
             model,
-            device_ids=[self.gpu_id],
+            device_ids=[self.local_rank],
         )
 
     def _load_snapshot(self, snapshot_path: str) -> None:
@@ -153,21 +154,21 @@ class Trainer:
         # we recover the batch size
         b_sz = len(next(iter(self.train_data))[0])  # batch size
         print(
-            f"[GPU{self.gpu_id}] Epoch {epoch} | Batchsize: {b_sz} | Steps: {len(self.train_data)}"
+            f"[GPU{self.global_rank}] Epoch {epoch} | Batchsize: {b_sz} | Steps: {len(self.train_data)}"
         )
         self.train_data.sampler.set_epoch(epoch)
         total_loss = 0.0
         for batch in self.train_data:
-            batch = tuple(t.to(self.gpu_id) for t in batch)
+            batch = tuple(t.to(self.local_rank) for t in batch)
             # unpack the batch
             input_ids, attention_mask, labels = batch
-            # input_ids = input_ids.to(self.gpu_id)
-            # attention_mask = batch["attention_mask"].to(self.gpu_id)
-            # labels = batch["labels"].to(self.gpu_id)
+            # input_ids = input_ids.to(self.local_rank)
+            # attention_mask = batch["attention_mask"].to(self.local_rank)
+            # labels = batch["labels"].to(self.local_rank)
             loss = self._run_batch(input_ids, attention_mask, labels)
             total_loss += loss
         average_loss = total_loss / len(self.train_data)
-        print(f"[GPU{self.gpu_id}] Epoch {epoch} | Average loss: {average_loss}")
+        print(f"[GPU{self.local_rank}] Epoch {epoch} | Average loss: {average_loss}")
         return average_loss
 
     def _accuracy(self, logits: np.ndarray, labels: np.ndarray) -> float:
@@ -191,11 +192,11 @@ class Trainer:
 
         with torch.no_grad():
             for batch in self.validation_data:
-                batch = tuple(t.to(self.gpu_id) for t in batch)
+                batch = tuple(t.to(self.local_rank) for t in batch)
                 b_input_ids, b_input_mask, b_labels = batch
-                b_input_ids = b_input_ids.to(self.gpu_id)
-                b_input_mask = b_input_mask.to(self.gpu_id)
-                b_labels = b_labels.to(self.gpu_id)
+                b_input_ids = b_input_ids.to(self.local_rank)
+                b_input_mask = b_input_mask.to(self.local_rank)
+                b_labels = b_labels.to(self.local_rank)
 
                 outputs = model(
                     b_input_ids,
@@ -241,7 +242,7 @@ class Trainer:
         best_loss = float("inf")
         for epoch in range(self.epochs_run, max_epochs):
             self._run_epoch(epoch)
-            if self.gpu_id == 0 and epoch % self.save_every == 0:
+            if self.local_rank == 0 and epoch % self.save_every == 0:
                 validation_loss, _, _ = self._validate()
                 if validation_loss < best_loss:
                     best_loss = validation_loss

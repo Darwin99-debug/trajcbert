@@ -22,14 +22,14 @@ import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 
 DIR_INPUTS_IDS = (
-    "/home/daril/trajcbert/savings_for_parrallel_1_2/input_ids_f_833383.pkl"
+    "/home/daril_kw/data/savings_for_parallel_60/input_ids_full_opti_for_para_60.pkl"
 )
 DIR_ATTENTION_MASKS = (
-    "/home/daril/trajcbert/savings_for_parrallel_1_2/attention_masks_833383_opti.pkl"
+    "/home/daril_kw/data/savings_for_parallel_60/attention_masks_full_opti_for_para_60.pkl"
 )
-DIR_TARGETS = "/home/daril/trajcbert/savings_for_parrallel_1_2/targets_833383_opti.pkl"
+DIR_TARGETS = "/home/daril_kw/data/savings_for_parallel_60/targets_full_opti_for_para_60.pkl"
 PRETRAINED_MODEL_NAME = (
-    "/home/daril/trajcbert/savings_for_parrallel_1_2/model_before_training_opti_833383"
+    "/home/daril_kw/data/savings_for_parallel_60/model_before_training_opti_full_for_para_60/"
 )
 
 # WORLD_S=2
@@ -346,7 +346,7 @@ def main(
 
     # save the model
     model_to_save = model.module if hasattr(model, "module") else model
-    model_to_save.save_pretrained("models/model_saved_parallel_version_1_2_32")
+    model_to_save.save_pretrained("models/model_saved_parallel_version_1_2_32_torh_run")
 
 
 if __name__ == "__main__":
@@ -361,7 +361,7 @@ if __name__ == "__main__":
     save_every = config["save_every"]
 
     # world_size = torch.cuda.device_count()
-    SNASHOT_PATH = f"models/model_saved_parallel_version_1_2_32/checkpoints/snapshot.pt"
+    SNASHOT_PATH = f"models/model_saved_parallel_version_1_2_32_torh_run/checkpoints/snapshot.pt"
 
     main(
         save_every=save_every,
