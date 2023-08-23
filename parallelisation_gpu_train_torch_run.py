@@ -332,8 +332,8 @@ def main(
     # we create the trainer
     trainer = Trainer(
         model=model,
-        train_dataloader=train_dataloader,
-        validation_dataloader=validation_dataloader,
+        train_data=train_dataloader,
+        validation_data=validation_dataloader,
         optimizer=optimizer,
         save_every=save_every,
         scheduler=scheduler,
