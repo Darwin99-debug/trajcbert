@@ -167,6 +167,15 @@ class Trainer:
             # labels = batch["labels"].to(self.gpu_id)
             loss = self._run_batch(input_ids, attention_mask, labels)
             total_loss += loss
+            # free memory
+            del input_ids
+            del attention_mask
+            del labels
+
+            # free GPU memory
+            torch.cuda.empty_cache()
+        
+
         average_loss = total_loss / len(self.train_data)
         print(f"[GPU{self.gpu_id}] Epoch {epoch} | Average loss: {average_loss}")
         return average_loss
@@ -249,6 +258,8 @@ class Trainer:
                     self._save_snapshot(epoch)
                     print(f"Epoch {epoch} | Best validation loss: {best_loss}")
             torch.distributed.barrier()  # wait for all processes to finish the epoch
+            # free GPU memory
+            torch.cuda.empty_cache()
 
 
 def load_data(batch_size):
