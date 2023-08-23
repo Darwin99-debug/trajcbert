@@ -109,6 +109,7 @@ class Trainer:
         self.optimizer = optimizer
         self.save_every = save_every
         self.epochs_run = 0
+        self.snapshot_path = snapshot_path
         if os.path.exists(snapshot_path):
             print("Loading Snapshot...")
             self._load_snapshot(snapshot_path)
