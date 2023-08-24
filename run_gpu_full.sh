@@ -6,8 +6,8 @@
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
 #SBATCH --cpus-per-task=16 # number of cores
-#SBATCH --mem=128G 
-#SBATCH --nodes=3 
+#SBATCH --mem=0 
+#SBATCH --nodes=1 
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=kengne_wambo.daril_raoul@courrier.uqam.ca
 
