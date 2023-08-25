@@ -6,7 +6,7 @@ from transformers import BertTokenizer, BertForSequenceClassification, get_linea
 import torch
 import json
 import pickle
-from tqdm import tqdm
+from tqdm import tqdm 
 
 
 #directories :
