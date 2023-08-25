@@ -358,7 +358,7 @@ def main(
 
     # save the model
     model_to_save = model.module if hasattr(model, "module") else model
-    model_to_save.save_pretrained("models/model_saved_parallel_version_1_2_32_torh_run")
+    model_to_save.save_pretrained("/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_32_torh_run")
 
 
 if __name__ == "__main__":
@@ -373,7 +373,7 @@ if __name__ == "__main__":
     save_every = config["save_every"]
 
     # world_size = torch.cuda.device_count()
-    SNASHOT_PATH = f"models/model_saved_parallel_version_1_2_32_torh_run/checkpoints/snapshot.pt"
+    SNASHOT_PATH = f"/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_32_torh_run/checkpoints/snapshot.pt"
 
     main(
         save_every=save_every,

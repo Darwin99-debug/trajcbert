@@ -192,12 +192,12 @@ Data conversion to tensors...
 [GPU0] Epoch 0 | Batchsize: 16 | Steps: 9376
 [GPU0] Epoch 0 | Average loss: 3.719192441378056
   Validation Loss: 1.9754
-Epoch 0 | Training checkpoint saved at models/model_saved_parallel_version_1_2/checkpoints/checkpoint_epoch_0.pt
+Epoch 0 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2/checkpoints/checkpoint_epoch_0.pt
 Epoch 0 | Best validation loss: 1.9753627814719052
 [GPU0] Epoch 1 | Batchsize: 16 | Steps: 9376
 [GPU0] Epoch 1 | Average loss: 2.283798067185252
   Validation Loss: 1.5624
-Epoch 1 | Training checkpoint saved at models/model_saved_parallel_version_1_2/checkpoints/checkpoint_epoch_1.pt
+Epoch 1 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2/checkpoints/checkpoint_epoch_1.pt
 Epoch 1 | Best validation loss: 1.562378987115666
 Data conversion to tensors...
 

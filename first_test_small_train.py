@@ -423,7 +423,7 @@ np.save(output_dir+'accuracy_values.npy',accuracy_values)"""
 # the hasattr function checks if the model has the attribute module or not
 #  the attribute module is used when we use the DataParallel function
 
-model.save_pretrained('models/model_trained_cpu_version')
+model.save_pretrained('/home/daril/scratch/data/trajcbert/models/model_trained_cpu_version')
 
 #np.save('/home/daril_kw/data/loss.npy',loss_values)
 #np.save('/home/daril_kw/data/acc.npy' ,accuracy_values)
@@ -432,4 +432,4 @@ model.save_pretrained('models/model_trained_cpu_version')
 #torch.save(validation_dataloader,'/home/daril_kw/data/validation_dataloader_v_small.pt')
 
 #save the prediction dataloader
-torch.save(prediction_dataloader,'models/pred_dataloader_v_small.pt')
+torch.save(prediction_dataloader,'/home/daril/scratch/data/trajcbert/models/pred_dataloader_v_small.pt')

@@ -11,4 +11,4 @@ Traceback (most recent call last):
     resolved_config_file = cached_file(
   File "/localscratch/daril.20297971.0/MYENV/lib/python3.10/site-packages/transformers/utils/hub.py", line 388, in cached_file
     raise EnvironmentError(
-OSError: /home/daril/trajcbert/models/model_saved_parallel_version_1_2_32 does not appear to have a file named config.json. Checkout 'https://huggingface.co//home/daril/trajcbert/models/model_saved_parallel_version_1_2_32/main' for available files.
+OSError: /home/daril/trajcbert//home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_32 does not appear to have a file named config.json. Checkout 'https://huggingface.co//home/daril/trajcbert//home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_32/main' for available files.

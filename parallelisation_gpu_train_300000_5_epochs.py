@@ -204,7 +204,7 @@ class Trainer:
 
     def _save_checkpoint(self, epoch):
         ckp = self.model.module.state_dict()
-        PATH = f"models/model_saved_parallel_version_300000_5_epochs/checkpoints/checkpoint_epoch_{epoch}.pt"
+        PATH = f"/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_300000_5_epochs/checkpoints/checkpoint_epoch_{epoch}.pt"
         torch.save(ckp, PATH)
         print(f"Epoch {epoch} | Training checkpoint saved at {PATH}")
 
@@ -290,7 +290,7 @@ def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_s
 
     #save the model
     model_to_save = model.module if hasattr(model, 'module') else model
-    model_to_save.save_pretrained('models/model_saved_parallel_version_300000_5_epochs')
+    model_to_save.save_pretrained('/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_300000_5_epochs')
 
 
 
@@ -689,7 +689,7 @@ if __name__ == "__main__":
 
 #     #save the model
 #     model_to_save = model.module if hasattr(model, 'module') else model
-#     model_to_save.save_pretrained('models/model_saved_parallel_version')
+#     model_to_save.save_pretrained('/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version')
 
 
 

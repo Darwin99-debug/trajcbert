@@ -306,47 +306,47 @@ Data conversion to tensors...
 [GPU0] Epoch 0 | Batchsize: 32 | Steps: 4688
 [GPU0] Epoch 0 | Average loss: 4.405239541198003
   Validation Loss: 2.2907
-Epoch 0 | Training checkpoint saved at models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_0.pt
+Epoch 0 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_0.pt
 Epoch 0 | Best validation loss: 2.2907007611186856
 [GPU0] Epoch 1 | Batchsize: 32 | Steps: 4688
 [GPU0] Epoch 1 | Average loss: 2.212099674923835
   Validation Loss: 1.3799
-Epoch 1 | Training checkpoint saved at models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_1.pt
+Epoch 1 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_1.pt
 Epoch 1 | Best validation loss: 1.3799007777231898
 [GPU0] Epoch 2 | Batchsize: 32 | Steps: 4688
 [GPU0] Epoch 2 | Average loss: 1.369333598692822
   Validation Loss: 1.0824
-Epoch 2 | Training checkpoint saved at models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_2.pt
+Epoch 2 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_2.pt
 Epoch 2 | Best validation loss: 1.0823935738652086
 [GPU0] Epoch 3 | Batchsize: 32 | Steps: 4688
 [GPU0] Epoch 3 | Average loss: 1.0586959241488916
   Validation Loss: 0.9502
-Epoch 3 | Training checkpoint saved at models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_3.pt
+Epoch 3 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_3.pt
 Epoch 3 | Best validation loss: 0.9502436273271887
 [GPU0] Epoch 4 | Batchsize: 32 | Steps: 4688
 [GPU0] Epoch 4 | Average loss: 0.8844643014613476
   Validation Loss: 0.8712
-Epoch 4 | Training checkpoint saved at models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_4.pt
+Epoch 4 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_4.pt
 Epoch 4 | Best validation loss: 0.871237688166967
 [GPU0] Epoch 5 | Batchsize: 32 | Steps: 4688
 [GPU0] Epoch 5 | Average loss: 0.7648624891872953
   Validation Loss: 0.8309
-Epoch 5 | Training checkpoint saved at models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_5.pt
+Epoch 5 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_5.pt
 Epoch 5 | Best validation loss: 0.8309087859048381
 [GPU0] Epoch 6 | Batchsize: 32 | Steps: 4688
 [GPU0] Epoch 6 | Average loss: 0.6894682772448064
   Validation Loss: 0.8077
-Epoch 6 | Training checkpoint saved at models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_6.pt
+Epoch 6 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_6.pt
 Epoch 6 | Best validation loss: 0.8076504652608265
 [GPU0] Epoch 7 | Batchsize: 32 | Steps: 4688
 [GPU0] Epoch 7 | Average loss: 0.6203575421700019
   Validation Loss: 0.8037
-Epoch 7 | Training checkpoint saved at models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_7.pt
+Epoch 7 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_7.pt
 Epoch 7 | Best validation loss: 0.8036743703757675
 [GPU0] Epoch 8 | Batchsize: 32 | Steps: 4688
 [GPU0] Epoch 8 | Average loss: 0.5627134858690991
   Validation Loss: 0.7989
-Epoch 8 | Training checkpoint saved at models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_8.pt
+Epoch 8 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_20_epochs/checkpoints/checkpoint_epoch_8.pt
 Epoch 8 | Best validation loss: 0.7989322770737297
 [GPU0] Epoch 9 | Batchsize: 32 | Steps: 4688
 [GPU0] Epoch 9 | Average loss: 0.5193073413622448
