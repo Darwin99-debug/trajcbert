@@ -2,7 +2,7 @@
 #SBATCH --account=def-nkambou
 #SBATCH --gres=gpu:1
 #SBATCH --time=4-0:00
-#SBATCH --job-name=trajcbert_test_1_2_data_1_point_full_context_10_epochs
+#SBATCH --job-name=trajcbert_test_1_2_data_1_point_witout_context_20_epochs
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
 #SBATCH --cpus-per-task=16 # number of cores for each task
@@ -20,6 +20,6 @@ source $VENV_DIR/bin/activate
 pip install -r requirements.txt --no-index
 pip list
 
-python testing_1_point_with_context.py
+python testing_1_point_without_context.py
 
 
