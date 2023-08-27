@@ -1,12 +1,13 @@
 #!/bin/bash
 #SBATCH --account=def-nkambou
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:4
 #SBATCH --time=4-0:00
-#SBATCH --job-name=trajcbert_test_1_2_data_1_point_full_context_10_epochs
+#SBATCH --job-name=trajcbert_on_gpu_1_2_batch_size_32_4_DAYS_100_epochs_with_c
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
 #SBATCH --cpus-per-task=16 # number of cores for each task
-#SBATCH --mem=256G
+#SBATCH --nodes=3 
+#SBATCH --mem=0
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=kengne_wambo.daril_raoul@courrier.uqam.ca
 
@@ -20,6 +21,7 @@ source $VENV_DIR/bin/activate
 pip install -r requirements.txt --no-index
 pip list
 
-python testing_1_point_with_context.py
+
+python parallelisation_gpu_train_1_2_bs_32_100_epochs.py
 
 
