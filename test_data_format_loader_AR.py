@@ -51,6 +51,7 @@ def get_whole_inputs(dataframe):
 
 
 def prepare_data(input, tokenizer, targets_input):
+    
     input_sequences = []
     
     for idx, input_seq in enumerate(input):
