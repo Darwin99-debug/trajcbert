@@ -241,9 +241,9 @@ def main():
     model.resize_token_embeddings(len(tokenizer))
 
     #save the model, the tokenizer and the data in different files
-    model.save_pretrained(f"/home/daril_kw/data/savings_for_parallel_60/model_before_training_opti_full_for_para_60")
-    data_format.to_json(f"/home/daril_kw/data/savings_for_parallel_60/data_with_time_info_ok_opti_full_for_para_60.json")
-    tokenizer.save_pretrained(f"/home/daril_kw/data/savings_for_parallel_60/tokenizer_final_opti_full_for_para_60")
+    model.save_pretrained(f"/home/daril_kw/data/savings_for_parallel_60/model_before_training_opti_full_for_para_1")
+    data_format.to_json(f"/home/daril_kw/data/savings_for_parallel_60/data_with_time_info_ok_opti_full_for_para_1.json")
+    tokenizer.save_pretrained(f"/home/daril_kw/data/savings_for_parallel_60/tokenizer_final_opti_full_for_para_1")
 
     #we get the DEB_TRAJ and TARGET columns well formatted but without the special tokens [CLS] and [SEP]
     #this is because we will add them later
@@ -251,17 +251,16 @@ def main():
 
     #we get the input_ids, the attention_masks, the targets and the full_inputs
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(data_format, tokenizer)
+
+    input_ids = torch.tensor(input_ids)
+    attention_masks = torch.tensor(attention_masks)
+    targets = torch.tensor(targets)
+
     
     #save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
-    with open(f"/home/daril_kw/data/savings_for_parallel_60/input_ids_full_opti_for_para_60.pkl", 'wb') as fp:
-        pickle.dump(input_ids, fp)
-    with open(f"/home/daril_kw/data/savings_for_parallel_60/attention_masks_full_opti_for_para_60.pkl", 'wb') as fp:
-        pickle.dump(attention_masks, fp)
-    with open(f"/home/daril_kw/data/savings_for_parallel_60/targets_full_opti_for_para_60.pkl", 'wb') as fp:
-        pickle.dump(targets, fp)
-    with open(f"/home/daril_kw/data/savings_for_parallel_60/full_inputs_full_opti_for_para_60.pkl", 'wb') as fp:
-        pickle.dump(full_inputs, fp)
-
+    torch.save(input_ids,f"/home/daril_kw/data/savings_for_parallel_60/input_ids_full_opti_for_test_60.pkl") 
+    torch.save(attention_masks, f"/home/daril_kw/data/savings_for_parallel_60/attention_masks_full_opti_for_para_1.pkl") 
+    torch.save(targets,f"/home/daril_kw/data/savings_for_parallel_60/targets_full_opti_for_para_1.pkl") 
 
 if __name__ == "__main__":
     main()
