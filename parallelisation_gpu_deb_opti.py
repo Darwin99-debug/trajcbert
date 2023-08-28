@@ -252,9 +252,23 @@ def main():
     #we get the input_ids, the attention_masks, the targets and the full_inputs
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(data_format, tokenizer)
 
+    # transform targgets in dictionary
+    targets_dict={}
+
+    for i in range(len(targets)):
+
+        if targets[i] not in targets_dict:
+
+            targets_dict[targets[i]]=len(targets_dict)
+
+ 
+
+    targets_input=[targets_dict[targets[i]] for i in range(len(targets))]
+
     input_ids = torch.tensor(input_ids)
     attention_masks = torch.tensor(attention_masks)
-    targets = torch.tensor(targets)
+    targets = torch.tensor(targets_input)
+    # 
 
     
     #save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
