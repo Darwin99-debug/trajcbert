@@ -126,10 +126,10 @@ def manage_duplication(dataframe, liste_to_duplicate):
 def attribution_deb_traj_and_target(dataframe, uniform, list_rate_per_cat, nb_categories):
 
     """Prepare the training data without duplicates
-    we create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
+    We create the threshold for each category knowing that they go from 0.3 to 1 (the last token is excluded)
     tow categories are reserved for the last token (the destination) and the [SEP] token so we don't take them into account
     for example, if we have 5 categories, the uniform threshold would be (1-0.3)/(5-2) = 0.23333333333333334
-    that means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
+    That means that the first category will concern length of trajectory from 0.3 to 0.5333333333333333, the second from 0.5333333333333333 to 0.7666666666666666 and the third from 0.7666666666666666 to 1
     we create a list of threshold"""
 
     dataframe_original = dataframe
@@ -381,7 +381,7 @@ def formatting_to_train(data_format, tokenizer):
     - at the beginning, we add the CLS token and the end of the input the SEP token
 
         b) get the input_ids
-    - we use the tokenizer to get the ids of the tokens that will be the input_ids thatthe model will take as input
+    - we use the tokenizer to get the ids of the tokens that will be the input_ids that the model will take as input
     - we pad the input to the maximum length of 512
 
     2) and we create the attention masks
@@ -428,7 +428,7 @@ def formatting_to_train(data_format, tokenizer):
         full_input = '[CLS] ' + c_inputs[i] + ' ' + traj_inputs[i] + ' [SEP]'
         full_inputs.append(full_input)
 
-        # we use the tokenizer to get the ids of the tokens that will be the input_ids that the model will take as input
+        # we use the tokenizer to get the IDs of the tokens that will be the input_ids that the model will take as input
         # the format of the input_ids would be : [101] + encoded_c_input + encoded_traj_input + [102]
         #the[101] token is the CLS token and the [102] token is the SEP token
         # TODO : test adding an additional SEP token between the context input and the trajectory input so that the format of the input_ids would be : [101] + encoded_c_input + [102] + encoded_traj_input + [102]
