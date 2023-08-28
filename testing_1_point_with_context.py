@@ -14,11 +14,10 @@ from torch.utils.data import TensorDataset, DataLoader, SequentialSampler
 
 
 
-DIR_INPUTS_IDS = '/home/daril/trajcbert/savings_for_parrallel_1_2/input_ids_f_833383.pkl'
-DIR_ATTENTION_MASKS = '/home/daril/trajcbert/savings_for_parrallel_1_2/attention_masks_833383_opti.pkl'
-DIR_TARGETS = '/home/daril/trajcbert/savings_for_parrallel_1_2/targets_833383_opti.pkl'
-PRETRAINED_MODEL_NAME = '/home/daril/trajcbert//home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_10_epochs'
-DATALOADER_DIR = '/home/daril/trajcbert/savings/test_dataloader_833383.pt'
+DIR_INPUTS_IDS = '/home/daril_kw/data/savings_for_parallel_60/input_ids_full_opti_for_para_60.pkl'
+DIR_ATTENTION_MASKS = '/home/daril_kw/data/savings_for_parallel_60/attention_masks_full_opti_for_para_60.pkl'
+DIR_TARGETS = '/home/daril_kw/data/savings_for_parallel_60/targets_full_opti_for_para_60.pkl'
+PRETRAINED_MODEL_NAME = 'bert-base-cased'
 
 
 
@@ -33,8 +32,17 @@ DATALOADER_DIR = '/home/daril/trajcbert/savings/test_dataloader_833383.pt'
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
+
+
 # load the prediction_dataloader
-prediction_dataloader = torch.load(DATALOADER_DIR)
+prediction_dataloader = DataLoader(
+    TensorDataset(torch.load(DIR_INPUTS_IDS), torch.load(DIR_ATTENTION_MASKS), torch.load(DIR_TARGETS)),
+    sampler=SequentialSampler(TensorDataset(torch.load(DIR_INPUTS_IDS), torch.load(DIR_ATTENTION_MASKS), torch.load(DIR_TARGETS))),
+    batch_size=32
+    
+
+
+)
 
 
 # we load the model
@@ -48,6 +56,8 @@ predictions, true_labels, list_inputs_test = [], [], []
 
 # losses
 losses = 0
+
+losess_witouht_mean = 0
 print("We predict")
 # Predict
 for batch in prediction_dataloader:
@@ -73,7 +83,9 @@ for batch in prediction_dataloader:
         # The loss is computed with the CrossEntropyLoss
 
     logits = outputs[0]
+    print(f"logits: {logits}\n logits shape: {logits.shape} \n losses: {outputs[0]}  \n outputs shape: {outputs[0].shape}")
     losses += outputs[0].mean().item()
+    losess_witouht_mean += outputs[0].item()
 
     # Move logits and labels to CPU
     logits = logits.detach().cpu().numpy()
@@ -136,6 +148,8 @@ print("accuracy: %.3f" % accuracy)
 
 # print the loss
 print("loss: %.3f" % (losses / len(true_labels)))
+
+print("loss without mean: %.3f" % (losess_witouht_mean / len(true_labels)))
 
 
 # save flat_list_inputs_test
