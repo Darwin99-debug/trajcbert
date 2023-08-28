@@ -67,6 +67,10 @@ for batch in prediction_dataloader:
     with torch.no_grad():
         # Forward pass, calculate logit predictions
         outputs = model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask)
+        # the ouputs are a tuple with the loss and the logits
+        # the losses are the item 0 of the tuple
+        # and the logits are the item 1 of the tuple
+        # The loss is computed with the CrossEntropyLoss
 
     logits = outputs[0]
     losses += outputs[0].mean().item()
@@ -76,6 +80,9 @@ for batch in prediction_dataloader:
     label_ids = b_labels.to("cpu").numpy()
 
     # Store predictions and true labels
+    # we have to append  the max of the logits
+    # because the logits are the output of the softmax
+    # and the max of the logits is the class with the highest probability
     predictions.append(logits)
     true_labels.append(label_ids)
 
