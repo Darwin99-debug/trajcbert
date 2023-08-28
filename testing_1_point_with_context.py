@@ -14,10 +14,10 @@ from torch.utils.data import TensorDataset, DataLoader, SequentialSampler
 
 
 
-DIR_INPUTS_IDS = '/home/daril_kw/data/savings_for_parallel_60/input_ids_full_opti_for_para_60.pkl'
-DIR_ATTENTION_MASKS = '/home/daril_kw/data/savings_for_parallel_60/attention_masks_full_opti_for_para_60.pkl'
-DIR_TARGETS = '/home/daril_kw/data/savings_for_parallel_60/targets_full_opti_for_para_60.pkl'
-PRETRAINED_MODEL_NAME = 'bert-base-cased'
+DIR_INPUTS_IDS = '/home/daril_kw/data/savings_for_parallel_60/input_ids_full_opti_for_test_60.pkl'
+DIR_ATTENTION_MASKS = '/home/daril_kw/data/savings_for_parallel_60/attention_masks_full_opti_for_para_1.pkl'
+DIR_TARGETS = '/home/daril_kw/data/savings_for_parallel_60/targets_full_opti_for_para_1.pkl'
+PRETRAINED_MODEL_NAME = '/home/daril_kw/data/savings_for_parallel_60/model_before_training_opti_full_for_para_1'
 
 
 
