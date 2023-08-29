@@ -144,10 +144,36 @@ Le but ici est de prédire la trajectoire entière par auto-régression. Pour ce
 - Branche: **feature/V1_model_less_context**
 - Fichier: **parallelisation_gpu_deb_opti_only_dest.py**
 
+#### Test avec 1 ou plusieurs points
+ 
+##### Description du fichier
+
+
+Fichier de configuration: 
+
+  - config_test_gene.json (parmètres du modèle)
+  - parameter_sep_dup.json (Paramètres de formatage des données et de la version du test(Auto-régression(2) ou non(1)))
+
+
+
+- Branche: **feature/generalization_parallel**
+- Fichier: **opti_suite_sep_dup_test_format.py** 
+``` 
+Il est le même que celui utilisé pour les données d´entrainement mais avec la gestion des données de test en plus.
+__NB__: Il faudra tester le ficher et le corriger
+
+```
+
+
+##### Fichier de lancement du test
+
+- Fichier de test: **testing_AR.py**
+  **A modifier**
 
 
 
 
-## Deuxième version du modèle TrajCBERT en auto-régression sans contexte
+
+
 
 
