@@ -568,13 +568,14 @@ if __name__ == '__main__':
 
         def get_traj(dataframe):
             len_context_info = len(dataframe['CONTEXT_INPUT'][0].split(' '))
-            """the TRAJ column will be the tokenization column truncated"""
+            """ The TRAJ column will be the tokenization column truncated"""
             dataframe['TRAJ']=dataframe['Tokenization_2']
             # we manage the length of the CONTEXT_INPUT column so that after the concatenation, it does not exceed 512 tokens
             # the -2 corresponds to the two special tokens [CLS] and [SEP]
             # for exemple here, if the trajectory input is too long, we keep the 512-6-2=504 last tokens
+            # The data in this data frame are already tokenized with h3
             dataframe['TRAJ']=dataframe['TRAJ'].apply(lambda x: x[-(512-len_context_info-2):] if len(x)>512-len_context_info-2 else x)    
-            #then we keep the column in form of a string with spaces between the tokens (the space replaces the comma)
+            #then we keep the column in the form of a string with spaces between the tokens (the space replaces the comma)
             dataframe['TRAJ']=dataframe['TRAJ'].apply(lambda x: ' '.join(x))
             return dataframe
 
@@ -612,7 +613,7 @@ if __name__ == '__main__':
         input_ids_test = prepare_data_test(data_test['WHOLE_INPUT'], tokenizer)
 
 
-    ##save the lists inputs_ids, attention_masks, same for the test data and the targets : we use the save function from torch
+    ## Save the lists inputs_ids, and attention_masks, same for the test data and the targets : we use the save function from torch
     torch.save(input_ids, DIR_INPUT)
     torch.save(attention_masks, DIR_ATT_MASK)
     torch.save(targets_dict, DIR_TARGET_DICT)
