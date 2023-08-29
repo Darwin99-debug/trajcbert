@@ -119,12 +119,25 @@ Le but ici est de prédire la trajectoire entière par auto-régression. Pour ce
 
 ### Test du modèle 
 #### Test auto-regressif
- - Branche: **feature/generalization_parallel*
+ - Branche: **feature/generalization_parallel**
  - Fichier: **testing_AR.py**
 
  ##### Pretraitement des données
-  - Branche: **feature/generalization_parallel*
+  - Branche: **feature/generalization_parallel**
   - Fichier: **test_data_format_loader_AR.py**
+
+  - Inputs: 
+    - `/home/daril_kw/data/data_test_gene_AR_to_format.pkl`
+    - `/home/daril_kw/data/tokenizer_final`
+    - `/home/daril_kw/data/AR/targets_dict_v_small_AR.pt`
+    - `/home/daril_kw/data/AR/targets_input_v_small_AR.pt`
+
+  - Outputs:
+  
+
+
+
+
 
 #### Test avec un point
 
