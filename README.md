@@ -39,6 +39,10 @@ Fichier de Base: **parallelisation_gpu_train_full.py**
 **Lancement de l'entraînement:**
 `run_gpu_full.sh`
 
+
+### Test du modèle 
+  - Branche: **gpu_parallelization_with_torch_run**
+  - Fichier: **testing_1_point_with_context.py**
 ## Avec seulement la destination comme information de contexte
 
 ### Description du modèle
@@ -81,6 +85,10 @@ Fichier de Base: **parallelisation_gpu_train_full.py**
 **Lancement de l'entraînement:**
 `run_gpu_1_2_32_20_epochs_without_context.sh` (branche gpu_parallelization_with_torch_run)
 
+
+### Test du modèle 
+  - Branche: **gpu_parallelization_with_torch_run**
+  - Fichier: **testing_1_point_without_context.py**
 # Deuxième version du modèle TrajCBERT
 
 ## Description du modèle
@@ -107,4 +115,26 @@ Le but ici est de prédire la trajectoire entière par auto-régression. Pour ce
     - `/home/daril_kw/data/AR/list_inputs_test_v_small_AR.pt`
     - `/home/daril_kw/data/AR/targets_dict_v_small_AR.pt`
     - `/home/daril_kw/data/AR/targets_input_v_small_AR.pt`
-```
+
+
+### Test du modèle 
+#### Test auto-regressif
+ - Branche: **feature/generalization_parallel*
+ - Fichier: **testing_AR.py**
+
+ ##### Pretraitement des données
+  - Branche: **feature/generalization_parallel*
+  - Fichier: **test_data_format_loader_AR.py**
+
+#### Test avec un point
+
+- Branche: **feature/V1_model_less_context**
+- Fichier: **parallelisation_gpu_deb_opti_only_dest.py**
+
+
+
+
+
+## Deuxième version du modèle TrajCBERT en auto-régression sans contexte
+
+
