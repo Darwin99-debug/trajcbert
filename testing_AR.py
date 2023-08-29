@@ -138,6 +138,8 @@ def test_autoregressively(prediction_dataloader, model, min_traj_rate, target_di
           #predicted_token_detokenized = h3.h3_to_geo(list(target_dict.keys())[list(target_dict.values()).index(predicted_token)]) if list(target_dict.keys())[list(target_dict.values()).index(predicted_token)] != '[SEP]' else None
           #we add the detokenized predicted token to the list of detokenized predictions
           #all_predictions_detokenized[batch_idx].append(predicted_token_detokenized)
+
+                # TODO: NB: make sure that it is the trajectory that is selected by the index
           #we add the predicted to the input by taking the input of the model and adding the predicted token at the end
           #we get the traj from traj_i_padded
           
