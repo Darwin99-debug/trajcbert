@@ -28,7 +28,8 @@ Données d'entrée: `/home/daril_kw/data/02.06.23/train_clean.json`
 
 ### Entrainement du modèle
 
-Fichier de Base: **parallelisation_gpu_train_full.py**
+- Fichier de Base: **parallelisation_gpu_train_full.py**
+- Branche: **Feature/parallelization_gpu**
 
 **À modifier:**
 - Nom du fichier de configuration et fichier de configuration
