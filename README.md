@@ -161,7 +161,7 @@ Fichier de configuration:
 - Fichier: **opti_suite_sep_dup_test_format.py** 
 ``` 
 Il est le même que celui utilisé pour les données d´entrainement mais avec la gestion des données de test en plus.
-__NB__: Il faudra tester le ficher et le corriger
+**NB**: Il faudra tester le ficher et le corriger
 
 ```
 
