@@ -4,30 +4,46 @@ import torch
 import numpy as np
 import pickle
 from torch.utils.data import TensorDataset, DataLoader, SequentialSampler
+import argparse
 
 
 # This file test the first version of the model: classification with context
 
 
-DIR_INPUTS_IDS = (
-    "/home/daril/trajcbert/savings_for_parrallel_1_2/input_ids_f_833383.pkl"
-)
-DIR_ATTENTION_MASKS = (
-    "/home/daril/trajcbert/savings_for_parrallel_1_2/attention_masks_833383_opti.pkl"
-)
-DIR_TARGETS = "/home/daril/trajcbert/savings_for_parrallel_1_2/targets_833383_opti.pkl"
-PRETRAINED_MODEL_NAME = "/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_full_bs_32_20_epochs_with_context"
-DATALOADER_DIR = "/home/daril/trajcbert/savings/test_dataloader_833383.pt"
+# PRETRAINED_MODEL_NAME = "/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_full_bs_32_20_epochs_with_context"
+# DATALOADER_DIR = "/home/daril/trajcbert/savings/test_dataloader_833383.pt"
+
 
 def main():
+    # --pretrained_model_name $PRETRAINED_MODEL_NAME \
+    # --dataloader_dir $DATALOADER_DIR
+
+
+    # recovery the arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--pretrained_model_name",
+        default="/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_full_bs_32_20_epochs_with_context",
+        type=str,
+        help="The pretrained model name",
+    )
+    parser.add_argument(
+        "--dataloader_dir",
+        default="/home/daril/trajcbert/savings/test_dataloader_833383.pt",
+        type=str,
+        help="The dataloader directory",
+    )
+
+    args = parser.parse_args()
+
+    PRETRAINED_MODEL_NAME = args.pretrained_model_name
+    DATALOADER_DIR = args.dataloader_dir
 
     # device = torch.device("cpu")
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-
     # load the prediction_dataloader
     prediction_dataloader = torch.load(DATALOADER_DIR)
-
 
     # we load the model
     model = BertForSequenceClassification.from_pretrained(PRETRAINED_MODEL_NAME)
@@ -58,7 +74,9 @@ def main():
         # speeding up prediction
         with torch.no_grad():
             # Forward pass, calculate logit predictions
-            outputs = model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask)
+            outputs = model(
+                b_input_ids, token_type_ids=None, attention_mask=b_input_mask
+            )
 
         logits = outputs[0]
         losses += outputs[0].mean().item()
@@ -76,7 +94,6 @@ def main():
         list_inputs_test.append(b_input_ids.tolist())
 
     print("DONE.")
-
 
     matthews_set = []
 
@@ -97,14 +114,12 @@ def main():
         matthews = matthews_corrcoef(true_labels[i], pred_labels_i)
         matthews_set.append(matthews)
 
-
     # Combine the predictions for each batch into a single list of 0s and 1s.
     flat_predictions = [item for sublist in predictions for item in sublist]
     flat_predictions = np.argmax(flat_predictions, axis=1).flatten()
 
     # Combine the correct labels for each batch into a single list.
     flat_true_labels = [item for sublist in true_labels for item in sublist]
-
 
     # Combine the inputs for each batch into a single list.
     flat_list_inputs_test = [item for sublist in list_inputs_test for item in sublist]
@@ -114,7 +129,6 @@ def main():
 
     print("MCC: %.3f" % mcc)
 
-
     # compute the accuracy
     accuracy = (flat_true_labels == flat_predictions).mean()
     print("accuracy: %.3f" % accuracy)
@@ -122,9 +136,7 @@ def main():
     # print the loss
     print("loss: %.3f" % (losses / len(true_labels)))
 
-
     # save flat_list_inputs_test
-
 
 
 if __name__ == "__main__":
