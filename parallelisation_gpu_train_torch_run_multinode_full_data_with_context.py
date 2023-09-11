@@ -21,7 +21,6 @@ from torch.distributed import init_process_group, destroy_process_group
 import torch.multiprocessing as mp
 from torch.nn.parallel import DistributedDataParallel as DDP
 
-
 DIR_INPUTS_IDS = '/home/daril/trajcbert/savings_for_parallel_computing_full/input_ids_full_opti.pkl'
 DIR_ATTENTION_MASKS = '/home/daril/trajcbert/savings_for_parallel_computing_full/attention_masks_full_opti.pkl'
 DIR_TARGETS = '/home/daril/trajcbert/savings_for_parallel_computing_full/targets_full_opti.pkl'
@@ -372,6 +371,7 @@ if __name__ == "__main__":
 
     # world_size = torch.cuda.device_count()
     SNASHOT_PATH = f"/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_full_multinode/checkpoints/snapshot.pt"
+
 
     main(
         save_every=save_every,
