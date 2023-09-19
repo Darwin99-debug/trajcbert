@@ -101,9 +101,9 @@ Le but ici est de prédire la trajectoire entière par auto-régression. Pour ce
 - Branche: **feature/generalization_2**
 - Fichier de formatage: **opti_deb_gene.py** (formatage des données comme au début)
   - Output:
-    - `/home/daril_kw/data/tokenizer_final`
-    - `/home/daril_kw/data/data_with_time_info_ok_opti.json`
-    - `/home/daril_kw/data/model_resized_embeddings`
+    - ```/home/daril_kw/data/tokenizer_final```
+    - ```/home/daril_kw/data/data_with_time_info_ok_opti.json```
+    - ```/home/daril_kw/data/model_resized_embeddings```
 - Fichier de formation des inputs: **opti_suite_gene_sep_dup.py** (séparation des trajectoires les plus longues selon le taux de séparation -> duplication -> séparation en catégories)
   - Inputs:
     - `/home/daril_kw/data/data_with_time_info_ok_opti.json`
