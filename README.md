@@ -15,7 +15,7 @@ Prédiction de l'avant-dernier point de la trajectoire (classification).
 
 **Définir la taille du dataset avec nb_rows**
 
-Données d'entrée: `/home/daril_kw/data/02.06.23/train_clean.json`
+Données d'entrée: ```/home/daril_kw/data/02.06.23/train_clean.json```
 
 **Données de sortie:**
 - modèle
