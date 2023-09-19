@@ -1,0 +1,295 @@
+created virtual environment CPython3.10.2.final.0-64 in 582ms
+  creator CPython3Posix(dest=/localscratch/daril.19918025.0/MYENV, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/home/daril/.local/share/virtualenv)
+    added seed packages: pip==21.3.1, setuptools==60.2.0, wheel==0.37.1
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tqdm-4.65.0+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/avx2/torch-2.0.1+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic/scikit_learn-1.3.0+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-4.31.0+computecanada-py3-none-any.whl
+Requirement already satisfied: typing-extensions in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from torch->-r requirements.txt (line 2)) (4.5.0+computecanada)
+Requirement already satisfied: jinja2 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from torch->-r requirements.txt (line 2)) (3.1.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/networkx-3.1+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/filelock-3.12.0+computecanada-py3-none-any.whl
+Requirement already satisfied: sympy in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from torch->-r requirements.txt (line 2)) (1.11.1+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/threadpoolctl-3.2.0+computecanada-py3-none-any.whl
+Requirement already satisfied: numpy>=1.21 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from scikit-learn->-r requirements.txt (line 3)) (1.24.2+computecanada)
+Requirement already satisfied: scipy>=1.5.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from scikit-learn->-r requirements.txt (line 3)) (1.10.1+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/joblib-1.3.1+computecanada-py3-none-any.whl
+Requirement already satisfied: packaging>=20.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/ipykernel/2023a/lib/python3.10/site-packages (from transformers->-r requirements.txt (line 4)) (23.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic/safetensors-0.3.1+computecanada-cp310-cp310-linux_x86_64.whl
+Requirement already satisfied: requests in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from transformers->-r requirements.txt (line 4)) (2.28.2+computecanada)
+Requirement already satisfied: pyyaml>=5.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from transformers->-r requirements.txt (line 4)) (6.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic/tokenizers-0.13.3+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/huggingface_hub-0.16.4+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/regex-2022.10.31+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fsspec-2023.6.0+computecanada-py3-none-any.whl
+Requirement already satisfied: MarkupSafe>=2.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from jinja2->torch->-r requirements.txt (line 2)) (2.1.2+computecanada)
+Requirement already satisfied: charset-normalizer<4,>=2 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from requests->transformers->-r requirements.txt (line 4)) (3.0.1+computecanada)
+Requirement already satisfied: urllib3<1.27,>=1.21.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from requests->transformers->-r requirements.txt (line 4)) (1.26.14+computecanada)
+Requirement already satisfied: idna<4,>=2.5 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from requests->transformers->-r requirements.txt (line 4)) (3.4+computecanada)
+Requirement already satisfied: certifi>=2017.4.17 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from requests->transformers->-r requirements.txt (line 4)) (2022.12.7+computecanada)
+Requirement already satisfied: mpmath>=0.19 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from sympy->torch->-r requirements.txt (line 2)) (1.2.1+computecanada)
+Installing collected packages: tqdm, fsspec, filelock, tokenizers, threadpoolctl, safetensors, regex, networkx, joblib, huggingface-hub, transformers, torch, scikit-learn
+Successfully installed filelock-3.12.0+computecanada fsspec-2023.6.0+computecanada huggingface-hub-0.16.4+computecanada joblib-1.3.1+computecanada networkx-3.1+computecanada regex-2022.10.31+computecanada safetensors-0.3.1+computecanada scikit-learn-1.3.0+computecanada threadpoolctl-3.2.0+computecanada tokenizers-0.13.3+computecanada torch-2.0.1+computecanada tqdm-4.65.0+computecanada transformers-4.31.0+computecanada
+Package                            Version
+---------------------------------- ------------------------
+anyio                              3.6.2+computecanada
+arff                               0.9+computecanada
+argon2_cffi                        21.3.0+computecanada
+argon2_cffi_bindings               21.2.0+computecanada
+asttokens                          2.2.1+computecanada
+async_generator                    1.10+computecanada
+attrs                              22.2.0+computecanada
+backcall                           0.2.0+computecanada
+backports-abc                      0.5+computecanada
+backports.shutil_get_terminal_size 1.0.0+computecanada
+bcrypt                             4.0.1+computecanada
+beautifulsoup4                     4.11.2+computecanada
+bitstring                          4.0.1+computecanada
+bleach                             6.0.0+computecanada
+certifi                            2022.12.7+computecanada
+cffi                               1.15.1+computecanada
+chardet                            5.1.0+computecanada
+charset_normalizer                 3.0.1+computecanada
+comm                               0.1.2+computecanada
+contourpy                          1.0.7+computecanada
+cryptography                       39.0.1+computecanada
+cycler                             0.11.0+computecanada
+Cython                             0.29.33+computecanada
+deap                               1.3.3+computecanada
+debugpy                            1.6.6+computecanada
+decorator                          5.1.1+computecanada
+defusedxml                         0.7.1+computecanada
+dnspython                          2.3.0+computecanada
+ecdsa                              0.18.0+computecanada
+entrypoints                        0.4+computecanada
+executing                          1.2.0+computecanada
+fastjsonschema                     2.16.2+computecanada
+filelock                           3.12.0+computecanada
+fonttools                          4.38.0+computecanada
+fsspec                             2023.6.0+computecanada
+funcsigs                           1.0.2+computecanada
+huggingface_hub                    0.16.4+computecanada
+idna                               3.4+computecanada
+importlib_metadata                 5.2.0+computecanada
+importlib_resources                5.12.0+computecanada
+ipykernel                          6.21.2+computecanada
+ipython                            8.10.0+computecanada
+ipython_genutils                   0.2.0+computecanada
+ipywidgets                         8.0.4+computecanada
+jedi                               0.18.2+computecanada
+Jinja2                             3.1.2+computecanada
+joblib                             1.3.1+computecanada
+jsonschema                         4.17.3+computecanada
+jupyter_client                     8.0.3+computecanada
+jupyter_core                       5.2.0+computecanada
+jupyter_events                     0.6.3+computecanada
+jupyter_server                     2.3.0+computecanada
+jupyter_server_terminals           0.4.4+computecanada
+jupyterlab_pygments                0.2.2+computecanada
+jupyterlab_widgets                 3.0.5+computecanada
+kiwisolver                         1.4.4+computecanada
+lockfile                           0.12.2+computecanada
+MarkupSafe                         2.1.2+computecanada
+matplotlib                         3.7.0+computecanada
+matplotlib_inline                  0.1.6+computecanada
+mistune                            2.0.5+computecanada
+mock                               5.0.1+computecanada
+mpmath                             1.2.1+computecanada
+nbclassic                          0.5.2+computecanada
+nbclient                           0.7.2+computecanada
+nbconvert                          7.2.9+computecanada
+nbformat                           5.7.3+computecanada
+nest_asyncio                       1.5.6+computecanada
+netaddr                            0.8.0+computecanada
+netifaces                          0.11.0+computecanada
+networkx                           3.1+computecanada
+nose                               1.3.7+computecanada
+notebook                           6.5.2+computecanada
+notebook_shim                      0.2.2+computecanada
+numpy                              1.24.2+computecanada
+packaging                          23.0+computecanada
+pandas                             1.5.3+computecanada
+pandocfilters                      1.5.0+computecanada
+paramiko                           3.0.0+computecanada
+parso                              0.8.3+computecanada
+path                               16.6.0+computecanada
+path.py                            12.5.0+computecanada
+pathlib2                           2.3.7+computecanada
+paycheck                           1.0.2+computecanada
+pbr                                5.11.1+computecanada
+pexpect                            4.8.0+computecanada
+pickleshare                        0.7.5+computecanada
+Pillow                             9.4.0+computecanada
+pip                                21.3.1
+pkgutil_resolve_name               1.3.10+computecanada
+platformdirs                       2.5.2+computecanada
+prometheus_client                  0.16.0+computecanada
+prompt_toolkit                     3.0.37+computecanada
+psutil                             5.9.4+computecanada
+ptyprocess                         0.7.0+computecanada
+pure_eval                          0.2.2+computecanada
+pycparser                          2.21+computecanada
+Pygments                           2.14.0+computecanada
+PyNaCl                             1.5.0+computecanada
+pyparsing                          3.0.9+computecanada
+pyrsistent                         0.19.3+computecanada
+python-dateutil                    2.8.2+computecanada
+python_json_logger                 2.0.7+computecanada
+pytz                               2022.7.1+computecanada
+PyYAML                             6.0+computecanada
+pyzmq                              25.0.0+computecanada
+regex                              2022.10.31+computecanada
+requests                           2.28.2+computecanada
+rfc3339_validator                  0.1.4+computecanada
+rfc3986_validator                  0.1.1+computecanada
+safetensors                        0.3.1+computecanada
+scikit_learn                       1.3.0+computecanada
+scipy                              1.10.1+computecanada
+Send2Trash                         1.8.0+computecanada
+setuptools                         60.2.0
+simplegeneric                      0.8.1+computecanada
+singledispatch                     4.0.0+computecanada
+six                                1.16.0+computecanada
+sniffio                            1.3.0+computecanada
+soupsieve                          2.4+computecanada
+stack_data                         0.6.2+computecanada
+sympy                              1.11.1+computecanada
+terminado                          0.17.1+computecanada
+testpath                           0.6.0+computecanada
+threadpoolctl                      3.2.0+computecanada
+tinycss2                           1.2.1+computecanada
+tokenizers                         0.13.3+computecanada
+torch                              2.0.1+computecanada
+tornado                            6.2+computecanada
+tqdm                               4.65.0+computecanada
+traitlets                          5.9.0+computecanada
+transformers                       4.31.0+computecanada
+typing_extensions                  4.5.0+computecanada
+urllib3                            1.26.14+computecanada
+wcwidth                            0.2.6+computecanada
+webencodings                       0.5.1+computecanada
+websocket_client                   1.5.1+computecanada
+wheel                              0.37.1
+widgetsnbextension                 4.0.5+computecanada
+zipp                               3.14.0+computecanada
+Data conversion to tensors...
+
+[GPU3] Epoch 0 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 0 | Average loss: 6.548533314212238
+[GPU3] Epoch 1 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 1 | Average loss: 3.8539128371324582
+[GPU3] Epoch 2 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 2 | Average loss: 2.7466820029992065
+[GPU3] Epoch 3 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 3 | Average loss: 2.0956637929612993
+[GPU3] Epoch 4 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 4 | Average loss: 1.6865014011013846
+[GPU3] Epoch 5 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 5 | Average loss: 1.4269039417436056
+[GPU3] Epoch 6 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 6 | Average loss: 1.2590000571427047
+[GPU3] Epoch 7 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 7 | Average loss: 1.1359276768720545
+[GPU3] Epoch 8 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 8 | Average loss: 1.0502221158471718
+[GPU3] Epoch 9 | Batchsize: 32 | Steps: 1688
+[GPU3] Epoch 9 | Average loss: 0.9897423584226042
+Data conversion to tensors...
+
+[GPU0] Epoch 0 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 0 | Average loss: 6.536766654366001
+  Validation Loss: 4.7784
+Epoch 0 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_0.pt
+Epoch 0 | Best validation loss: 4.778435759226481
+[GPU0] Epoch 1 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 1 | Average loss: 4.476042759503233
+  Validation Loss: 3.3216
+Epoch 1 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_1.pt
+Epoch 1 | Best validation loss: 3.3215655530293784
+[GPU0] Epoch 2 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 2 | Average loss: 3.2576344211660855
+  Validation Loss: 2.5530
+Epoch 2 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_2.pt
+Epoch 2 | Best validation loss: 2.552966025193532
+[GPU0] Epoch 3 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 3 | Average loss: 2.5656322419502158
+  Validation Loss: 2.1270
+Epoch 3 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_3.pt
+Epoch 3 | Best validation loss: 2.127018808444341
+[GPU0] Epoch 4 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 4 | Average loss: 2.155198971489312
+  Validation Loss: 1.8822
+Epoch 4 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_4.pt
+Epoch 4 | Best validation loss: 1.8822069046497345
+[GPU0] Epoch 5 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 5 | Average loss: 1.9147964181705108
+  Validation Loss: 1.7251
+Epoch 5 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_5.pt
+Epoch 5 | Best validation loss: 1.725142194588979
+[GPU0] Epoch 6 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 6 | Average loss: 1.7208705858737936
+  Validation Loss: 1.6297
+Epoch 6 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_6.pt
+Epoch 6 | Best validation loss: 1.6296517746448518
+[GPU0] Epoch 7 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 7 | Average loss: 1.5871946271420656
+  Validation Loss: 1.5731
+Epoch 7 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_7.pt
+Epoch 7 | Best validation loss: 1.5731439143021901
+[GPU0] Epoch 8 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 8 | Average loss: 1.5115283000419772
+  Validation Loss: 1.5420
+Epoch 8 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_8.pt
+Epoch 8 | Best validation loss: 1.5419861749013264
+[GPU0] Epoch 9 | Batchsize: 32 | Steps: 1688
+[GPU0] Epoch 9 | Average loss: 1.481141726040586
+  Validation Loss: 1.5332
+Epoch 9 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_300000/checkpoints/checkpoint_epoch_9.pt
+Epoch 9 | Best validation loss: 1.533240605354309
+Data conversion to tensors...
+
+[GPU1] Epoch 0 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 0 | Average loss: 6.5449703465705795
+[GPU1] Epoch 1 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 1 | Average loss: 3.878967031765888
+[GPU1] Epoch 2 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 2 | Average loss: 2.7235361024101765
+[GPU1] Epoch 3 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 3 | Average loss: 2.089059723673556
+[GPU1] Epoch 4 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 4 | Average loss: 1.7036410717390724
+[GPU1] Epoch 5 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 5 | Average loss: 1.4300057539336772
+[GPU1] Epoch 6 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 6 | Average loss: 1.2621455933916343
+[GPU1] Epoch 7 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 7 | Average loss: 1.1357569842736162
+[GPU1] Epoch 8 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 8 | Average loss: 1.0541949788046674
+[GPU1] Epoch 9 | Batchsize: 32 | Steps: 1688
+[GPU1] Epoch 9 | Average loss: 1.0002962804324396
+Data conversion to tensors...
+
+[GPU2] Epoch 0 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 0 | Average loss: 6.5382614662579455
+[GPU2] Epoch 1 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 1 | Average loss: 3.8832956390075775
+[GPU2] Epoch 2 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 2 | Average loss: 2.724883264274959
+[GPU2] Epoch 3 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 3 | Average loss: 2.0936327323105663
+[GPU2] Epoch 4 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 4 | Average loss: 1.7120724620553553
+[GPU2] Epoch 5 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 5 | Average loss: 1.4394124055996325
+[GPU2] Epoch 6 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 6 | Average loss: 1.2560801045589538
+[GPU2] Epoch 7 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 7 | Average loss: 1.1367399924880521
+[GPU2] Epoch 8 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 8 | Average loss: 1.0480544942638603
+[GPU2] Epoch 9 | Batchsize: 32 | Steps: 1688
+[GPU2] Epoch 9 | Average loss: 1.0023041803972417

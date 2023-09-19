@@ -1,0 +1,270 @@
+master_addr is only used for static rdzv_backend and when rdzv_endpoint is not specified.
+INFO:torch.distributed.launcher.api:Starting elastic_operator with launch configs:
+  entrypoint       : parallelisation_gpu_train_torch_run_multinode.py
+  min_nodes        : 3
+  max_nodes        : 3
+  nproc_per_node   : 1
+  run_id           : 28266
+  rdzv_backend     : c10d
+  rdzv_endpoint    : 10.80.88.101:29500
+  rdzv_configs     : {'timeout': 900}
+  max_restarts     : 0
+  monitor_interval : 5
+  log_dir          : None
+  metrics_cfg      : {}
+
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:log directory set to: /tmp/torchelastic_5pllgr77/28266_t7hcjaj8
+INFO:torch.distributed.elastic.agent.server.api:[default] starting workers for entrypoint: python
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous'ing worker group
+master_addr is only used for static rdzv_backend and when rdzv_endpoint is not specified.
+INFO:torch.distributed.launcher.api:Starting elastic_operator with launch configs:
+  entrypoint       : parallelisation_gpu_train_torch_run_multinode.py
+  min_nodes        : 3
+  max_nodes        : 3
+  nproc_per_node   : 1
+  run_id           : 28266
+  rdzv_backend     : c10d
+  rdzv_endpoint    : 10.80.88.101:29500
+  rdzv_configs     : {'timeout': 900}
+  max_restarts     : 0
+  monitor_interval : 5
+  log_dir          : None
+  metrics_cfg      : {}
+
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:log directory set to: /tmp/torchelastic_sefgbxxm/28266_9sjzdpei
+INFO:torch.distributed.elastic.agent.server.api:[default] starting workers for entrypoint: python3.10
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous'ing worker group
+master_addr is only used for static rdzv_backend and when rdzv_endpoint is not specified.
+INFO:torch.distributed.launcher.api:Starting elastic_operator with launch configs:
+  entrypoint       : parallelisation_gpu_train_torch_run_multinode.py
+  min_nodes        : 3
+  max_nodes        : 3
+  nproc_per_node   : 1
+  run_id           : 28266
+  rdzv_backend     : c10d
+  rdzv_endpoint    : 10.80.88.101:29500
+  rdzv_configs     : {'timeout': 900}
+  max_restarts     : 0
+  monitor_interval : 5
+  log_dir          : None
+  metrics_cfg      : {}
+
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:log directory set to: /tmp/torchelastic_hkvxwwym/28266_jisph9js
+INFO:torch.distributed.elastic.agent.server.api:[default] starting workers for entrypoint: python3.10
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous'ing worker group
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous complete for workers. Result:
+  restart_count=0
+  master_addr=ng30801.narval.calcul.quebec
+  master_port=51267
+  group_rank=0
+  group_world_size=3
+  local_ranks=[0]
+  role_ranks=[0]
+  global_ranks=[0]
+  role_world_sizes=[3]
+  global_world_sizes=[3]
+
+INFO:torch.distributed.elastic.agent.server.api:[default] Starting worker group
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:Environment variable 'TORCHELASTIC_ENABLE_FILE_TIMER' not found. Do not start FileTimerServer.
+INFO:torch.distributed.elastic.multiprocessing:Setting worker0 reply file to: /tmp/torchelastic_5pllgr77/28266_t7hcjaj8/attempt_0/0/error.json
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous complete for workers. Result:
+  restart_count=0
+  master_addr=ng30801.narval.calcul.quebec
+  master_port=51267
+  group_rank=1
+  group_world_size=3
+  local_ranks=[0]
+  role_ranks=[1]
+  global_ranks=[1]
+  role_world_sizes=[3]
+  global_world_sizes=[3]
+
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous complete for workers. Result:
+  restart_count=0
+  master_addr=ng30801.narval.calcul.quebec
+  master_port=51267
+  group_rank=2
+  group_world_size=3
+  local_ranks=[0]
+  role_ranks=[2]
+  global_ranks=[2]
+  role_world_sizes=[3]
+  global_world_sizes=[3]
+
+INFO:torch.distributed.elastic.agent.server.api:[default] Starting worker group
+INFO:torch.distributed.elastic.agent.server.api:[default] Starting worker group
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:Environment variable 'TORCHELASTIC_ENABLE_FILE_TIMER' not found. Do not start FileTimerServer.
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:Environment variable 'TORCHELASTIC_ENABLE_FILE_TIMER' not found. Do not start FileTimerServer.
+INFO:torch.distributed.elastic.multiprocessing:Setting worker0 reply file to: /tmp/torchelastic_sefgbxxm/28266_9sjzdpei/attempt_0/0/error.json
+INFO:torch.distributed.elastic.multiprocessing:Setting worker0 reply file to: /tmp/torchelastic_hkvxwwym/28266_jisph9js/attempt_0/0/error.json
+Traceback (most recent call last):
+  File "/localscratch/daril.20466238.0/MYENV/lib/python3.10/site-packages/torch/serialization.py", line 441, in save
+    _save(obj, opened_zipfile, pickle_module, pickle_protocol)
+  File "/localscratch/daril.20466238.0/MYENV/lib/python3.10/site-packages/torch/serialization.py", line 668, in _save
+    zip_file.write_record(name, storage.data_ptr(), num_bytes)
+RuntimeError: [enforce fail at inline_container.cc:471] . PytorchStreamWriter failed writing file data/199: file write failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/daril/trajcbert/parallelisation_gpu_train_torch_run_multinode.py", line 375, in <module>
+    main(
+  File "/home/daril/trajcbert/parallelisation_gpu_train_torch_run_multinode.py", line 352, in main
+    trainer.train(total_epochs)
+  File "/home/daril/trajcbert/parallelisation_gpu_train_torch_run_multinode.py", line 255, in train
+    self._save_snapshot(epoch)
+  File "/home/daril/trajcbert/parallelisation_gpu_train_torch_run_multinode.py", line 244, in _save_snapshot
+    torch.save(snapshot, self.snapshot_path)
+  File "/localscratch/daril.20466238.0/MYENV/lib/python3.10/site-packages/torch/serialization.py", line 440, in save
+    with _open_zipfile_writer(f) as opened_zipfile:
+  File "/localscratch/daril.20466238.0/MYENV/lib/python3.10/site-packages/torch/serialization.py", line 291, in __exit__
+    self.file_like.write_end_of_file()
+RuntimeError: [enforce fail at inline_container.cc:337] . unexpected pos 546661184 vs 546661072
+Traceback (most recent call last):
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/serialization.py", line 441, in save
+Traceback (most recent call last):
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/serialization.py", line 441, in save
+    _save(obj, opened_zipfile, pickle_module, pickle_protocol)
+    _save(obj, opened_zipfile, pickle_module, pickle_protocol)
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/serialization.py", line 668, in _save
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/serialization.py", line 668, in _save
+    zip_file.write_record(name, storage.data_ptr(), num_bytes)
+    zip_file.write_record(name, storage.data_ptr(), num_bytes)
+RuntimeError: [enforce fail at inline_container.cc:471] . PytorchStreamWriter failed writing file data/0: file write failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/daril/trajcbert/parallelisation_gpu_train_torch_run_multinode.py", line 375, in <module>
+RuntimeError: [enforce fail at inline_container.cc:471] . PytorchStreamWriter failed writing file data/0: file write failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/daril/trajcbert/parallelisation_gpu_train_torch_run_multinode.py", line 375, in <module>
+    main(
+    main(
+  File "/home/daril/trajcbert/parallelisation_gpu_train_torch_run_multinode.py", line 352, in main
+  File "/home/daril/trajcbert/parallelisation_gpu_train_torch_run_multinode.py", line 352, in main
+    trainer.train(total_epochs)
+    trainer.train(total_epochs)
+  File "/home/daril/trajcbert/parallelisation_gpu_train_torch_run_multinode.py", line 255, in train
+  File "/home/daril/trajcbert/parallelisation_gpu_train_torch_run_multinode.py", line 255, in train
+    self._save_snapshot(epoch)
+    self._save_snapshot(epoch)
+  File "/home/daril/trajcbert/parallelisation_gpu_train_torch_run_multinode.py", line 244, in _save_snapshot
+  File "/home/daril/trajcbert/parallelisation_gpu_train_torch_run_multinode.py", line 244, in _save_snapshot
+    torch.save(snapshot, self.snapshot_path)
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/serialization.py", line 440, in save
+    torch.save(snapshot, self.snapshot_path)
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/serialization.py", line 440, in save
+    with _open_zipfile_writer(f) as opened_zipfile:
+    with _open_zipfile_writer(f) as opened_zipfile:
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/serialization.py", line 291, in __exit__
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/serialization.py", line 291, in __exit__
+    self.file_like.write_end_of_file()
+    self.file_like.write_end_of_file()
+RuntimeError: [enforce fail at inline_container.cc:337] . unexpected pos 42944 vs 42854
+RuntimeError: [enforce fail at inline_container.cc:337] . unexpected pos 42944 vs 42854
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 2876550) of binary: /localscratch/daril.20466238.0/MYENV/bin/python
+INFO:torch.distributed.elastic.agent.server.api:Local worker group finished (FAILED). Waiting 300 seconds for other agents to finish
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 1611671) of binary: /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/python/3.10.2/bin/python3.10
+INFO:torch.distributed.elastic.agent.server.api:Local worker group finished (FAILED). Waiting 300 seconds for other agents to finish
+ERROR:torch.distributed.elastic.multiprocessing.api:failed (exitcode: 1) local_rank: 0 (pid: 1401300) of binary: /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/python/3.10.2/bin/python3.10
+INFO:torch.distributed.elastic.agent.server.api:Local worker group finished (FAILED). Waiting 300 seconds for other agents to finish
+INFO:torch.distributed.elastic.agent.server.api:Done waiting for other agents. Elapsed: 0.24904465675354004 seconds
+INFO:torch.distributed.elastic.agent.server.api:Done waiting for other agents. Elapsed: 0.001562356948852539 seconds
+INFO:torch.distributed.elastic.agent.server.api:Done waiting for other agents. Elapsed: 0.2586193084716797 seconds
+INFO:torch.distributed.elastic.multiprocessing.errors:local_rank 0 FAILED with no error file. Decorate your entrypoint fn with @record for traceback info. See: https://pytorch.org/docs/stable/elastic/errors.html
+Traceback (most recent call last):
+  File "/localscratch/daril.20466238.0/MYENV/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/localscratch/daril.20466238.0/MYENV/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 346, in wrapper
+    return f(*args, **kwargs)
+  File "/localscratch/daril.20466238.0/MYENV/lib/python3.10/site-packages/torch/distributed/run.py", line 794, in main
+    run(args)
+  File "/localscratch/daril.20466238.0/MYENV/lib/python3.10/site-packages/torch/distributed/run.py", line 785, in run
+    elastic_launch(
+  File "/localscratch/daril.20466238.0/MYENV/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 134, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/localscratch/daril.20466238.0/MYENV/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 250, in launch_agent
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+parallelisation_gpu_train_torch_run_multinode.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2023-08-24_12:40:47
+  host      : ng30801.narval.calcul.quebec
+  rank      : 0 (local_rank: 0)
+  exitcode  : 1 (pid: 2876550)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+INFO:torch.distributed.elastic.multiprocessing.errors:local_rank 1 FAILED with no error file. Decorate your entrypoint fn with @record for traceback info. See: https://pytorch.org/docs/stable/elastic/errors.html
+INFO:torch.distributed.elastic.multiprocessing.errors:local_rank 2 FAILED with no error file. Decorate your entrypoint fn with @record for traceback info. See: https://pytorch.org/docs/stable/elastic/errors.html
+Traceback (most recent call last):
+  File "/home/daril/.local/bin/torchrun", line 8, in <module>
+Traceback (most recent call last):
+  File "/home/daril/.local/bin/torchrun", line 8, in <module>
+    sys.exit(main())
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 346, in wrapper
+    sys.exit(main())
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/distributed/elastic/multiprocessing/errors/__init__.py", line 346, in wrapper
+    return f(*args, **kwargs)
+    return f(*args, **kwargs)
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/distributed/run.py", line 794, in main
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/distributed/run.py", line 794, in main
+    run(args)
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/distributed/run.py", line 785, in run
+    run(args)
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/distributed/run.py", line 785, in run
+    elastic_launch(
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 134, in __call__
+    elastic_launch(
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 134, in __call__
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 250, in launch_agent
+    return launch_agent(self._config, self._entrypoint, list(args))
+  File "/home/daril/.local/lib/python3.10/site-packages/torch/distributed/launcher/api.py", line 250, in launch_agent
+    raise ChildFailedError(
+    raise ChildFailedError(
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+parallelisation_gpu_train_torch_run_multinode.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2023-08-24_12:40:47
+  host      : ng30808.narval.calcul.quebec
+  rank      : 1 (local_rank: 0)
+  exitcode  : 1 (pid: 1611671)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+torch.distributed.elastic.multiprocessing.errors.ChildFailedError: 
+============================================================
+parallelisation_gpu_train_torch_run_multinode.py FAILED
+------------------------------------------------------------
+Failures:
+  <NO_OTHER_FAILURES>
+------------------------------------------------------------
+Root Cause (first observed failure):
+[0]:
+  time      : 2023-08-24_12:40:48
+  host      : ng30906.narval.calcul.quebec
+  rank      : 2 (local_rank: 0)
+  exitcode  : 1 (pid: 1401300)
+  error_file: <N/A>
+  traceback : To enable traceback see: https://pytorch.org/docs/stable/elastic/errors.html
+============================================================
+srun: error: ng30808: task 1: Exited with exit code 1
+srun: error: ng30801: task 0: Exited with exit code 1
+srun: error: ng30906: task 2: Exited with exit code 1

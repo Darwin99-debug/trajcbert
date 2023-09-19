@@ -1,0 +1,36 @@
+Traceback (most recent call last):
+  File "/home/daril/trajcbert/parallelisation_gpu_train_full.py", line 319, in <module>
+    mp.spawn(main, args=(world_size, save_every, epochs, batch_size), nprocs=world_size, join=True)
+  File "/localscratch/daril.20466366.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 239, in spawn
+    return start_processes(fn, args, nprocs, join, daemon, start_method='spawn')
+  File "/localscratch/daril.20466366.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 197, in start_processes
+    while not context.join():
+  File "/localscratch/daril.20466366.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 160, in join
+    raise ProcessRaisedException(msg, error_index, failed_process.pid)
+torch.multiprocessing.spawn.ProcessRaisedException: 
+
+-- Process 0 terminated with the following error:
+Traceback (most recent call last):
+  File "/localscratch/daril.20466366.0/MYENV/lib/python3.10/site-packages/torch/serialization.py", line 441, in save
+    _save(obj, opened_zipfile, pickle_module, pickle_protocol)
+  File "/localscratch/daril.20466366.0/MYENV/lib/python3.10/site-packages/torch/serialization.py", line 668, in _save
+    zip_file.write_record(name, storage.data_ptr(), num_bytes)
+RuntimeError: [enforce fail at inline_container.cc:471] . PytorchStreamWriter failed writing file data/0: file write failed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/localscratch/daril.20466366.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+  File "/home/daril/trajcbert/parallelisation_gpu_train_full.py", line 296, in main
+    trainer.train(total_epochs)
+  File "/home/daril/trajcbert/parallelisation_gpu_train_full.py", line 226, in train
+    self._save_checkpoint(epoch)
+  File "/home/daril/trajcbert/parallelisation_gpu_train_full.py", line 214, in _save_checkpoint
+    torch.save(ckp, PATH)
+  File "/localscratch/daril.20466366.0/MYENV/lib/python3.10/site-packages/torch/serialization.py", line 440, in save
+    with _open_zipfile_writer(f) as opened_zipfile:
+  File "/localscratch/daril.20466366.0/MYENV/lib/python3.10/site-packages/torch/serialization.py", line 291, in __exit__
+    self.file_like.write_end_of_file()
+RuntimeError: [enforce fail at inline_container.cc:337] . unexpected pos 42880 vs 42798
+

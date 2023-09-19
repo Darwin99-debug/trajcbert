@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "/home/daril/trajcbert/parallelisation_gpu_train_full.py", line 280, in <module>
+    mp.spawn(main, args=(world_size, save_every, epochs, batch_size), nprocs=world_size, join=True)
+  File "/localscratch/daril.19839655.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 239, in spawn
+    return start_processes(fn, args, nprocs, join, daemon, start_method='spawn')
+  File "/localscratch/daril.19839655.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 197, in start_processes
+    while not context.join():
+  File "/localscratch/daril.19839655.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 160, in join
+    raise ProcessRaisedException(msg, error_index, failed_process.pid)
+torch.multiprocessing.spawn.ProcessRaisedException: 
+
+-- Process 0 terminated with the following error:
+Traceback (most recent call last):
+  File "/localscratch/daril.19839655.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+  File "/home/daril/trajcbert/parallelisation_gpu_train_full.py", line 250, in main
+    model, optimizer = load_bert_model_and_tokenizer()
+  File "/home/daril/trajcbert/parallelisation_gpu_train_full.py", line 55, in load_bert_model_and_tokenizer
+    model = BertForSequenceClassification.from_pretrained(PRETRAINED_MODEL_NAME)
+  File "/localscratch/daril.19839655.0/MYENV/lib/python3.10/site-packages/transformers/modeling_utils.py", line 2325, in from_pretrained
+    config, model_kwargs = cls.config_class.from_pretrained(
+  File "/localscratch/daril.19839655.0/MYENV/lib/python3.10/site-packages/transformers/configuration_utils.py", line 590, in from_pretrained
+    config_dict, kwargs = cls.get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/localscratch/daril.19839655.0/MYENV/lib/python3.10/site-packages/transformers/configuration_utils.py", line 617, in get_config_dict
+    config_dict, kwargs = cls._get_config_dict(pretrained_model_name_or_path, **kwargs)
+  File "/localscratch/daril.19839655.0/MYENV/lib/python3.10/site-packages/transformers/configuration_utils.py", line 672, in _get_config_dict
+    resolved_config_file = cached_file(
+  File "/localscratch/daril.19839655.0/MYENV/lib/python3.10/site-packages/transformers/utils/hub.py", line 388, in cached_file
+    raise EnvironmentError(
+OSError: /home/daril/trajcbert/savings_for_parrallel_1_2/tokenizer_final_opti_833383 does not appear to have a file named config.json. Checkout 'https://huggingface.co//home/daril/trajcbert/savings_for_parrallel_1_2/tokenizer_final_opti_833383/main' for available files.
+

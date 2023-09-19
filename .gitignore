@@ -4,3 +4,15 @@ new_tokenizer/added_tokens.json
 new_tokenizer/special_tokens_map.json
 new_tokenizer/tokenizer_config.json
 new_tokenizer/vocab.txt
+data/train_clean_small.json
+computing_code/venv
+venv
+BERT_MODEL
+savings_for_parallel_computing/
+models
+savings_for_parrallel_1_2
+savings_300000/
+savings_for_parallel_computing_1_2/
+savings_for_parallel_computing_full/
+savings
+

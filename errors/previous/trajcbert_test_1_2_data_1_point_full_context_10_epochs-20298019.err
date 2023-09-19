@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/home/daril/trajcbert/testing_1_point.py", line 68, in <module>
+    outputs = model(b_input_ids, token_type_ids=None, 
+  File "/localscratch/daril.20298019.0/MYENV/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/localscratch/daril.20298019.0/MYENV/lib/python3.10/site-packages/transformers//home/daril/scratch/data/trajcbert/models/bert/modeling_bert.py", line 1562, in forward
+    outputs = self.bert(
+  File "/localscratch/daril.20298019.0/MYENV/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/localscratch/daril.20298019.0/MYENV/lib/python3.10/site-packages/transformers//home/daril/scratch/data/trajcbert/models/bert/modeling_bert.py", line 1015, in forward
+    embedding_output = self.embeddings(
+  File "/localscratch/daril.20298019.0/MYENV/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/localscratch/daril.20298019.0/MYENV/lib/python3.10/site-packages/transformers//home/daril/scratch/data/trajcbert/models/bert/modeling_bert.py", line 232, in forward
+    inputs_embeds = self.word_embeddings(input_ids)
+  File "/localscratch/daril.20298019.0/MYENV/lib/python3.10/site-packages/torch/nn/modules/module.py", line 1501, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "/localscratch/daril.20298019.0/MYENV/lib/python3.10/site-packages/torch/nn/modules/sparse.py", line 162, in forward
+    return F.embedding(
+  File "/localscratch/daril.20298019.0/MYENV/lib/python3.10/site-packages/torch/nn/functional.py", line 2210, in embedding
+    return torch.embedding(weight, input, padding_idx, scale_grad_by_freq, sparse)
+RuntimeError: Expected all tensors to be on the same device, but found at least two devices, cpu and cuda:0! (when checking argument for argument index in method wrapper_CUDA__index_select)
