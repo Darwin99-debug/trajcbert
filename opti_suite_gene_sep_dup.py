@@ -275,6 +275,13 @@ def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, n
     This function prepares the train dataset like the prepare_train_wo_duplicate function but with the possibility to duplicate the rows.
     The separation rate is the proportion of rows that will separated into two different trajectories. 
     The duplication rate is the proportion of rows that will be duplicated, ie that will occur in two different trajectories with different targets.
+
+    - dataframe : the dataframe that we want to prepare
+    - duplication_rate : the proportion of rows that will be duplicated
+    - separation_rate : the proportion of rows that will be separated
+    - uniforme_bool : boolean that indicates whether we want to separate the rows uniformly or not. uniformly means that the rows will be separated according to the rates given in list_rate_per_cat and the number of categories and not according to their length and non uniformly means that the rows will be separated according to their length
+    - nb_categories : the number of categories that we want to separate the rows into
+    - list_rate_per_cat : the list of rates that we want to use to separate the rows. It is a list of length nb_categories that contains the rates of each category. It is only used if uniforme_bool is True
     """
 
 
@@ -284,16 +291,19 @@ def prepare_train(dataframe, duplication_rate, separation_rate, uniforme_bool, n
         assert len(list_rate_per_cat)==nb_categories, "The number of elements of list_rate_per_cat must be equal to nb_categories"
 
 
-    #we copy to avoid caveat
+    #we copy to avoid caveat. caveat is when we modify the original dataframe when we modify the copy
     dataframe_original = dataframe
     dataframe = dataframe_original.copy()
 
+    datframe_len = len(dataframe)
+
     #we calculate the number of rows that we will separate and the number of rows that we will duplicate
-    nb_to_separate = int(len(dataframe)*separation_rate/100)
-    nb_to_duplicate = int(len(dataframe)*duplication_rate/100)
+    nb_to_separate = int(datframe_len * separation_rate/100)
+    nb_to_duplicate = int(datframe_len * duplication_rate/100)
     nb_to_select=nb_to_separate+nb_to_duplicate
 
     #we select the rows we are going to separate or duplicate with the number of times we will duplicate them or separate them
+
     list_row_to_select = row_selection(dataframe, nb_to_select)
 
     #we attribute the rows that we will separate and the rows that we will duplicate among the rows that we selected
@@ -471,10 +481,10 @@ if __name__ == '__main__':
     data_format = add_spaces_for_concat(data_format, 'TAXI_ID')
     data_format = add_spaces_for_concat(data_format, 'DAY')
 
-    # la colonne CONTEXT_INPUT sera la concaténation du jour de la semaine, de l'heure et de la semaien de l'année pui de la colonne CALL_TYPE, de la colonne TAXI_ID, d'un espace et du dernier token de la colonne Tokenization
+    # la colonne CONTEXT_INPUT sera la concaténation du jour de la semaine, de l'heure et de la semaine de l'année puis de la colonne CALL_TYPE, de la colonne TAXI_ID, d'un espace et du dernier token de la colonne Tokenization
     data_format['CONTEXT_INPUT'] =data_format['Tokenization_2'].apply(lambda x: x[-1]) + data_format['DAY'] + data_format['HOUR'] + data_format['WEEK'] + data_format['CALL_TYPE'] + data_format['TAXI_ID']
     #on récupère le nombre d'informations dans la colonne CONTEXT_INPUT
-    #Comme cette colonne contiient les informations en string séparé par un espace, on récupère la liste correspondante puis on compte le nombre d'éléments de cette liste
+    #Comme cette colonne contient les informations en string séparé par un espace, on récupère la liste correspondante puis on compte le nombre d'éléments de cette liste
     len_context_info = len(data_format['CONTEXT_INPUT'][0].split(' '))
 
     #we separate the dataframe into train and test 
@@ -484,6 +494,7 @@ if __name__ == '__main__':
 
 
     df_full_dup, df_sep_dup, list_row_to_sep_dup, list_row_to_dup = prepare_train(data_train, duplication_rate=dup_rate, separation_rate=sep_rate, uniforme_bool=uniform,nb_categories=nb_cat,list_rate_per_cat=percentage_per_cat)
+
     #df_test, df_sep_test, list_row_to_sep_test, list_row_to_dup_test = prepare_train(data_test, duplication_rate=0, separation_rate=0, decal_gauche=False, decal_droite=False, uniforme=True)
     
 

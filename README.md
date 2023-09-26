@@ -13,6 +13,8 @@ Prédiction de l'avant-dernier point de la trajectoire (classification).
 - Branche: **Feature/parallelization_gpu**
 - Fichier: **parallelisation_gpu_deb_opti.py**
 
+***NB*** : Il faudrait plustard prendre en compte le fait de selctionner dans le data set que des trajectoires qui sont les meilleurs car celles ci pourraient bien fonctionner selon le contexte mais ne sont pas necessairement les meilleures.
+
 **Définir la taille du dataset avec nb_rows**
 
 Données d'entrée: ```/home/daril_kw/data/02.06.23/train_clean.json```
