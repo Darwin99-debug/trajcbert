@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --account=def-nkambou
 #SBATCH --gres=gpu:4
-#SBATCH --time=4-0:00
+#SBATCH --time=7-0:00
 #SBATCH --job-name=trajcbert_on_gpu_1_2_batch_size_32_4_DAYS_100_epochs_with_c
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
 #SBATCH --cpus-per-task=16 # number of cores for each task
-#SBATCH --nodes=3 
+#SBATCH --nodes=1 
 #SBATCH --mem=0
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=kengne_wambo.daril_raoul@courrier.uqam.ca
