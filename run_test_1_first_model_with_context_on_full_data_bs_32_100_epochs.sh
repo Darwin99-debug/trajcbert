@@ -21,7 +21,7 @@ pip install -r requirements.txt --no-index
 pip list
 
 PRETRAINED_MODEL_NAME="/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_full_bs_32_20_epochs_with_context"
-DATALOADER_DIR="/home/daril/trajcbert/savings/test_dataloader_833383.pt"
+DATALOADER_DIR="/home/daril/scratch/data/trajcbert/test_dataloader/test_dataloader_full_32_bs.pt"
 
 
 python testing_1_point_with_context_generic.py \
