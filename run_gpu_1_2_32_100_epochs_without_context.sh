@@ -2,7 +2,7 @@
 #SBATCH --account=def-nkambou
 #SBATCH --gres=gpu:4
 #SBATCH --time=4-0:00
-#SBATCH --job-name=trajcbert_on_gpu_1_2_batch_size_32_4_DAYS_20_epochs_without_context
+#SBATCH --job-name=trajcbert_on_gpu_1_2_batch_size_32_4_DAYS_100_epochs_without_context
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
 #SBATCH --cpus-per-task=16 # number of cores for each task
