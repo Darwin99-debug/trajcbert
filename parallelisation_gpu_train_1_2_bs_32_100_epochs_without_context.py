@@ -289,7 +289,7 @@ def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_s
 if __name__ == "__main__":
     import json
     # import the config file
-    with open("config_1_2_batch_size_32_20_epochs.json") as json_file:
+    with open("config_1_2_batch_size_32_100_epochs.json") as json_file:
         config = json.load(json_file)
 
     batch_size = config["batch_size"]
