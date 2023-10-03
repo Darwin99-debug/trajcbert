@@ -1,8 +1,5 @@
 train_clean.json
 train_clean_truncated.json
-<<<<<<< HEAD
-models
-=======
 new_tokenizer/added_tokens.json
 new_tokenizer/special_tokens_map.json
 new_tokenizer/tokenizer_config.json
@@ -19,4 +16,3 @@ savings_for_parallel_computing_1_2/
 savings_for_parallel_computing_full/
 savings
 
->>>>>>> d6c97067cd716e7d21c2a759d1ce70a11ed87c15
