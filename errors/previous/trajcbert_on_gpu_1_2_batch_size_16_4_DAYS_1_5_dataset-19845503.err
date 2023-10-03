@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "/home/daril/trajcbert/parallelisation_gpu_train_full.py", line 280, in <module>
+    mp.spawn(main, args=(world_size, save_every, epochs, batch_size), nprocs=world_size, join=True)
+  File "/localscratch/daril.19845503.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 239, in spawn
+    return start_processes(fn, args, nprocs, join, daemon, start_method='spawn')
+  File "/localscratch/daril.19845503.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 197, in start_processes
+    while not context.join():
+  File "/localscratch/daril.19845503.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 160, in join
+    raise ProcessRaisedException(msg, error_index, failed_process.pid)
+torch.multiprocessing.spawn.ProcessRaisedException: 
+
+-- Process 1 terminated with the following error:
+Traceback (most recent call last):
+  File "/localscratch/daril.19845503.0/MYENV/lib/python3.10/site-packages/torch/multiprocessing/spawn.py", line 69, in _wrap
+    fn(i, *args)
+  File "/home/daril/trajcbert/parallelisation_gpu_train_full.py", line 258, in main
+    trainer.train(total_epochs)
+  File "/home/daril/trajcbert/parallelisation_gpu_train_full.py", line 185, in train
+    self._run_epoch(epoch)
+  File "/home/daril/trajcbert/parallelisation_gpu_train_full.py", line 114, in _run_epoch
+    b_sz = len(next(iter(self.train_data))[0]) # batch size
+  File "/localscratch/daril.19845503.0/MYENV/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 633, in __next__
+    data = self._next_data()
+  File "/localscratch/daril.19845503.0/MYENV/lib/python3.10/site-packages/torch/utils/data/dataloader.py", line 679, in _next_data
+    data = _utils.pin_memory.pin_memory(data, self._pin_memory_device)
+  File "/localscratch/daril.19845503.0/MYENV/lib/python3.10/site-packages/torch/utils/data/_utils/pin_memory.py", line 70, in pin_memory
+    return type(data)([pin_memory(sample, device) for sample in data])  # type: ignore[call-arg]
+  File "/localscratch/daril.19845503.0/MYENV/lib/python3.10/site-packages/torch/utils/data/_utils/pin_memory.py", line 70, in <listcomp>
+    return type(data)([pin_memory(sample, device) for sample in data])  # type: ignore[call-arg]
+  File "/localscratch/daril.19845503.0/MYENV/lib/python3.10/site-packages/torch/utils/data/_utils/pin_memory.py", line 55, in pin_memory
+    return data.pin_memory(device)
+RuntimeError: cannot pin 'torch.cuda.LongTensor' only dense CPU tensors can be pinned
+
