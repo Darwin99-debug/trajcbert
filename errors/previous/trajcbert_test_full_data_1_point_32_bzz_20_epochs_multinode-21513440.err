@@ -1,0 +1,2 @@
+/var/spool/slurmd/job21513440/slurm_script: line 29: 2061274 Killed                  python testing_1_point_with_context_generic.py --pretrained_model_name $PRETRAINED_MODEL_NAME --dataloader_dir $DATALOADER_DIR
+slurmstepd: error: Detected 1 oom-kill event(s) in StepId=21513440.batch. Some of your processes may have been killed by the cgroup out-of-memory handler.

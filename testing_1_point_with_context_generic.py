@@ -92,6 +92,15 @@ def main():
         # Store the inputs
 
         list_inputs_test.append(b_input_ids.tolist())
+        #free the memory
+        del b_input_ids
+        del b_input_mask
+        del b_labels
+        del outputs
+        del logits
+        del label_ids
+        torch.cuda.empty_cache()
+        
 
     print("DONE.")
 
@@ -113,6 +122,8 @@ def main():
         # Calculate and store the coef for this batch.
         matthews = matthews_corrcoef(true_labels[i], pred_labels_i)
         matthews_set.append(matthews)
+        # free the memory
+        torch.cuda.empty_cache()
 
     # Combine the predictions for each batch into a single list of 0s and 1s.
     flat_predictions = [item for sublist in predictions for item in sublist]
@@ -134,7 +145,7 @@ def main():
     print("accuracy: %.3f" % accuracy)
 
     # print the loss
-    print("loss: %.3f" % (losses / len(true_labels)))
+    # print("loss: %.3f" % (losses / len(true_labels)))
 
     # save flat_list_inputs_test
 

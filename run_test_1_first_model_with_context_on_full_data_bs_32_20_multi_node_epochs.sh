@@ -2,11 +2,11 @@
 #SBATCH --account=def-nkambou
 #SBATCH --gres=gpu:1
 #SBATCH --time=4-0:00
-#SBATCH --job-name=trajcbert_test_full_data_1_point_32_bzz_20_epochs_multinode
+#SBATCH --job-name=trajcbert_test_full_data_1_point_32_bz_20_epochs_multinode
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
 #SBATCH --cpus-per-task=16 # number of cores for each task
-#SBATCH --mem=256G
+#SBATCH --mem=498G
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=kengne_wambo.daril_raoul@courrier.uqam.ca
 
