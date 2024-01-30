@@ -53,6 +53,16 @@ print("We predict")
 for batch in prediction_dataloader:
     # Add batch to GPU
     batch = tuple(t.to(device) for t in batch)
+    # Those batches are tuples of tensors with the input_ids, the attention masks and the labels
+    # An example of batch is:
+    # tuple(
+    #   tensor([[  101,  2054,  2003,  ...,     0,     0,     0],
+    #           [  101,  2054,  2003,  ...,     0,     0,     0],
+    #           [  101,  2054,  2003,  ...,     0,     0,     0],
+    #           ...,
+    #           [  101,  2054,  2003,  ...,     0,     0,     0],
+    #           [  101,  2054,  2003,  ...,     0,     0,     0],
+    #           [  101,  2054,  2003,  ...,     0,     0,     0]]),
 
     # Unpack the inputs from our dataloader
     b_input_ids, b_input_mask, b_labels = batch
@@ -139,3 +149,22 @@ print("loss: %.3f" % (losses / len(true_labels)))
 
 
 # save flat_list_inputs_test
+
+
+
+
+def predict_auto_gressively_one_trajectory(model, trajectory, max_length, device):
+    """
+    This function predicts the labels of a trajectory and then add this prediction to the trajectory
+    and then predicts the next label and so on
+    up to token SEP
+    :param model: the model
+    :param trajectory: the trajectory
+    :param max_length: the max length of the trajectory
+    :param device: the device
+    :return: the prediction
+    """
+    # we put the model in eval mode
+    model.eval()
+    input_ids, masks, labels = trajectory
+    
