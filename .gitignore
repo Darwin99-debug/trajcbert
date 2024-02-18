@@ -1,6 +1,7 @@
 train_clean.json
 train_clean_truncated.json
 data/train_clean_small.json
+<<<<<<< HEAD
 computing_code/venv
 venv
 BERT_MODEL
@@ -12,3 +13,6 @@ savings_for_parallel_computing_1_2/
 savings_for_parallel_computing_full/
 savings
 
+=======
+new_tokenizer
+>>>>>>> e99d8c154cdcb9546364bef34082da3906848bbb
