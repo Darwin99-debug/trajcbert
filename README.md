@@ -15,7 +15,7 @@ Prédiction de l'avant-dernier point de la trajectoire (classification).
 
 **Définir la taille du dataset avec nb_rows**
 
-Données d'entrée: `/home/daril_kw/data/02.06.23/train_clean.json`
+Données d'entrée: ```/home/daril_kw/data/02.06.23/train_clean.json```
 
 **Données de sortie:**
 - modèle
@@ -101,9 +101,9 @@ Le but ici est de prédire la trajectoire entière par auto-régression. Pour ce
 - Branche: **feature/generalization_2**
 - Fichier de formatage: **opti_deb_gene.py** (formatage des données comme au début)
   - Output:
-    - `/home/daril_kw/data/tokenizer_final`
-    - `/home/daril_kw/data/data_with_time_info_ok_opti.json`
-    - `/home/daril_kw/data/model_resized_embeddings`
+    - ```/home/daril_kw/data/tokenizer_final```
+    - ```/home/daril_kw/data/data_with_time_info_ok_opti.json```
+    - ```/home/daril_kw/data/model_resized_embeddings```
 - Fichier de formation des inputs: **opti_suite_gene_sep_dup.py** (séparation des trajectoires les plus longues selon le taux de séparation -> duplication -> séparation en catégories)
   - Inputs:
     - `/home/daril_kw/data/data_with_time_info_ok_opti.json`
@@ -161,7 +161,7 @@ Fichier de configuration:
 - Fichier: **opti_suite_sep_dup_test_format.py** 
 ``` 
 Il est le même que celui utilisé pour les données d´entrainement mais avec la gestion des données de test en plus.
-NB: Il faudra tester le ficher et le corriger
+__NB__: Il faudra tester le ficher et le corriger
 
 ```
 

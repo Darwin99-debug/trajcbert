@@ -1,5 +1,9 @@
 train_clean.json
 train_clean_truncated.json
+new_tokenizer/added_tokens.json
+new_tokenizer/special_tokens_map.json
+new_tokenizer/tokenizer_config.json
+new_tokenizer/vocab.txt
 data/train_clean_small.json
 computing_code/venv
 venv
