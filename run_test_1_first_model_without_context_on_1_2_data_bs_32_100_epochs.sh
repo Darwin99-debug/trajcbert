@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --account=def-nkambou
 #SBATCH --gres=gpu:1
-#SBATCH --time=7-0:00
+#SBATCH --time=3-0:00
 #SBATCH --job-name=trajcbert_test_1_2_data_1_point_without_context_bs_32_100_epochs
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
