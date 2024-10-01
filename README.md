@@ -180,3 +180,8 @@ __NB__: Il faudra tester le ficher et le corriger
 
 
 
+## Résultats préliminaires: 
+
+
+## REFERENCES
+- [Parralélisation multi-noeud avec DDP et torchrun](https://github.com/pytorch/examples/blob/main/distributed/ddp-tutorial-series/multinode.py)
