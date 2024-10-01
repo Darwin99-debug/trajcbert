@@ -24,8 +24,8 @@ PRETRAINED_MODEL_NAME="/home/daril/scratch/data/trajcbert/models/model_saved_par
 DATALOADER_DIR="/home/daril/trajcbert/savings/test_dataloader_833383.pt"
 
 
-# python testing_1_point_with_context_on_full_data_bs_32_20_epochs.py \
-python testing_1_point_with_context_generic.py \
+# python testing_1_point_with_context_generic.py \
+python testing_1_point_with_context_on_full_data_bs_32_20_epochs.py \
 --pretrained_model_name $PRETRAINED_MODEL_NAME \
 --dataloader_dir $DATALOADER_DIR
 

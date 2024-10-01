@@ -1,6 +1,6 @@
-# TrajCBERT Model
+# TrajC-BERT Model
 
-## Première version du modèle TrajCBERT
+## Première version du modèle TrajC-BERT
 
 ### Description du modèle
 
@@ -92,7 +92,7 @@ Fichier de Base: **parallelisation_gpu_train_full.py**
 ### Test du modèle 
   - Branche: **gpu_parallelization_with_torch_run**
   - Fichier: **testing_1_point_without_context.py**
-# Deuxième version du modèle TrajCBERT
+# Deuxième version du modèle TrajC-BERT
 
 ## Description du modèle
 
