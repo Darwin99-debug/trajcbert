@@ -2,7 +2,7 @@
 #SBATCH --account=def-nkambou
 #SBATCH --gres=gpu:1
 #SBATCH --time=4-0:00
-#SBATCH --job-name=trajcbert_test_full_data_1_point_full_context_bs_16_1_epochs
+#SBATCH --job-name=trajcbert_test_1_point_1_2_data_with_context_bs_32_100_epochs
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
 #SBATCH --cpus-per-task=16 # number of cores for each task
@@ -20,7 +20,7 @@ source $VENV_DIR/bin/activate
 pip install -r requirements.txt --no-index
 pip list
 
-PRETRAINED_MODEL_NAME="/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_full_bs_32_20_epochs_with_context"
+PRETRAINED_MODEL_NAME="/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_100_epochs"
 DATALOADER_DIR="/home/daril/trajcbert/savings/test_dataloader_833383.pt"
 
 

@@ -2,7 +2,7 @@
 #SBATCH --account=def-nkambou
 #SBATCH --gres=gpu:4
 #SBATCH --time=7-0:00
-#SBATCH --job-name=trajcbert_on_gpu_1_2_batch_size_32_4_DAYS_100_epochs_with_c
+#SBATCH --job-name=trajcbert_on_gpu_full_batch_size_32_7_DAYS_100_epochs_with_c
 #SBATCH --output=outputs/%x-%j.out
 #SBATCH --error=errors/%x-%j.err
 #SBATCH --cpus-per-task=16 # number of cores for each task
@@ -22,6 +22,6 @@ pip install -r requirements.txt --no-index
 pip list
 
 
-python parallelisation_gpu_train_1_2_bs_32_100_epochs.py
+python parallelisation_gpu_train_full_data_bs_32_100_epochs.py
 
 

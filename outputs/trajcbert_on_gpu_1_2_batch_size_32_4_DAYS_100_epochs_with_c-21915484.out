@@ -1,0 +1,1102 @@
+created virtual environment CPython3.10.2.final.0-64 in 903ms
+  creator CPython3Posix(dest=/localscratch/daril.21915484.0/MYENV, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/home/daril/.local/share/virtualenv)
+    added seed packages: pip==23.0+computecanada, setuptools==68.1.2+computecanada, wheel==0.41.2+computecanada
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2020/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2020/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tqdm-4.66.1+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/avx2/torch-2.0.1+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic/scikit_learn-1.3.0+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-4.34.0+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/networkx-3.1+computecanada-py3-none-any.whl
+Requirement already satisfied: sympy in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from torch->-r requirements.txt (line 2)) (1.11.1+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/filelock-3.12.4+computecanada-py3-none-any.whl
+Requirement already satisfied: typing-extensions in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from torch->-r requirements.txt (line 2)) (4.5.0+computecanada)
+Requirement already satisfied: jinja2 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from torch->-r requirements.txt (line 2)) (3.1.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/joblib-1.3.2+computecanada-py3-none-any.whl
+Requirement already satisfied: numpy>=1.21 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from scikit-learn->-r requirements.txt (line 3)) (1.24.2+computecanada)
+Requirement already satisfied: scipy>=1.5.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from scikit-learn->-r requirements.txt (line 3)) (1.10.1+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/threadpoolctl-3.2.0+computecanada-py3-none-any.whl
+Requirement already satisfied: packaging>=20.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/ipykernel/2023a/lib/python3.10/site-packages (from transformers->-r requirements.txt (line 4)) (23.0+computecanada)
+Requirement already satisfied: pyyaml>=5.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from transformers->-r requirements.txt (line 4)) (6.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic/safetensors-0.3.3+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/regex-2023.8.8+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/huggingface_hub-0.18.0+computecanada-py3-none-any.whl
+Requirement already satisfied: requests in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from transformers->-r requirements.txt (line 4)) (2.28.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic/tokenizers-0.14.0+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fsspec-2023.9.2+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/huggingface_hub-0.16.4+computecanada-py3-none-any.whl
+Requirement already satisfied: MarkupSafe>=2.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from jinja2->torch->-r requirements.txt (line 2)) (2.1.2+computecanada)
+Requirement already satisfied: urllib3<1.27,>=1.21.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from requests->transformers->-r requirements.txt (line 4)) (1.26.14+computecanada)
+Requirement already satisfied: idna<4,>=2.5 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from requests->transformers->-r requirements.txt (line 4)) (3.4+computecanada)
+Requirement already satisfied: certifi>=2017.4.17 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from requests->transformers->-r requirements.txt (line 4)) (2022.12.7+computecanada)
+Requirement already satisfied: charset-normalizer<4,>=2 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from requests->transformers->-r requirements.txt (line 4)) (3.0.1+computecanada)
+Requirement already satisfied: mpmath>=0.19 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from sympy->torch->-r requirements.txt (line 2)) (1.2.1+computecanada)
+Installing collected packages: safetensors, tqdm, threadpoolctl, regex, networkx, joblib, fsspec, filelock, torch, scikit-learn, huggingface-hub, tokenizers, transformers
+Successfully installed filelock-3.12.4+computecanada fsspec-2023.9.2+computecanada huggingface-hub-0.16.4+computecanada joblib-1.3.2+computecanada networkx-3.1+computecanada regex-2023.8.8+computecanada safetensors-0.3.3+computecanada scikit-learn-1.3.0+computecanada threadpoolctl-3.2.0+computecanada tokenizers-0.14.0+computecanada torch-2.0.1+computecanada tqdm-4.66.1+computecanada transformers-4.34.0+computecanada
+Package                            Version
+---------------------------------- -----------------------
+anyio                              3.6.2+computecanada
+arff                               0.9+computecanada
+argon2_cffi                        21.3.0+computecanada
+argon2_cffi_bindings               21.2.0+computecanada
+asttokens                          2.2.1+computecanada
+async_generator                    1.10+computecanada
+attrs                              22.2.0+computecanada
+backcall                           0.2.0+computecanada
+backports-abc                      0.5+computecanada
+backports.shutil_get_terminal_size 1.0.0+computecanada
+bcrypt                             4.0.1+computecanada
+beautifulsoup4                     4.11.2+computecanada
+bitstring                          4.0.1+computecanada
+bleach                             6.0.0+computecanada
+certifi                            2022.12.7+computecanada
+cffi                               1.15.1+computecanada
+chardet                            5.1.0+computecanada
+charset_normalizer                 3.0.1+computecanada
+comm                               0.1.2+computecanada
+contourpy                          1.0.7+computecanada
+cryptography                       39.0.1+computecanada
+cycler                             0.11.0+computecanada
+Cython                             0.29.33+computecanada
+deap                               1.3.3+computecanada
+debugpy                            1.6.6+computecanada
+decorator                          5.1.1+computecanada
+defusedxml                         0.7.1+computecanada
+dnspython                          2.3.0+computecanada
+ecdsa                              0.18.0+computecanada
+entrypoints                        0.4+computecanada
+executing                          1.2.0+computecanada
+fastjsonschema                     2.16.2+computecanada
+filelock                           3.12.4+computecanada
+fonttools                          4.38.0+computecanada
+fsspec                             2023.9.2+computecanada
+funcsigs                           1.0.2+computecanada
+huggingface_hub                    0.16.4+computecanada
+idna                               3.4+computecanada
+importlib_metadata                 5.2.0+computecanada
+importlib_resources                5.12.0+computecanada
+ipykernel                          6.21.2+computecanada
+ipython                            8.10.0+computecanada
+ipython_genutils                   0.2.0+computecanada
+ipywidgets                         8.0.4+computecanada
+jedi                               0.18.2+computecanada
+Jinja2                             3.1.2+computecanada
+joblib                             1.3.2+computecanada
+jsonschema                         4.17.3+computecanada
+jupyter_client                     8.0.3+computecanada
+jupyter_core                       5.2.0+computecanada
+jupyter_events                     0.6.3+computecanada
+jupyter_server                     2.3.0+computecanada
+jupyter_server_terminals           0.4.4+computecanada
+jupyterlab_pygments                0.2.2+computecanada
+jupyterlab_widgets                 3.0.5+computecanada
+kiwisolver                         1.4.4+computecanada
+lockfile                           0.12.2+computecanada
+MarkupSafe                         2.1.2+computecanada
+matplotlib                         3.7.0+computecanada
+matplotlib_inline                  0.1.6+computecanada
+mistune                            2.0.5+computecanada
+mock                               5.0.1+computecanada
+mpmath                             1.2.1+computecanada
+nbclassic                          0.5.2+computecanada
+nbclient                           0.7.2+computecanada
+nbconvert                          7.2.9+computecanada
+nbformat                           5.7.3+computecanada
+nest_asyncio                       1.5.6+computecanada
+netaddr                            0.8.0+computecanada
+netifaces                          0.11.0+computecanada
+networkx                           3.1+computecanada
+nose                               1.3.7+computecanada
+notebook                           6.5.2+computecanada
+notebook_shim                      0.2.2+computecanada
+numpy                              1.24.2+computecanada
+packaging                          23.0+computecanada
+pandas                             1.5.3+computecanada
+pandocfilters                      1.5.0+computecanada
+paramiko                           3.0.0+computecanada
+parso                              0.8.3+computecanada
+path                               16.6.0+computecanada
+path.py                            12.5.0+computecanada
+pathlib2                           2.3.7+computecanada
+paycheck                           1.0.2+computecanada
+pbr                                5.11.1+computecanada
+pexpect                            4.8.0+computecanada
+pickleshare                        0.7.5+computecanada
+Pillow                             9.4.0+computecanada
+pip                                23.0+computecanada
+pkgutil_resolve_name               1.3.10+computecanada
+platformdirs                       2.5.2+computecanada
+prometheus_client                  0.16.0+computecanada
+prompt_toolkit                     3.0.37+computecanada
+psutil                             5.9.4+computecanada
+ptyprocess                         0.7.0+computecanada
+pure_eval                          0.2.2+computecanada
+pycparser                          2.21+computecanada
+Pygments                           2.14.0+computecanada
+PyNaCl                             1.5.0+computecanada
+pyparsing                          3.0.9+computecanada
+pyrsistent                         0.19.3+computecanada
+python-dateutil                    2.8.2+computecanada
+python_json_logger                 2.0.7+computecanada
+pytz                               2022.7.1+computecanada
+PyYAML                             6.0+computecanada
+pyzmq                              25.0.0+computecanada
+regex                              2023.8.8+computecanada
+requests                           2.28.2+computecanada
+rfc3339_validator                  0.1.4+computecanada
+rfc3986_validator                  0.1.1+computecanada
+safetensors                        0.3.3+computecanada
+scikit_learn                       1.3.0+computecanada
+scipy                              1.10.1+computecanada
+Send2Trash                         1.8.0+computecanada
+setuptools                         68.1.2+computecanada
+simplegeneric                      0.8.1+computecanada
+singledispatch                     4.0.0+computecanada
+six                                1.16.0+computecanada
+sniffio                            1.3.0+computecanada
+soupsieve                          2.4+computecanada
+stack_data                         0.6.2+computecanada
+sympy                              1.11.1+computecanada
+terminado                          0.17.1+computecanada
+testpath                           0.6.0+computecanada
+threadpoolctl                      3.2.0+computecanada
+tinycss2                           1.2.1+computecanada
+tokenizers                         0.14.0+computecanada
+torch                              2.0.1+computecanada
+tornado                            6.2+computecanada
+tqdm                               4.66.1+computecanada
+traitlets                          5.9.0+computecanada
+transformers                       4.34.0+computecanada
+typing_extensions                  4.5.0+computecanada
+urllib3                            1.26.14+computecanada
+wcwidth                            0.2.6+computecanada
+webencodings                       0.5.1+computecanada
+websocket_client                   1.5.1+computecanada
+wheel                              0.41.2+computecanada
+widgetsnbextension                 4.0.5+computecanada
+zipp                               3.14.0+computecanada
+Data conversion to tensors...
+
+[GPU2] Epoch 0 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 0 | Average loss: 4.3858258435216575
+[GPU2] Epoch 1 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 1 | Average loss: 1.6149677475310429
+[GPU2] Epoch 2 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 2 | Average loss: 1.0354469088208147
+[GPU2] Epoch 3 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 3 | Average loss: 0.7810379477891651
+[GPU2] Epoch 4 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 4 | Average loss: 0.6319947390508784
+[GPU2] Epoch 5 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 5 | Average loss: 0.5328551080179601
+[GPU2] Epoch 6 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 6 | Average loss: 0.43644549485070333
+[GPU2] Epoch 7 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 7 | Average loss: 0.36412856991978126
+[GPU2] Epoch 8 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 8 | Average loss: 0.3040916327714488
+[GPU2] Epoch 9 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 9 | Average loss: 0.2441187224258691
+[GPU2] Epoch 10 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 10 | Average loss: 0.1995200845142731
+[GPU2] Epoch 11 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 11 | Average loss: 0.1596263842577744
+[GPU2] Epoch 12 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 12 | Average loss: 0.13095648157235104
+[GPU2] Epoch 13 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 13 | Average loss: 0.11046857263617942
+[GPU2] Epoch 14 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 14 | Average loss: 0.08994296140706169
+[GPU2] Epoch 15 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 15 | Average loss: 0.075394773185126
+[GPU2] Epoch 16 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 16 | Average loss: 0.06437356999134422
+[GPU2] Epoch 17 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 17 | Average loss: 0.054543763159663194
+[GPU2] Epoch 18 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 18 | Average loss: 0.04826620645475325
+[GPU2] Epoch 19 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 19 | Average loss: 0.043314703542114565
+[GPU2] Epoch 20 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 20 | Average loss: 0.037867602228220595
+[GPU2] Epoch 21 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 21 | Average loss: 0.03432774374683107
+[GPU2] Epoch 22 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 22 | Average loss: 0.029629454828538328
+[GPU2] Epoch 23 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 23 | Average loss: 0.026567734298794415
+[GPU2] Epoch 24 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 24 | Average loss: 0.02423667210655755
+[GPU2] Epoch 25 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 25 | Average loss: 0.021962055886989146
+[GPU2] Epoch 26 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 26 | Average loss: 0.01920963656274465
+[GPU2] Epoch 27 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 27 | Average loss: 0.017628127833703273
+[GPU2] Epoch 28 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 28 | Average loss: 0.014906636906384024
+[GPU2] Epoch 29 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 29 | Average loss: 0.014048772775173975
+[GPU2] Epoch 30 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 30 | Average loss: 0.0125755740302506
+[GPU2] Epoch 31 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 31 | Average loss: 0.01148826753339808
+[GPU2] Epoch 32 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 32 | Average loss: 0.010610023590218778
+[GPU2] Epoch 33 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 33 | Average loss: 0.009153506241473038
+[GPU2] Epoch 34 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 34 | Average loss: 0.008283237311700763
+[GPU2] Epoch 35 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 35 | Average loss: 0.007687688527807376
+[GPU2] Epoch 36 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 36 | Average loss: 0.007102554299795735
+[GPU2] Epoch 37 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 37 | Average loss: 0.006362643886837859
+[GPU2] Epoch 38 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 38 | Average loss: 0.005848385748086561
+[GPU2] Epoch 39 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 39 | Average loss: 0.005508089734284277
+[GPU2] Epoch 40 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 40 | Average loss: 0.00530424064094926
+[GPU2] Epoch 41 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 41 | Average loss: 0.004445750449496029
+[GPU2] Epoch 42 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 42 | Average loss: 0.004116717406228765
+[GPU2] Epoch 43 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 43 | Average loss: 0.0036044130686980654
+[GPU2] Epoch 44 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 44 | Average loss: 0.0035894852907925614
+[GPU2] Epoch 45 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 45 | Average loss: 0.003679956896155584
+[GPU2] Epoch 46 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 46 | Average loss: 0.0032179701826626672
+[GPU2] Epoch 47 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 47 | Average loss: 0.002760669556149375
+[GPU2] Epoch 48 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 48 | Average loss: 0.0024878387115888547
+[GPU2] Epoch 49 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 49 | Average loss: 0.002399859673938042
+[GPU2] Epoch 50 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 50 | Average loss: 0.0023739899381539993
+[GPU2] Epoch 51 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 51 | Average loss: 0.0023804084809353762
+[GPU2] Epoch 52 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 52 | Average loss: 0.0018756114666636581
+[GPU2] Epoch 53 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 53 | Average loss: 0.0015477230739814288
+[GPU2] Epoch 54 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 54 | Average loss: 0.0016467355940376954
+[GPU2] Epoch 55 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 55 | Average loss: 0.0014940247186895786
+[GPU2] Epoch 56 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 56 | Average loss: 0.001425555237860723
+[GPU2] Epoch 57 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 57 | Average loss: 0.0012838641073792873
+[GPU2] Epoch 58 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 58 | Average loss: 0.0011532639111617058
+[GPU2] Epoch 59 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 59 | Average loss: 0.0011598414452060261
+[GPU2] Epoch 60 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 60 | Average loss: 0.0011041006796885095
+[GPU2] Epoch 61 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 61 | Average loss: 0.0010879744747698489
+[GPU2] Epoch 62 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 62 | Average loss: 0.0008844839033173748
+[GPU2] Epoch 63 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 63 | Average loss: 0.0008971791641147242
+[GPU2] Epoch 64 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 64 | Average loss: 0.0008447901132834197
+[GPU2] Epoch 65 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 65 | Average loss: 0.0007313474922332626
+[GPU2] Epoch 66 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 66 | Average loss: 0.0006931375622872163
+[GPU2] Epoch 67 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 67 | Average loss: 0.0007045641333670791
+[GPU2] Epoch 68 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 68 | Average loss: 0.0005902474664577908
+[GPU2] Epoch 69 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 69 | Average loss: 0.0005966538729185867
+[GPU2] Epoch 70 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 70 | Average loss: 0.0005909794517370793
+[GPU2] Epoch 71 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 71 | Average loss: 0.0004995812916228743
+[GPU2] Epoch 72 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 72 | Average loss: 0.00045217606892134247
+[GPU2] Epoch 73 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 73 | Average loss: 0.0004532029670139334
+[GPU2] Epoch 74 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 74 | Average loss: 0.0003927867324701135
+[GPU2] Epoch 75 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 75 | Average loss: 0.0003739139110865627
+[GPU2] Epoch 76 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 76 | Average loss: 0.0004360655501000964
+[GPU2] Epoch 77 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 77 | Average loss: 0.00035127174131222206
+[GPU2] Epoch 78 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 78 | Average loss: 0.00032014919526770054
+[GPU2] Epoch 79 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 79 | Average loss: 0.00032823497393222046
+[GPU2] Epoch 80 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 80 | Average loss: 0.0003075008346346797
+[GPU2] Epoch 81 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 81 | Average loss: 0.0002930837865748858
+[GPU2] Epoch 82 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 82 | Average loss: 0.00027842705784214344
+[GPU2] Epoch 83 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 83 | Average loss: 0.00025934396461615793
+[GPU2] Epoch 84 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 84 | Average loss: 0.00025104376852138184
+[GPU2] Epoch 85 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 85 | Average loss: 0.0002392883214071453
+[GPU2] Epoch 86 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 86 | Average loss: 0.0002649567238630703
+[GPU2] Epoch 87 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 87 | Average loss: 0.0002309744054072785
+[GPU2] Epoch 88 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 88 | Average loss: 0.00021820386542092154
+[GPU2] Epoch 89 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 89 | Average loss: 0.00020683721916560613
+[GPU2] Epoch 90 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 90 | Average loss: 0.00020222017952330673
+[GPU2] Epoch 91 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 91 | Average loss: 0.00019474543433738192
+[GPU2] Epoch 92 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 92 | Average loss: 0.00018922493749579087
+[GPU2] Epoch 93 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 93 | Average loss: 0.0001819147911741398
+[GPU2] Epoch 94 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 94 | Average loss: 0.00018071173850701461
+[GPU2] Epoch 95 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 95 | Average loss: 0.00017220894500288825
+[GPU2] Epoch 96 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 96 | Average loss: 0.0001780322047389705
+[GPU2] Epoch 97 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 97 | Average loss: 0.00017483692448669292
+[GPU2] Epoch 98 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 98 | Average loss: 0.00016619698347176227
+[GPU2] Epoch 99 | Batchsize: 32 | Steps: 4688
+[GPU2] Epoch 99 | Average loss: 0.00016532615461586824
+Data conversion to tensors...
+
+[GPU1] Epoch 0 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 0 | Average loss: 4.376960995762828
+[GPU1] Epoch 1 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 1 | Average loss: 1.6156937328036938
+[GPU1] Epoch 2 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 2 | Average loss: 1.0335580662064534
+[GPU1] Epoch 3 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 3 | Average loss: 0.789711754842194
+[GPU1] Epoch 4 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 4 | Average loss: 0.6343518348884334
+[GPU1] Epoch 5 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 5 | Average loss: 0.5233521141881066
+[GPU1] Epoch 6 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 6 | Average loss: 0.44118732648008463
+[GPU1] Epoch 7 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 7 | Average loss: 0.36445375169236405
+[GPU1] Epoch 8 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 8 | Average loss: 0.2971097107403737
+[GPU1] Epoch 9 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 9 | Average loss: 0.24865875696388323
+[GPU1] Epoch 10 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 10 | Average loss: 0.2000572397671608
+[GPU1] Epoch 11 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 11 | Average loss: 0.16455818869434966
+[GPU1] Epoch 12 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 12 | Average loss: 0.13087764485109812
+[GPU1] Epoch 13 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 13 | Average loss: 0.1069927330672385
+[GPU1] Epoch 14 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 14 | Average loss: 0.09010905059810995
+[GPU1] Epoch 15 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 15 | Average loss: 0.0764549304008561
+[GPU1] Epoch 16 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 16 | Average loss: 0.0655110328778193
+[GPU1] Epoch 17 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 17 | Average loss: 0.0561807091877702
+[GPU1] Epoch 18 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 18 | Average loss: 0.04906374908889939
+[GPU1] Epoch 19 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 19 | Average loss: 0.042583784723710806
+[GPU1] Epoch 20 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 20 | Average loss: 0.03813603095174489
+[GPU1] Epoch 21 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 21 | Average loss: 0.03323188808253659
+[GPU1] Epoch 22 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 22 | Average loss: 0.030292703747217813
+[GPU1] Epoch 23 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 23 | Average loss: 0.027063435488645208
+[GPU1] Epoch 24 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 24 | Average loss: 0.024364667367500033
+[GPU1] Epoch 25 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 25 | Average loss: 0.020970747482749047
+[GPU1] Epoch 26 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 26 | Average loss: 0.01958300461719711
+[GPU1] Epoch 27 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 27 | Average loss: 0.017671275662666814
+[GPU1] Epoch 28 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 28 | Average loss: 0.015231802017725376
+[GPU1] Epoch 29 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 29 | Average loss: 0.014262911476254804
+[GPU1] Epoch 30 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 30 | Average loss: 0.01330118763719624
+[GPU1] Epoch 31 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 31 | Average loss: 0.011333292742292481
+[GPU1] Epoch 32 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 32 | Average loss: 0.010070301420955264
+[GPU1] Epoch 33 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 33 | Average loss: 0.009484484432247631
+[GPU1] Epoch 34 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 34 | Average loss: 0.008826804325645
+[GPU1] Epoch 35 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 35 | Average loss: 0.007191703714594699
+[GPU1] Epoch 36 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 36 | Average loss: 0.006971682354467349
+[GPU1] Epoch 37 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 37 | Average loss: 0.006452387222294363
+[GPU1] Epoch 38 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 38 | Average loss: 0.005907705246164732
+[GPU1] Epoch 39 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 39 | Average loss: 0.0052305966231708705
+[GPU1] Epoch 40 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 40 | Average loss: 0.00494405741141447
+[GPU1] Epoch 41 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 41 | Average loss: 0.004339889944239116
+[GPU1] Epoch 42 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 42 | Average loss: 0.004200490522268656
+[GPU1] Epoch 43 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 43 | Average loss: 0.0038148213880794275
+[GPU1] Epoch 44 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 44 | Average loss: 0.0035050463504761147
+[GPU1] Epoch 45 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 45 | Average loss: 0.0031871714369806504
+[GPU1] Epoch 46 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 46 | Average loss: 0.003047074889095261
+[GPU1] Epoch 47 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 47 | Average loss: 0.0030217163435230475
+[GPU1] Epoch 48 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 48 | Average loss: 0.0025207262809341453
+[GPU1] Epoch 49 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 49 | Average loss: 0.0023451555675928332
+[GPU1] Epoch 50 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 50 | Average loss: 0.0020054414701315077
+[GPU1] Epoch 51 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 51 | Average loss: 0.0019171618235059554
+[GPU1] Epoch 52 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 52 | Average loss: 0.0018797232282415448
+[GPU1] Epoch 53 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 53 | Average loss: 0.001736384983322791
+[GPU1] Epoch 54 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 54 | Average loss: 0.001724112346387658
+[GPU1] Epoch 55 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 55 | Average loss: 0.0015099801861459487
+[GPU1] Epoch 56 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 56 | Average loss: 0.001557001989432625
+[GPU1] Epoch 57 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 57 | Average loss: 0.0013215130533176726
+[GPU1] Epoch 58 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 58 | Average loss: 0.0012724761867636296
+[GPU1] Epoch 59 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 59 | Average loss: 0.0011989548044274712
+[GPU1] Epoch 60 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 60 | Average loss: 0.0011190617880962274
+[GPU1] Epoch 61 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 61 | Average loss: 0.000939837833640407
+[GPU1] Epoch 62 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 62 | Average loss: 0.0008962029636919589
+[GPU1] Epoch 63 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 63 | Average loss: 0.0007732962159062441
+[GPU1] Epoch 64 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 64 | Average loss: 0.0007934795391416324
+[GPU1] Epoch 65 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 65 | Average loss: 0.0007264928553418388
+[GPU1] Epoch 66 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 66 | Average loss: 0.0006691244895968954
+[GPU1] Epoch 67 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 67 | Average loss: 0.0006206558382124095
+[GPU1] Epoch 68 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 68 | Average loss: 0.0005849264652559511
+[GPU1] Epoch 69 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 69 | Average loss: 0.0005744198791333151
+[GPU1] Epoch 70 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 70 | Average loss: 0.0005750877663021635
+[GPU1] Epoch 71 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 71 | Average loss: 0.0004918235324795848
+[GPU1] Epoch 72 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 72 | Average loss: 0.0004939369578336941
+[GPU1] Epoch 73 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 73 | Average loss: 0.0004598689133462926
+[GPU1] Epoch 74 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 74 | Average loss: 0.0004016004282189003
+[GPU1] Epoch 75 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 75 | Average loss: 0.0003796424647715162
+[GPU1] Epoch 76 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 76 | Average loss: 0.0003793072550160393
+[GPU1] Epoch 77 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 77 | Average loss: 0.00041574225090802735
+[GPU1] Epoch 78 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 78 | Average loss: 0.0003762142425420258
+[GPU1] Epoch 79 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 79 | Average loss: 0.0003367267892854867
+[GPU1] Epoch 80 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 80 | Average loss: 0.00031021660868579256
+[GPU1] Epoch 81 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 81 | Average loss: 0.00029193118502071196
+[GPU1] Epoch 82 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 82 | Average loss: 0.00027415271992879106
+[GPU1] Epoch 83 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 83 | Average loss: 0.00026414988887590445
+[GPU1] Epoch 84 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 84 | Average loss: 0.0002483045867263635
+[GPU1] Epoch 85 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 85 | Average loss: 0.0002469664286930717
+[GPU1] Epoch 86 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 86 | Average loss: 0.00023378504505852063
+[GPU1] Epoch 87 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 87 | Average loss: 0.00022411283318283013
+[GPU1] Epoch 88 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 88 | Average loss: 0.00021616185259147646
+[GPU1] Epoch 89 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 89 | Average loss: 0.00020647847798774862
+[GPU1] Epoch 90 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 90 | Average loss: 0.00020399760161148053
+[GPU1] Epoch 91 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 91 | Average loss: 0.00019740593287835833
+[GPU1] Epoch 92 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 92 | Average loss: 0.0002057603819985968
+[GPU1] Epoch 93 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 93 | Average loss: 0.00018829897011851974
+[GPU1] Epoch 94 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 94 | Average loss: 0.00018028658482766575
+[GPU1] Epoch 95 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 95 | Average loss: 0.0001762544589071558
+[GPU1] Epoch 96 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 96 | Average loss: 0.00017407903662815567
+[GPU1] Epoch 97 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 97 | Average loss: 0.00016931232284718656
+[GPU1] Epoch 98 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 98 | Average loss: 0.00017075244959290542
+[GPU1] Epoch 99 | Batchsize: 32 | Steps: 4688
+[GPU1] Epoch 99 | Average loss: 0.00017023253464884357
+Data conversion to tensors...
+
+[GPU3] Epoch 0 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 0 | Average loss: 4.380941714074323
+[GPU3] Epoch 1 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 1 | Average loss: 1.6213207008514186
+[GPU3] Epoch 2 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 2 | Average loss: 1.0313570030294232
+[GPU3] Epoch 3 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 3 | Average loss: 0.7778149644078197
+[GPU3] Epoch 4 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 4 | Average loss: 0.6334610139194609
+[GPU3] Epoch 5 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 5 | Average loss: 0.5239167275859214
+[GPU3] Epoch 6 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 6 | Average loss: 0.4336882452297727
+[GPU3] Epoch 7 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 7 | Average loss: 0.3622740173725087
+[GPU3] Epoch 8 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 8 | Average loss: 0.3003854294325012
+[GPU3] Epoch 9 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 9 | Average loss: 0.243372196976871
+[GPU3] Epoch 10 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 10 | Average loss: 0.1987760440877928
+[GPU3] Epoch 11 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 11 | Average loss: 0.16079708579895896
+[GPU3] Epoch 12 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 12 | Average loss: 0.131562418968706
+[GPU3] Epoch 13 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 13 | Average loss: 0.10689014088016388
+[GPU3] Epoch 14 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 14 | Average loss: 0.09005206854270577
+[GPU3] Epoch 15 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 15 | Average loss: 0.07519478461561716
+[GPU3] Epoch 16 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 16 | Average loss: 0.06402335963989711
+[GPU3] Epoch 17 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 17 | Average loss: 0.05543047462066766
+[GPU3] Epoch 18 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 18 | Average loss: 0.04894030014471268
+[GPU3] Epoch 19 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 19 | Average loss: 0.043550868867002525
+[GPU3] Epoch 20 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 20 | Average loss: 0.0384110792949454
+[GPU3] Epoch 21 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 21 | Average loss: 0.03423205932467495
+[GPU3] Epoch 22 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 22 | Average loss: 0.02944629101723662
+[GPU3] Epoch 23 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 23 | Average loss: 0.026645926747770277
+[GPU3] Epoch 24 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 24 | Average loss: 0.023785837895041528
+[GPU3] Epoch 25 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 25 | Average loss: 0.021933938520069765
+[GPU3] Epoch 26 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 26 | Average loss: 0.01946892167650439
+[GPU3] Epoch 27 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 27 | Average loss: 0.017603526702573355
+[GPU3] Epoch 28 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 28 | Average loss: 0.01562581532683715
+[GPU3] Epoch 29 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 29 | Average loss: 0.01437947493396513
+[GPU3] Epoch 30 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 30 | Average loss: 0.012243409712530502
+[GPU3] Epoch 31 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 31 | Average loss: 0.011611363180624376
+[GPU3] Epoch 32 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 32 | Average loss: 0.01062766244426665
+[GPU3] Epoch 33 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 33 | Average loss: 0.009773527311703306
+[GPU3] Epoch 34 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 34 | Average loss: 0.008566718520431983
+[GPU3] Epoch 35 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 35 | Average loss: 0.008106358177543625
+[GPU3] Epoch 36 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 36 | Average loss: 0.006983628312070972
+[GPU3] Epoch 37 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 37 | Average loss: 0.006712569535983002
+[GPU3] Epoch 38 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 38 | Average loss: 0.005795382107974425
+[GPU3] Epoch 39 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 39 | Average loss: 0.005309439359014678
+[GPU3] Epoch 40 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 40 | Average loss: 0.004793725948996794
+[GPU3] Epoch 41 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 41 | Average loss: 0.004634054527102242
+[GPU3] Epoch 42 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 42 | Average loss: 0.003888667204340481
+[GPU3] Epoch 43 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 43 | Average loss: 0.0036419787800963162
+[GPU3] Epoch 44 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 44 | Average loss: 0.00345616365281906
+[GPU3] Epoch 45 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 45 | Average loss: 0.003353631991171901
+[GPU3] Epoch 46 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 46 | Average loss: 0.0030718746471725526
+[GPU3] Epoch 47 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 47 | Average loss: 0.0026688653754845227
+[GPU3] Epoch 48 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 48 | Average loss: 0.002614596450997845
+[GPU3] Epoch 49 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 49 | Average loss: 0.0022400195575616104
+[GPU3] Epoch 50 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 50 | Average loss: 0.0020926971857163287
+[GPU3] Epoch 51 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 51 | Average loss: 0.0020465481594831455
+[GPU3] Epoch 52 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 52 | Average loss: 0.001859171344298027
+[GPU3] Epoch 53 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 53 | Average loss: 0.0018031732809445343
+[GPU3] Epoch 54 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 54 | Average loss: 0.0017566880880960538
+[GPU3] Epoch 55 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 55 | Average loss: 0.0014900551614072178
+[GPU3] Epoch 56 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 56 | Average loss: 0.0015214689213050806
+[GPU3] Epoch 57 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 57 | Average loss: 0.00125283086626547
+[GPU3] Epoch 58 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 58 | Average loss: 0.0012415082087174267
+[GPU3] Epoch 59 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 59 | Average loss: 0.0011703741957413084
+[GPU3] Epoch 60 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 60 | Average loss: 0.0010724592027995781
+[GPU3] Epoch 61 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 61 | Average loss: 0.0009755501916822944
+[GPU3] Epoch 62 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 62 | Average loss: 0.0009060644893858897
+[GPU3] Epoch 63 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 63 | Average loss: 0.0008506021331002359
+[GPU3] Epoch 64 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 64 | Average loss: 0.0008000840473406667
+[GPU3] Epoch 65 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 65 | Average loss: 0.0007138332361790554
+[GPU3] Epoch 66 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 66 | Average loss: 0.0007057495831309206
+[GPU3] Epoch 67 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 67 | Average loss: 0.0007351503638987904
+[GPU3] Epoch 68 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 68 | Average loss: 0.0006506096422882945
+[GPU3] Epoch 69 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 69 | Average loss: 0.0005349914937823221
+[GPU3] Epoch 70 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 70 | Average loss: 0.0005970670173394681
+[GPU3] Epoch 71 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 71 | Average loss: 0.0004634060617170336
+[GPU3] Epoch 72 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 72 | Average loss: 0.0004439532274085675
+[GPU3] Epoch 73 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 73 | Average loss: 0.0004483072098571522
+[GPU3] Epoch 74 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 74 | Average loss: 0.0004736290742353716
+[GPU3] Epoch 75 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 75 | Average loss: 0.00036806976972384104
+[GPU3] Epoch 76 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 76 | Average loss: 0.00040963957429367457
+[GPU3] Epoch 77 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 77 | Average loss: 0.00037042753410438344
+[GPU3] Epoch 78 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 78 | Average loss: 0.0003602474993042064
+[GPU3] Epoch 79 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 79 | Average loss: 0.00034627746862406016
+[GPU3] Epoch 80 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 80 | Average loss: 0.0003304421883196371
+[GPU3] Epoch 81 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 81 | Average loss: 0.0002823607927655031
+[GPU3] Epoch 82 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 82 | Average loss: 0.0002803928627414348
+[GPU3] Epoch 83 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 83 | Average loss: 0.0002540069125753835
+[GPU3] Epoch 84 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 84 | Average loss: 0.0002535739444971865
+[GPU3] Epoch 85 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 85 | Average loss: 0.0002362998829870304
+[GPU3] Epoch 86 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 86 | Average loss: 0.0002346583191473758
+[GPU3] Epoch 87 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 87 | Average loss: 0.0002217269022433701
+[GPU3] Epoch 88 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 88 | Average loss: 0.00021502941625546986
+[GPU3] Epoch 89 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 89 | Average loss: 0.00021856765476114954
+[GPU3] Epoch 90 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 90 | Average loss: 0.00020518945713158724
+[GPU3] Epoch 91 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 91 | Average loss: 0.00019209810714290967
+[GPU3] Epoch 92 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 92 | Average loss: 0.0001917118969769305
+[GPU3] Epoch 93 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 93 | Average loss: 0.000188264501168535
+[GPU3] Epoch 94 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 94 | Average loss: 0.00018161566386171984
+[GPU3] Epoch 95 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 95 | Average loss: 0.00017755978289041733
+[GPU3] Epoch 96 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 96 | Average loss: 0.000168534807849509
+[GPU3] Epoch 97 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 97 | Average loss: 0.00016921757575045324
+[GPU3] Epoch 98 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 98 | Average loss: 0.00016851150029203223
+[GPU3] Epoch 99 | Batchsize: 32 | Steps: 4688
+[GPU3] Epoch 99 | Average loss: 0.0001691034186640058
+Data conversion to tensors...
+
+[GPU0] Epoch 0 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 0 | Average loss: 4.386980526657845
+  Validation Loss: 2.2588
+Epoch 0 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_100_epochs/checkpoints/checkpoint_epoch_0.pt
+Epoch 0 | Best validation loss: 2.2587972172963187
+[GPU0] Epoch 1 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 1 | Average loss: 2.1593448610359696
+  Validation Loss: 1.3485
+Epoch 1 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_100_epochs/checkpoints/checkpoint_epoch_1.pt
+Epoch 1 | Best validation loss: 1.3484677225923356
+[GPU0] Epoch 2 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 2 | Average loss: 1.3188168258110615
+  Validation Loss: 1.0556
+Epoch 2 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_100_epochs/checkpoints/checkpoint_epoch_2.pt
+Epoch 2 | Best validation loss: 1.05559999344159
+[GPU0] Epoch 3 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 3 | Average loss: 1.0107268736039767
+  Validation Loss: 0.9238
+Epoch 3 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_100_epochs/checkpoints/checkpoint_epoch_3.pt
+Epoch 3 | Best validation loss: 0.9237975513637637
+[GPU0] Epoch 4 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 4 | Average loss: 0.839717666977705
+  Validation Loss: 0.8519
+Epoch 4 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_100_epochs/checkpoints/checkpoint_epoch_4.pt
+Epoch 4 | Best validation loss: 0.8518770286480891
+[GPU0] Epoch 5 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 5 | Average loss: 0.7165130617815378
+  Validation Loss: 0.8125
+Epoch 5 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_100_epochs/checkpoints/checkpoint_epoch_5.pt
+Epoch 5 | Best validation loss: 0.8125297723198578
+[GPU0] Epoch 6 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 6 | Average loss: 0.635530637626444
+  Validation Loss: 0.7934
+Epoch 6 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_100_epochs/checkpoints/checkpoint_epoch_6.pt
+Epoch 6 | Best validation loss: 0.7934040912711231
+[GPU0] Epoch 7 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 7 | Average loss: 0.5636761066259073
+  Validation Loss: 0.7878
+Epoch 7 | Training checkpoint saved at /home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_1_2_bs_32_100_epochs/checkpoints/checkpoint_epoch_7.pt
+Epoch 7 | Best validation loss: 0.7878155980023221
+[GPU0] Epoch 8 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 8 | Average loss: 0.5005231710443266
+  Validation Loss: 0.7885
+[GPU0] Epoch 9 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 9 | Average loss: 0.44795501598160165
+  Validation Loss: 0.7983
+[GPU0] Epoch 10 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 10 | Average loss: 0.40286305810820705
+  Validation Loss: 0.8207
+[GPU0] Epoch 11 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 11 | Average loss: 0.3664912476765354
+  Validation Loss: 0.8375
+[GPU0] Epoch 12 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 12 | Average loss: 0.3331214678807521
+  Validation Loss: 0.8542
+[GPU0] Epoch 13 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 13 | Average loss: 0.3014452602835881
+  Validation Loss: 0.8718
+[GPU0] Epoch 14 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 14 | Average loss: 0.2751207967221645
+  Validation Loss: 0.8945
+[GPU0] Epoch 15 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 15 | Average loss: 0.25653608301145886
+  Validation Loss: 0.9266
+[GPU0] Epoch 16 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 16 | Average loss: 0.23958092661568126
+  Validation Loss: 0.9381
+[GPU0] Epoch 17 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 17 | Average loss: 0.22500658553366235
+  Validation Loss: 0.9498
+[GPU0] Epoch 18 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 18 | Average loss: 0.2104623650688179
+  Validation Loss: 0.9735
+[GPU0] Epoch 19 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 19 | Average loss: 0.19343251286435287
+  Validation Loss: 0.9842
+[GPU0] Epoch 20 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 20 | Average loss: 0.18290221636658757
+  Validation Loss: 1.0007
+[GPU0] Epoch 21 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 21 | Average loss: 0.17456629272763308
+  Validation Loss: 1.0132
+[GPU0] Epoch 22 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 22 | Average loss: 0.16213678611611707
+  Validation Loss: 1.0301
+[GPU0] Epoch 23 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 23 | Average loss: 0.15444468306832465
+  Validation Loss: 1.0386
+[GPU0] Epoch 24 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 24 | Average loss: 0.14617827908942913
+  Validation Loss: 1.0677
+[GPU0] Epoch 25 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 25 | Average loss: 0.14018686603206057
+  Validation Loss: 1.0603
+[GPU0] Epoch 26 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 26 | Average loss: 0.13105626902417852
+  Validation Loss: 1.0732
+[GPU0] Epoch 27 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 27 | Average loss: 0.12352089332140515
+  Validation Loss: 1.0905
+[GPU0] Epoch 28 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 28 | Average loss: 0.12006855048344521
+  Validation Loss: 1.1038
+[GPU0] Epoch 29 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 29 | Average loss: 0.1129688335257406
+  Validation Loss: 1.1070
+[GPU0] Epoch 30 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 30 | Average loss: 0.10762145096822935
+  Validation Loss: 1.1157
+[GPU0] Epoch 31 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 31 | Average loss: 0.1044365275309917
+  Validation Loss: 1.1341
+[GPU0] Epoch 32 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 32 | Average loss: 0.09764556476267042
+  Validation Loss: 1.1373
+[GPU0] Epoch 33 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 33 | Average loss: 0.09416791036264746
+  Validation Loss: 1.1567
+[GPU0] Epoch 34 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 34 | Average loss: 0.08891668386168146
+  Validation Loss: 1.1725
+[GPU0] Epoch 35 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 35 | Average loss: 0.0854497075218643
+  Validation Loss: 1.1779
+[GPU0] Epoch 36 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 36 | Average loss: 0.0820243091948214
+  Validation Loss: 1.1894
+[GPU0] Epoch 37 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 37 | Average loss: 0.0786206918550455
+  Validation Loss: 1.1906
+[GPU0] Epoch 38 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 38 | Average loss: 0.07545293761388862
+  Validation Loss: 1.1983
+[GPU0] Epoch 39 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 39 | Average loss: 0.07461621385474361
+  Validation Loss: 1.2130
+[GPU0] Epoch 40 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 40 | Average loss: 0.07002227495074508
+  Validation Loss: 1.2176
+[GPU0] Epoch 41 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 41 | Average loss: 0.06524034524010654
+  Validation Loss: 1.2267
+[GPU0] Epoch 42 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 42 | Average loss: 0.06340745227963071
+  Validation Loss: 1.2327
+[GPU0] Epoch 43 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 43 | Average loss: 0.06139990480147054
+  Validation Loss: 1.2332
+[GPU0] Epoch 44 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 44 | Average loss: 0.05800971380352635
+  Validation Loss: 1.2474
+[GPU0] Epoch 45 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 45 | Average loss: 0.05552457713744468
+  Validation Loss: 1.2629
+[GPU0] Epoch 46 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 46 | Average loss: 0.054230034291800254
+  Validation Loss: 1.2671
+[GPU0] Epoch 47 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 47 | Average loss: 0.05186095744505113
+  Validation Loss: 1.2767
+[GPU0] Epoch 48 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 48 | Average loss: 0.050015378620277565
+  Validation Loss: 1.2774
+[GPU0] Epoch 49 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 49 | Average loss: 0.048944565178273676
+  Validation Loss: 1.2932
+[GPU0] Epoch 50 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 50 | Average loss: 0.047235438588771946
+  Validation Loss: 1.3005
+[GPU0] Epoch 51 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 51 | Average loss: 0.04401596003905262
+  Validation Loss: 1.3001
+[GPU0] Epoch 52 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 52 | Average loss: 0.04371011990970581
+  Validation Loss: 1.3091
+[GPU0] Epoch 53 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 53 | Average loss: 0.04100848763850168
+  Validation Loss: 1.3283
+[GPU0] Epoch 54 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 54 | Average loss: 0.03967368795298612
+  Validation Loss: 1.3136
+[GPU0] Epoch 55 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 55 | Average loss: 0.039504082432225224
+  Validation Loss: 1.3248
+[GPU0] Epoch 56 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 56 | Average loss: 0.03673803245028125
+  Validation Loss: 1.3340
+[GPU0] Epoch 57 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 57 | Average loss: 0.03492482592964703
+  Validation Loss: 1.3458
+[GPU0] Epoch 58 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 58 | Average loss: 0.0355891289103835
+  Validation Loss: 1.3424
+[GPU0] Epoch 59 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 59 | Average loss: 0.032281004704380105
+  Validation Loss: 1.3436
+[GPU0] Epoch 60 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 60 | Average loss: 0.031128638702508156
+  Validation Loss: 1.3495
+[GPU0] Epoch 61 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 61 | Average loss: 0.03120681939620602
+  Validation Loss: 1.3474
+[GPU0] Epoch 62 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 62 | Average loss: 0.02921851750569109
+  Validation Loss: 1.3637
+[GPU0] Epoch 63 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 63 | Average loss: 0.028216476966185417
+  Validation Loss: 1.3677
+[GPU0] Epoch 64 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 64 | Average loss: 0.027435663869143475
+  Validation Loss: 1.3813
+[GPU0] Epoch 65 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 65 | Average loss: 0.025442234753300062
+  Validation Loss: 1.3720
+[GPU0] Epoch 66 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 66 | Average loss: 0.024880192403270173
+  Validation Loss: 1.3903
+[GPU0] Epoch 67 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 67 | Average loss: 0.02429929556090385
+  Validation Loss: 1.3705
+[GPU0] Epoch 68 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 68 | Average loss: 0.023849017300702675
+  Validation Loss: 1.3827
+[GPU0] Epoch 69 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 69 | Average loss: 0.023017482705042898
+  Validation Loss: 1.3934
+[GPU0] Epoch 70 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 70 | Average loss: 0.02127764791351931
+  Validation Loss: 1.4085
+[GPU0] Epoch 71 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 71 | Average loss: 0.020184469992741795
+  Validation Loss: 1.4150
+[GPU0] Epoch 72 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 72 | Average loss: 0.020400666221188093
+  Validation Loss: 1.4138
+[GPU0] Epoch 73 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 73 | Average loss: 0.01869491833081575
+  Validation Loss: 1.4197
+[GPU0] Epoch 74 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 74 | Average loss: 0.01919779227197261
+  Validation Loss: 1.4192
+[GPU0] Epoch 75 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 75 | Average loss: 0.018418232831373543
+  Validation Loss: 1.4263
+[GPU0] Epoch 76 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 76 | Average loss: 0.01829189847627686
+  Validation Loss: 1.4293
+[GPU0] Epoch 77 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 77 | Average loss: 0.016520124096008185
+  Validation Loss: 1.4261
+[GPU0] Epoch 78 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 78 | Average loss: 0.015946399730491605
+  Validation Loss: 1.4302
+[GPU0] Epoch 79 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 79 | Average loss: 0.014928860873704923
+  Validation Loss: 1.4361
+[GPU0] Epoch 80 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 80 | Average loss: 0.014812592323893368
+  Validation Loss: 1.4332
+[GPU0] Epoch 81 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 81 | Average loss: 0.01446610728761614
+  Validation Loss: 1.4321
+[GPU0] Epoch 82 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 82 | Average loss: 0.013734138548059945
+  Validation Loss: 1.4468
+[GPU0] Epoch 83 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 83 | Average loss: 0.012900581415499773
+  Validation Loss: 1.4430
+[GPU0] Epoch 84 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 84 | Average loss: 0.012162588745662388
+  Validation Loss: 1.4383
+[GPU0] Epoch 85 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 85 | Average loss: 0.01211311537997711
+  Validation Loss: 1.4538
+[GPU0] Epoch 86 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 86 | Average loss: 0.01140157502326561
+  Validation Loss: 1.4543
+[GPU0] Epoch 87 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 87 | Average loss: 0.011161652572384285
+  Validation Loss: 1.4543
+[GPU0] Epoch 88 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 88 | Average loss: 0.010467889606241338
+  Validation Loss: 1.4559
+[GPU0] Epoch 89 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 89 | Average loss: 0.010643333014225797
+  Validation Loss: 1.4613
+[GPU0] Epoch 90 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 90 | Average loss: 0.009603501915181297
+  Validation Loss: 1.4627
+[GPU0] Epoch 91 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 91 | Average loss: 0.009919089017257462
+  Validation Loss: 1.4624
+[GPU0] Epoch 92 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 92 | Average loss: 0.00858102051022257
+  Validation Loss: 1.4679
+[GPU0] Epoch 93 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 93 | Average loss: 0.009176100884764024
+  Validation Loss: 1.4649
+[GPU0] Epoch 94 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 94 | Average loss: 0.007972773896992306
+  Validation Loss: 1.4654
+[GPU0] Epoch 95 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 95 | Average loss: 0.008131718148764304
+  Validation Loss: 1.4718
+[GPU0] Epoch 96 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 96 | Average loss: 0.007890896535197775
+  Validation Loss: 1.4731
+[GPU0] Epoch 97 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 97 | Average loss: 0.007306120339337597
+  Validation Loss: 1.4737
+[GPU0] Epoch 98 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 98 | Average loss: 0.007308640862430574
+  Validation Loss: 1.4737
+[GPU0] Epoch 99 | Batchsize: 32 | Steps: 4688
+[GPU0] Epoch 99 | Average loss: 0.006957030479583279
+  Validation Loss: 1.4734

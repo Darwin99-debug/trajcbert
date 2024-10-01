@@ -1,0 +1,110 @@
+master_addr is only used for static rdzv_backend and when rdzv_endpoint is not specified.
+INFO:torch.distributed.launcher.api:Starting elastic_operator with launch configs:
+  entrypoint       : parallelisation_gpu_train_torch_run_multinode_full_data_with_context.py
+  min_nodes        : 3
+  max_nodes        : 3
+  nproc_per_node   : 1
+  run_id           : 16687
+  rdzv_backend     : c10d
+  rdzv_endpoint    : 10.80.9.102:29500
+  rdzv_configs     : {'timeout': 900}
+  max_restarts     : 0
+  monitor_interval : 5
+  log_dir          : None
+  metrics_cfg      : {}
+
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:log directory set to: /tmp/torchelastic_gscgnt17/16687_8e_wyc5d
+INFO:torch.distributed.elastic.agent.server.api:[default] starting workers for entrypoint: python
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous'ing worker group
+master_addr is only used for static rdzv_backend and when rdzv_endpoint is not specified.
+INFO:torch.distributed.launcher.api:Starting elastic_operator with launch configs:
+  entrypoint       : parallelisation_gpu_train_torch_run_multinode_full_data_with_context.py
+  min_nodes        : 3
+  max_nodes        : 3
+  nproc_per_node   : 1
+  run_id           : 16687
+  rdzv_backend     : c10d
+  rdzv_endpoint    : 10.80.9.102:29500
+  rdzv_configs     : {'timeout': 900}
+  max_restarts     : 0
+  monitor_interval : 5
+  log_dir          : None
+  metrics_cfg      : {}
+
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:log directory set to: /tmp/torchelastic_ls70ewrp/16687_e9vi9bqb
+INFO:torch.distributed.elastic.agent.server.api:[default] starting workers for entrypoint: python3.10
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous'ing worker group
+master_addr is only used for static rdzv_backend and when rdzv_endpoint is not specified.
+INFO:torch.distributed.launcher.api:Starting elastic_operator with launch configs:
+  entrypoint       : parallelisation_gpu_train_torch_run_multinode_full_data_with_context.py
+  min_nodes        : 3
+  max_nodes        : 3
+  nproc_per_node   : 1
+  run_id           : 16687
+  rdzv_backend     : c10d
+  rdzv_endpoint    : 10.80.9.102:29500
+  rdzv_configs     : {'timeout': 900}
+  max_restarts     : 0
+  monitor_interval : 5
+  log_dir          : None
+  metrics_cfg      : {}
+
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:log directory set to: /tmp/torchelastic_dbc4zow3/16687_xoosvblk
+INFO:torch.distributed.elastic.agent.server.api:[default] starting workers for entrypoint: python3.10
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous'ing worker group
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous complete for workers. Result:
+  restart_count=0
+  master_addr=ng10902.narval.calcul.quebec
+  master_port=55587
+  group_rank=0
+  group_world_size=3
+  local_ranks=[0]
+  role_ranks=[0]
+  global_ranks=[0]
+  role_world_sizes=[3]
+  global_world_sizes=[3]
+
+INFO:torch.distributed.elastic.agent.server.api:[default] Starting worker group
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:Environment variable 'TORCHELASTIC_ENABLE_FILE_TIMER' not found. Do not start FileTimerServer.
+INFO:torch.distributed.elastic.multiprocessing:Setting worker0 reply file to: /tmp/torchelastic_gscgnt17/16687_8e_wyc5d/attempt_0/0/error.json
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous complete for workers. Result:
+  restart_count=0
+  master_addr=ng10902.narval.calcul.quebec
+  master_port=55587
+  group_rank=1
+  group_world_size=3
+  local_ranks=[0]
+  role_ranks=[1]
+  global_ranks=[1]
+  role_world_sizes=[3]
+  global_world_sizes=[3]
+
+INFO:torch.distributed.elastic.agent.server.api:[default] Starting worker group
+INFO:torch.distributed.elastic.agent.server.api:[default] Rendezvous complete for workers. Result:
+  restart_count=0
+  master_addr=ng10902.narval.calcul.quebec
+  master_port=55587
+  group_rank=2
+  group_world_size=3
+  local_ranks=[0]
+  role_ranks=[2]
+  global_ranks=[2]
+  role_world_sizes=[3]
+  global_world_sizes=[3]
+
+INFO:torch.distributed.elastic.agent.server.api:[default] Starting worker group
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:Environment variable 'TORCHELASTIC_ENABLE_FILE_TIMER' not found. Do not start FileTimerServer.
+INFO:torch.distributed.elastic.agent.server.local_elastic_agent:Environment variable 'TORCHELASTIC_ENABLE_FILE_TIMER' not found. Do not start FileTimerServer.
+INFO:torch.distributed.elastic.multiprocessing:Setting worker0 reply file to: /tmp/torchelastic_ls70ewrp/16687_e9vi9bqb/attempt_0/0/error.json
+INFO:torch.distributed.elastic.multiprocessing:Setting worker0 reply file to: /tmp/torchelastic_dbc4zow3/16687_xoosvblk/attempt_0/0/error.json
+INFO:torch.distributed.elastic.agent.server.api:[default] worker group successfully finished. Waiting 300 seconds for other agents to finish.
+INFO:torch.distributed.elastic.agent.server.api:Local worker group finished (SUCCEEDED). Waiting 300 seconds for other agents to finish
+INFO:torch.distributed.elastic.agent.server.api:[default] worker group successfully finished. Waiting 300 seconds for other agents to finish.
+INFO:torch.distributed.elastic.agent.server.api:Local worker group finished (SUCCEEDED). Waiting 300 seconds for other agents to finish
+INFO:torch.distributed.elastic.agent.server.api:[default] worker group successfully finished. Waiting 300 seconds for other agents to finish.
+INFO:torch.distributed.elastic.agent.server.api:Local worker group finished (SUCCEEDED). Waiting 300 seconds for other agents to finish
+INFO:torch.distributed.elastic.agent.server.api:Done waiting for other agents. Elapsed: 2.667491912841797 seconds
+INFO:torch.distributed.elastic.agent.server.api:Done waiting for other agents. Elapsed: 0.6733770370483398 seconds
+INFO:torch.distributed.elastic.agent.server.api:Done waiting for other agents. Elapsed: 0.0012812614440917969 seconds
+WARNING:torch.distributed.elastic.rendezvous.dynamic_rendezvous:The node 'ng30905.narval.calcul.quebec_2723970_0' has failed to shutdown the rendezvous '16687' due to an error of type RendezvousConnectionError.
+WARNING:torch.distributed.elastic.rendezvous.dynamic_rendezvous:The node 'ng30911.narval.calcul.quebec_3347784_0' has failed to shutdown the rendezvous '16687' due to an error of type RendezvousConnectionError.

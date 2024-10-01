@@ -1,0 +1,35 @@
+created virtual environment CPython3.10.2.final.0-64 in 4720ms
+  creator CPython3Posix(dest=/localscratch/daril.20637149.0/MYENV, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, setuptools=bundle, wheel=bundle, via=copy, app_data_dir=/home/daril/.local/share/virtualenv)
+    added seed packages: pip==23.0+computecanada, setuptools==68.0.0+computecanada, wheel==0.40.0+computecanada
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+Looking in links: /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2020/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/avx2, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo2020/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic, /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/tqdm-4.66.1+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/avx2/torch-2.0.1+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic/scikit_learn-1.3.0+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/transformers-4.31.0+computecanada-py3-none-any.whl
+Requirement already satisfied: typing-extensions in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from torch->-r requirements.txt (line 2)) (4.5.0+computecanada)
+Requirement already satisfied: jinja2 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from torch->-r requirements.txt (line 2)) (3.1.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/networkx-3.1+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/filelock-3.12.0+computecanada-py3-none-any.whl
+Requirement already satisfied: sympy in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from torch->-r requirements.txt (line 2)) (1.11.1+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/threadpoolctl-3.2.0+computecanada-py3-none-any.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/joblib-1.3.2+computecanada-py3-none-any.whl
+Requirement already satisfied: scipy>=1.5.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from scikit-learn->-r requirements.txt (line 3)) (1.10.1+computecanada)
+Requirement already satisfied: numpy>=1.21 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from scikit-learn->-r requirements.txt (line 3)) (1.24.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/regex-2023.8.8+computecanada-cp310-cp310-linux_x86_64.whl
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic/tokenizers-0.13.3+computecanada-cp310-cp310-linux_x86_64.whl
+Requirement already satisfied: packaging>=20.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/ipykernel/2023a/lib/python3.10/site-packages (from transformers->-r requirements.txt (line 4)) (23.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/huggingface_hub-0.16.4+computecanada-py3-none-any.whl
+Requirement already satisfied: requests in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from transformers->-r requirements.txt (line 4)) (2.28.2+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/gentoo/generic/safetensors-0.3.3+computecanada-cp310-cp310-linux_x86_64.whl
+Requirement already satisfied: pyyaml>=5.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from transformers->-r requirements.txt (line 4)) (6.0+computecanada)
+Processing /cvmfs/soft.computecanada.ca/custom/python/wheelhouse/generic/fsspec-2023.6.0+computecanada-py3-none-any.whl
+Requirement already satisfied: MarkupSafe>=2.0 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from jinja2->torch->-r requirements.txt (line 2)) (2.1.2+computecanada)
+Requirement already satisfied: charset-normalizer<4,>=2 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from requests->transformers->-r requirements.txt (line 4)) (3.0.1+computecanada)
+Requirement already satisfied: certifi>=2017.4.17 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from requests->transformers->-r requirements.txt (line 4)) (2022.12.7+computecanada)
+Requirement already satisfied: idna<4,>=2.5 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from requests->transformers->-r requirements.txt (line 4)) (3.4+computecanada)
+Requirement already satisfied: urllib3<1.27,>=1.21.1 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from requests->transformers->-r requirements.txt (line 4)) (1.26.14+computecanada)
+Requirement already satisfied: mpmath>=0.19 in /cvmfs/soft.computecanada.ca/easybuild/software/2020/avx2/Core/scipy-stack/2023a/lib/python3.10/site-packages (from sympy->torch->-r requirements.txt (line 2)) (1.2.1+computecanada)
+Installing collected packages: tokenizers, safetensors, tqdm, threadpoolctl, regex, networkx, joblib, fsspec, filelock, torch, scikit-learn, huggingface-hub, transformers
+Successfully installed filelock-3.12.0+computecanada fsspec-2023.6.0+computecanada huggingface-hub-0.16.4+computecanada joblib-1.3.2+computecanada networkx-3.1+computecanada regex-2023.8.8+computecanada safetensors-0.3.3+computecanada scikit-learn-1.3.0+computecanada threadpoolctl-3.2.0+computecanada tokenizers-0.13.3+computecanada torch-2.0.1+computecanada tqdm-4.66.1+computecanada transformers-4.31.0+computecanada
