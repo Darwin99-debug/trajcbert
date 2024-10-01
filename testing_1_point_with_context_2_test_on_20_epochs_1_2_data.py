@@ -84,7 +84,7 @@ for batch in prediction_dataloader:
     # because the logits are the output of the softmax
     # and the max of the logits is the class with the highest probability
     predictions.append(logits)
-    true_labels.append(label_ids)
+    true_labels.append(label_ids) # to get real class, we have to convert the label_ids to the real class with the label_map
 
     # Store the inputs
 

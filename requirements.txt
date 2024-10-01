@@ -2,6 +2,7 @@ tqdm
 torch
 scikit-learn    
 transformers
+h3
 
 
 
