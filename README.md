@@ -182,6 +182,14 @@ __NB__: Il faudra tester le ficher et le corriger
 
 ## Résultats préliminaires: 
 
+La figure ci-dessous présente les résultats préliminaires.
+
+![Résultats préliminaires](results.png)
+
+Les resultats du test en auto-regression avec la première version du modèle sont les suivants dans le fichier [testing_AR_with_start_fraction_of_traj_start.ipynb](testing_AR_with_start_fraction_of_traj_start.ipynb)
+
 
 ## REFERENCES
-- [Parralélisation multi-noeud avec DDP et torchrun](https://github.com/pytorch/examples/blob/main/distributed/ddp-tutorial-series/multinode.py)
+- Parralélisation multi-noeud avec DDP et torchrun : [https://github.com/pytorch/examples/blob/main/distributed/ddp-tutorial-series/multinode.py](https://github.com/pytorch/examples/blob/main/distributed/ddp-tutorial-series/multinode.py)
+
+- ChrisMcCormickAI, “Bert research series" : [https://youtube.com/playlist?list=PLam9sigHPGwOBuH4_4fr-XvDbe5uneaf6, https://www.chrismccormick.ai/bert-ebook?](https://youtube.com/playlist?list=PLam9sigHPGwOBuH4_4fr-XvDbe5uneaf6)
