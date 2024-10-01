@@ -195,7 +195,7 @@ def main():
 
     WORLD_S=2
     h3_config_size = 10
-    nb_rows = 60
+    nb_rows = 833383
 
     #we load the data
     with open('/home/daril_kw/data/02.06.23/train_clean.json', 'r') as openfile:
@@ -203,7 +203,7 @@ def main():
     data_format = pd.DataFrame(data=json_loaded)
 
     #we keep only nb_rows rows
-    # data_format = truncation_rows(data_format, nb_rows)
+    data_format = truncation_rows(data_format, nb_rows)
 
     #we count the number of rows for which teh column NB_POINTS is equal to 0 : there are 0 rows
     #>>>print("nombre de lignes pour lesquelles le nombre de points est inférieur à 3 : ", len(data_format[data_format['Nb_points']<3]))
@@ -241,9 +241,9 @@ def main():
     model.resize_token_embeddings(len(tokenizer))
 
     #save the model, the tokenizer and the data in different files
-    model.save_pretrained(f"/home/daril_kw/data/savings_for_parallel/model_before_training_opti_full_for_para_1")
-    data_format.to_json(f"/home/daril_kw/data/savings_for_parallel/data_with_time_info_ok_opti_full_for_para_1.json")
-    tokenizer.save_pretrained(f"/home/daril_kw/data/savings_for_parallel/tokenizer_final_opti_full_for_para_1")
+    model.save_pretrained(f"/home/daril_kw/data/savings_for_parallel_with_dest_context/model_before_training_opti_1_2")
+    data_format.to_json(f"/home/daril_kw/data/savings_for_parallel_with_dest_context/data_with_time_info_ok_opti_full_for_para_1_2.json")
+    tokenizer.save_pretrained(f"/home/daril_kw/data/savings_for_parallel_with_dest_context/tokenizer_final_opti_full_for_para_1_2")
 
     #we get the DEB_TRAJ and TARGET columns well formatted but without the special tokens [CLS] and [SEP]
     #this is because we will add them later
@@ -253,13 +253,13 @@ def main():
     input_ids, attention_masks, targets, full_inputs = formatting_to_train(data_format, tokenizer)
     
     #save the lists full_inputs, inputs_ids, attention_masks and the targets in different files
-    with open(f"/home/daril_kw/data/savings_for_parallel/input_ids_full_opti_for_para_1.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_with_dest_context/input_ids_full_opti_for_para_1.pkl", 'wb') as fp:
         pickle.dump(input_ids, fp)
-    with open(f"/home/daril_kw/data/savings_for_parallel/attention_masks_full_opti_for_para_1.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_with_dest_context/attention_masks_full_opti_for_para_1.pkl", 'wb') as fp:
         pickle.dump(attention_masks, fp)
-    with open(f"/home/daril_kw/data/savings_for_parralel/targets_full_opti_for_para_1.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_with_dest_context/targets_full_opti_for_para_1.pkl", 'wb') as fp:
         pickle.dump(targets, fp)
-    with open(f"/home/daril_kw/data/avings_for_parralel/full_inputs_full_opti_for_para_1.pkl", 'wb') as fp:
+    with open(f"/home/daril_kw/data/savings_for_parallel_with_dest_context/full_inputs_full_opti_for_para_1.pkl", 'wb') as fp:
         pickle.dump(full_inputs, fp)
 
 

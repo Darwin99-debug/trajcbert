@@ -141,12 +141,6 @@ class Trainer:
             # labels = batch["labels"].to(self.gpu_id)
             loss = self._run_batch(input_ids,attention_mask,labels)
             total_loss += loss
-            # free memory
-            del input_ids
-            del attention_mask
-            del labels
-            # free GPU memory
-            torch.cuda.empty_cache()
         average_loss = total_loss / len(self.train_data)
         print(f"[GPU{self.gpu_id}] Epoch {epoch} | Average loss: {average_loss}")
         return average_loss
@@ -210,7 +204,7 @@ class Trainer:
 
     def _save_checkpoint(self, epoch):
         ckp = self.model.module.state_dict()
-        PATH = f"/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_full/checkpoints/checkpoint_epoch_{epoch}.pt"
+        PATH = f"models/model_saved_parallel_version_full/checkpoints/checkpoint_epoch_{epoch}.pt"
         torch.save(ckp, PATH)
         print(f"Epoch {epoch} | Training checkpoint saved at {PATH}")
 
@@ -225,10 +219,7 @@ class Trainer:
                     best_loss = validation_loss
                     self._save_checkpoint(epoch)
                     print(f"Epoch {epoch} | Best validation loss: {best_loss}")
-            torch.distributed.barrier() # wait for all processes to finish the epoch  
-            #free GPU memory
-            torch.cuda.empty_cache()
-                      
+            torch.distributed.barrier() # wait for all processes to finish the epoch            
 
 
 def load_data(rank,batch_size):
@@ -299,7 +290,7 @@ def main(rank: int, world_size: int, save_every: int, total_epochs: int, batch_s
 
     #save the model
     model_to_save = model.module if hasattr(model, 'module') else model
-    model_to_save.save_pretrained('/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_full')
+    model_to_save.save_pretrained('models/model_saved_parallel_version_full')
 
 
 
@@ -698,7 +689,7 @@ if __name__ == "__main__":
 
 #     #save the model
 #     model_to_save = model.module if hasattr(model, 'module') else model
-#     model_to_save.save_pretrained('/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version')
+#     model_to_save.save_pretrained('models/model_saved_parallel_version')
 
 
 
