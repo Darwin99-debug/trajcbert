@@ -4,6 +4,8 @@ scikit-learn
 transformers
 h3
 haversine
+torchvision
+torchaudio
 
 
 
