@@ -53,18 +53,18 @@ from tqdm import tqdm
 # PRETRAINED_MODEL_NAME = args.pretrained_model_name
 # DATALOADER_DIR = args.dataloader_dir
 
-PRETRAINED_MODEL_NAME = '/home/daril_kw/data/model_saved_parallel_version_full_multinode'
-TOKENIZER_DIR = '/home/daril_kw/data/savings_for_parallel_computing/tokenizer_final_opti_full'
-DATALOADER_DIR = "/home/daril_kw/data/savings_for_parallel_computing/test_dataloader_full.pt"
+PRETRAINED_MODEL_NAME = '/home/daril/projects/def-nkambou/daril/trajcbert/savings/model_saved_parallel_version_full_multinode'
+TOKENIZER_DIR = '/home/daril/projects/def-nkambou/daril/trajcbert/savings/savings_for_parallel_computing/tokenizer_final_opti_full'
+DATALOADER_DIR = "/home/daril/projects/def-nkambou/daril/trajcbert/savings/savings_for_parallel_computing/test_dataloader_full.pt"
 
-DIR_TARGETS = "/home/daril_kw/data/savings_for_parallel_computing/targets_full_opti.pkl"
+DIR_TARGETS = "/home/daril/projects/def-nkambou/daril/trajcbert/savings/savings_for_parallel_computing/targets_full_opti.pkl"
 
 
 
 # device = torch.device("cpu")
 # use the GPU 1
 # os.environ["CUDA_VISIBLE_DEVICES"] = "1"
-device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # load the prediction_dataloader
 prediction_dataloader = torch.load(DATALOADER_DIR)
