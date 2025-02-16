@@ -191,8 +191,12 @@ for i in tqdm(range(len(true_labels)), desc="Calculating Matthews Corr. Coef., M
     matthews_set.append(matthews)
 
     # compute the distance between the prediction and the true label
-    distances = compute_absolute_distance(pred_labels_i, true_labels[i])
-    mae_set.append(abs(distances))
+    # distances = compute_absolute_distance(pred_labels_i, true_labels[i])
+    # mae_set.append(abs(distances))
+    for j in range(len(pred_labels_i)):
+        distances = compute_absolute_distance(pred_labels_i[j], true_labels[i][j])
+        mae_set.append(abs(distances))
+
 
     # free the memory
     torch.cuda.empty_cache()
