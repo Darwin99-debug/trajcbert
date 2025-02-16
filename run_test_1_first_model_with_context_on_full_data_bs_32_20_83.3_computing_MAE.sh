@@ -1,0 +1,33 @@
+#!/bin/bash
+#SBATCH --account=def-nkambou
+#SBATCH --gres=gpu:1
+#SBATCH --time=2-0:00
+#SBATCH --job-name=test_1_point_with_context_generic_computing_MAE_83_3
+#SBATCH --output=outputs/%x-%j.out
+#SBATCH --error=errors/%x-%j.err
+#SBATCH --cpus-per-task=16 # number of cores for each task
+#SBATCH --mem=498G
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=kengne_wambo.daril_raoul@courrier.uqam.ca
+
+
+
+
+module load scipy-stack
+VENV_DIR=$SLURM_TMPDIR/MYENV
+virtualenv  $VENV_DIR
+source $VENV_DIR/bin/activate
+pip install -r requirements.txt --no-index
+# pip list
+
+# PRETRAINED_MODEL_NAME="/home/daril/scratch/data/trajcbert/models/model_saved_parallel_version_full_multinode"
+# DATALOADER_DIR="/home/daril/scratch/data/trajcbert/test_dataloader/test_dataloader_full_32_bs.pt"
+
+
+# python testing_1_point_with_context_generic.py \
+# --pretrained_model_name $PRETRAINED_MODEL_NAME \
+# --dataloader_dir $DATALOADER_DIR
+
+python testing_1_point_with_context_generic_using_mae.py
+
+
