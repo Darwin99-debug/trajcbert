@@ -14,6 +14,7 @@
 
 
 module load scipy-stack
+module load python/3.10
 VENV_DIR=$SLURM_TMPDIR/MYENV
 virtualenv  $VENV_DIR
 source $VENV_DIR/bin/activate
